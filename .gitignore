@@ -1,0 +1,14 @@
+# Ignorar archivos generados automáticamente
+bin/
+target/
+
+# Ignorar archivos de configuración específicos del IDE de Eclipse
+.settings/
+.classpath
+.project
+
+# Ignorar los archivos de registro y datos de depuración
+*.log
+*.out
+*.idx
+*.swp
