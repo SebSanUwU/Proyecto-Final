@@ -1,6 +1,5 @@
 package presentation;
 import java.awt.*;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout.Alignment;
@@ -25,10 +24,12 @@ public class POOBSTAIRSGUI extends JFrame {
 	private JButton newGame, lastGame,exit, onePlayer, multiPlayer, principalMenu, next;
 	private JTextField name1, name2;
 	private JComboBox colors, machineMode, colors2;
+	private Color color1, color2;
 	
 	
 	
 	private POOBSTAIRSGUI() {
+		changeTemplate("Clasic");
 		prepareFrame();
 		 prepareElements();
 		prepareActions();
@@ -41,6 +42,14 @@ public class POOBSTAIRSGUI extends JFrame {
         Dimension frameSize = this.getSize();
         setLocation((screenSize.width - frameSize.width) / 2, (screenSize.height - frameSize.height) / 2);
 	}
+	
+	private void changeTemplate(String topic) {
+		if(topic.equals("Clasic")) {
+			color1 = new Color(255,233,90);
+			color2 = new Color(70,165,162);
+			
+		}
+	}
 	private void prepareElements() {
 		panels = new JPanel(new CardLayout());
 		setContentPane(panels);
@@ -51,10 +60,8 @@ public class POOBSTAIRSGUI extends JFrame {
         buildprincipal();
         panels.add(principal);
         mode = new JPanel();
-        onePlayer = new JButton("Jugar Contra la Maquina");
-        multiPlayer = new JButton("Jugar con amigo");
-        onePlayer = new JButton("Jugador vs Maquina");
-        multiPlayer = new JButton("Jugador vs Jugador");
+        onePlayer = new JButton("Jugar con Maquina");
+        multiPlayer = new JButton("Jugar con Amigo");
         principalMenu = new JButton("Volver al Menu Principal");
         buildMode();
         panels.add(mode);
@@ -105,6 +112,11 @@ public class POOBSTAIRSGUI extends JFrame {
 		colors2 = new JComboBox(colorOptions);
 		String[] mode = {"Principiante", "Aprendiz"};
 		machineMode = new JComboBox(mode);
+		machineMode.setBackground(new Color(168,202,186));
+		name1.setBackground(new Color(168,202,186));
+		name2.setBackground(new Color(168,202,186));
+		colors.setBackground(new Color(168,202,186));
+		colors2.setBackground(new Color(168,202,186));
 		panels.add(dataPlayers);
 		
 	}
@@ -120,8 +132,11 @@ public class POOBSTAIRSGUI extends JFrame {
 		JLabel title = new JLabel("Datos del Juego");
 		title.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
+		colors.setSelectedIndex(0);
+		colors2.setSelectedIndex(1);
 		GroupLayout layout = new GroupLayout(dataPlayers);
 		dataPlayers.setLayout(layout);
+		
 		
 		if(machine) {
 			layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
@@ -160,6 +175,7 @@ public class POOBSTAIRSGUI extends JFrame {
 								.addComponent(next)
 								.addComponent(principalMenu)))
 			);
+			
 			
 		}
 		
@@ -251,17 +267,18 @@ public class POOBSTAIRSGUI extends JFrame {
 		
 		principalMenu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-            	dataPlayers.removeAll();
             	CardLayout layout = (CardLayout) panels.getLayout();
         		layout.first(panels);
+        		dataPlayers.removeAll();
+        		mode.add(principalMenu);
             }
         });
 		
 		onePlayer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	buildData(true);
-            	CardLayout layout = (CardLayout) panels.getLayout();
-        		layout.next(panels);
+            	nextPane();
+            	
             	
             }
         });
@@ -269,11 +286,27 @@ public class POOBSTAIRSGUI extends JFrame {
 		multiPlayer.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
             	buildData(false);
-            	CardLayout layout = (CardLayout) panels.getLayout();
-        		layout.next(panels);
+            	nextPane();
+        		
             	
             }
         });
+		
+		next.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+            	if(colors.getSelectedItem().equals(colors2.getSelectedItem())) JOptionPane.showMessageDialog(POOBSTAIRSGUI.this,"Los jugadores no pueden tener el mismo color");
+            	else {
+            		CardLayout layout = (CardLayout) panels.getLayout();
+            		layout.next(panels);
+            		mode.add(principalMenu);
+            		
+            	}
+            	
+        		
+            	
+            }
+        });
+		
 		
 		
 	}
