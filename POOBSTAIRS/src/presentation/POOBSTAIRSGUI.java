@@ -1,8 +1,10 @@
 package presentation;
 import java.awt.*;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout.Alignment;
+import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
 
 import java.awt.event.ActionListener;
@@ -249,6 +251,7 @@ public class POOBSTAIRSGUI extends JFrame {
 		
 		principalMenu.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
+            	dataPlayers.removeAll();
             	CardLayout layout = (CardLayout) panels.getLayout();
         		layout.first(panels);
             }
