@@ -65,7 +65,7 @@ public class Die {
 	
 	/**
 	 * Función que simula el lanzamiento de un dado.
-	 * @return faces.get(random.nextInt(6), cara ganadora selecciona de forma aleatoria
+	 * @return faces.get(random.nextInt(faces.size()), cara ganadora selecciona de forma aleatoria
 	 */
 	
 	public Face roll() {
@@ -79,7 +79,7 @@ public class Die {
 	 * 04 de Mayo del 2023
 	 *
 	 */
-	private class Face{
+	public class Face{
 		private byte value;
 		private HashSet<String> powers;
 		private byte limPowers;
