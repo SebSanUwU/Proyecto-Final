@@ -46,7 +46,7 @@ public class PoobStairs {
 	 * @param numStairs , numero de serpientes a construir
 	 * @param pModifier , porcentaje de modificador de moviemineto para el dado
 	 * @param pSpecial  , porcentaje de casillas especiales a construir
-	 * @throws POOBSTAIRSException Se lanza un excepcion si se llega a tener un
+	 * @throws NUM_OBSTACLE, si Se lanza un excepcion si se llega a tener un
 	 *                             numero excesivo
 	 *                             de casillas especiales y obstaculos.
 	 */
@@ -58,9 +58,6 @@ public class PoobStairs {
 		randomSquareObstacle(numStairs, true, false);
 		randomSquareObstacle(aux, false, false);
 		obstacleSquares.sort(null);
-		printArrayListValues(obstacleSquares);
-		//System.out.println(obstacleSquares.size());
-		//printArray(boardLine);
 		setBoard();
 	}
 
@@ -92,7 +89,6 @@ public class PoobStairs {
 	}
 
 	public Square[][] board(){
-		printBoard();
 		return board;
 	}
 
@@ -130,7 +126,6 @@ public class PoobStairs {
 			}
 		}
 		Arrays.sort(obstacle);
-		printArray(obstacle);
 		if (isStair) {
 			connectObstacle(obstacle, "stair");
 		}else if (isSnake) {
@@ -231,56 +226,6 @@ public class PoobStairs {
 	}
 
 
-	/**No va */
-	public void printBoard(){
-		for (int i = 0; i < board.length; i++) {
-			for (int j = 0; j < board[0].length; j++) {
-				if(board[i][j] != null){
-					System.out.print(board[i][j].getNumSquareBoardGUI() + " ");
-				}else{
-					System.out.print("& ");
-				}
-			}
-			System.out.println();
-		}
-	}
-
-	/** No va */
-	public static void printArray(int[] arr) {
-		for (int i = 0; i < arr.length; i++) {
-			System.out.print(arr[i] + " ");
-		}
-		System.out.println();
-	}
-	/**No va */
-	public static void printArray(Square[] arr) {
-		for (int i = 0; i < arr.length; i++) {
-			if(arr[i] != null){
-				System.out.print(arr[i].getNumSquareBoardGUI() + " ");
-			}else{
-				System.out.print("& ");
-			}
-			
-		}
-		System.out.println();
-	}
-
-	/** No va */
-	public static void printArrayListValues(ArrayList<Integer> arrayList) {
-		for (int i = 0; i < arrayList.size(); i++) {
-			System.out.print(arrayList.get(i) + " ");
-		}
-		System.out.println();
-	}
-
-	/** No va */
-	public static void main(String[] args) {
-		try {
-			PoobStairs gm = new PoobStairs(10, 10);
-			gm.setGame(2, 2, 0, (float) 0.1);
-			gm.board();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-	}
+	
+	
 }

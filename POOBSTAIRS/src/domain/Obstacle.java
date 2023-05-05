@@ -18,5 +18,7 @@ public abstract class Obstacle {
     public int getNumTail(){
         return tail.getNumSquare();
     }
+    
+    
 
 }

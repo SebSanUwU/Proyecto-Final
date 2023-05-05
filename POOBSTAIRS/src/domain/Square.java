@@ -19,5 +19,10 @@ public abstract class Square {
     public int getNumSquare(){
         return numSquare;
     }
+    
+    public Obstacle getObstacle() {
+    	
+    	return obstacle;
+    }
 
 }

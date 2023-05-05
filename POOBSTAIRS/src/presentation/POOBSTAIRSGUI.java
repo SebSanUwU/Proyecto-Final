@@ -1,12 +1,11 @@
 package presentation;
-
+import domain.*;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
-
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -21,11 +20,13 @@ import javax.swing.LayoutStyle.ComponentPlacement;
  */
 
 public class POOBSTAIRSGUI extends JFrame {
-	private JPanel panels, principal, mode, dataPlayers;
-	private JButton newGame, lastGame, exit, onePlayer, multiPlayer, principalMenu, next;
+	private JPanel panels, principal, mode, dataPlayers, initGame,startPlaying, board;
+	private JButton newGame, lastGame, exit, onePlayer, multiPlayer, principalMenu, next, beggin;
 	private JTextField name1, name2;
 	private JComboBox colors, machineMode, colors2;
 	private Color color1, color2;
+	private PoobStairs poobStairs;
+	private JSpinner dataRows, dataColumns, dataSnakes, dataStairs, dataSpecials, dataPowers;
 
 	private POOBSTAIRSGUI() {
 		changeTemplate("Clasic");
@@ -44,10 +45,16 @@ public class POOBSTAIRSGUI extends JFrame {
 
 	private void changeTemplate(String topic) {
 		if (topic.equals("Clasic")) {
-			color1 = new Color(255, 233, 90);
-			color2 = new Color(70, 165, 162);
+			color1 = new Color(255, 233, 90); //Amarillo
+			color2 = new Color(70, 165, 162); //Azul
 
 		}
+	}
+	
+	private void setGame(int rows, int columns, int snakes, int stairs, double pSpecials, double pPowers) throws POOBSTAIRSException{
+		 poobStairs = new PoobStairs(rows, columns);
+		 poobStairs.setGame(snakes, stairs, (float) pSpecials, (float) pPowers);
+		
 	}
 
 	private void prepareElements() {
@@ -68,6 +75,22 @@ public class POOBSTAIRSGUI extends JFrame {
 		dataPlayers = new JPanel();
 		next = new JButton("Siguiente");
 		prepareData();
+		initGame = new JPanel();
+		beggin = new JButton("Comenzar");
+		dataRows= new JSpinner(new SpinnerNumberModel(3,3,5000000,1));
+		dataColumns= new JSpinner(new SpinnerNumberModel(3,3,5000000,1));
+		dataSnakes= new JSpinner(new SpinnerNumberModel(0,0,5000000,1));
+		dataStairs= new JSpinner(new SpinnerNumberModel(0,0,5000000,1));
+		dataSpecials= new JSpinner(new SpinnerNumberModel(0.0,0.0,1.05,0.15));
+		dataPowers= new JSpinner(new SpinnerNumberModel(0.0,0.0,1.05,0.15));
+		buildInit();
+		panels.add(initGame);
+		startPlaying = new JPanel();
+		startPlaying.setLayout(new BorderLayout());
+		board = new JPanel();
+		startPlaying.setBorder(new EmptyBorder(20,20,20,20));
+		startPlaying.add(board, BorderLayout.CENTER);
+		panels.add(startPlaying);
 		for (Component panel : panels.getComponents()) {
 			panel.setBackground(new Color(220, 93, 83));
 		}
@@ -221,6 +244,103 @@ public class POOBSTAIRSGUI extends JFrame {
 		dataPlayers.setBorder(new EmptyBorder(100, (int) (getSize().width * 0.3), 0, 0));
 		buildButton(dataPlayers);
 	}
+	
+	private void buildInit() {
+		
+		JLabel title = new JLabel("Datos del Tablero");
+		title.setFont(new Font("Times New Roman", Font.PLAIN, 22));
+		title.setHorizontalAlignment(SwingConstants.CENTER);
+		JLabel rows = new JLabel("Numero de Filas:");
+		JLabel columns = new JLabel("Numero de Columnas:");
+		JLabel snakes = new JLabel("Numero de Serpientes:");
+		JLabel stairs = new JLabel("Numero de Escaleras:");
+		JLabel specials = new JLabel("%Casilla Especial:");
+		JLabel powers = new JLabel("%Modificador:");
+		GroupLayout layout = new GroupLayout(initGame);
+		initGame.setLayout(layout);
+		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
+				.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
+						.addComponent(title, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
+								Short.MAX_VALUE)
+						.addGroup(layout.createSequentialGroup()
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(rows)
+										.addComponent(columns)
+										.addComponent(snakes)
+										.addComponent(stairs)
+										.addComponent(specials)
+										.addComponent(powers)
+										.addComponent(beggin))
+								.addGap(5)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(dataRows)
+										.addComponent(dataColumns)
+										.addComponent(dataSnakes)
+										.addComponent(dataStairs)
+										.addComponent(dataSpecials)
+										.addComponent(dataPowers)))));
+		layout.setVerticalGroup(
+				layout.createParallelGroup(Alignment.LEADING)
+						.addGroup(layout.createSequentialGroup()
+								.addComponent(title)
+								.addGap(10)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(rows)
+										.addComponent(dataRows, 0, 25, 25))
+								.addGap(10)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(columns)
+										.addComponent(dataColumns, 0, 25, 25))
+								.addGap(10)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(snakes)
+										.addComponent(dataSnakes, 0, 25, 25))
+								.addGap(10)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(stairs)
+										.addComponent(dataStairs, 0, 25, 25))
+								.addGap(10)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(specials)
+										.addComponent(dataSpecials, 0, 25, 25))
+								.addGap(10)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(powers)
+										.addComponent(dataPowers, 0, 25, 25))
+								.addGap(10)
+								.addComponent(beggin)));
+		initGame.setBorder(new EmptyBorder(90, (int) (getSize().width * 0.3), 0, 0));
+		buildLabels(initGame, title.getText());
+		buildButton(initGame);
+		
+	}
+	
+	private void buildLabels(Container container, String title) {
+		for (Component componente : container.getComponents()) {
+			if (componente instanceof JLabel && !(((JLabel) componente).getText().equals(title))) {
+				componente.setFont(new Font("Trebuchet MS", Font.PLAIN, 15));
+			}
+		}
+	}
+	private void refresh() {
+		board.setLayout(new GridLayout(poobStairs.board().length, poobStairs.board()[0].length, 0, 0));
+		JLabel square;
+		Color color;
+		for(int i = 0; i < poobStairs.board().length; i++
+				) {
+			for(int j = 0; j < poobStairs.board()[0].length; j++) {
+				square = new JLabel();
+				if((i + j)%2 == 0) color = color2;
+				else color = color1;
+				square.setBackground(color);
+				square.setOpaque(true);
+				square.setText(String.valueOf(poobStairs.board()[i][j].getNumSquareBoardGUI()));
+				board.add(square);
+				
+				
+			}
+		}
+	}
 
 	private void buildButton(Container container) {
 		for (Component componente : container.getComponents()) {
@@ -255,6 +375,7 @@ public class POOBSTAIRSGUI extends JFrame {
 
 		newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				mode.add(principalMenu);
 				nextPane();
 			}
 		});
@@ -295,6 +416,21 @@ public class POOBSTAIRSGUI extends JFrame {
 
 				}
 
+			}
+		});
+		
+		beggin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				CardLayout layout = (CardLayout) panels.getLayout();
+				try {
+					setGame((Integer) dataRows.getValue(), (Integer)dataColumns.getValue(), (Integer)dataSnakes.getValue(),(Integer)dataStairs.getValue()
+							,(Double)dataSpecials.getValue(), (Double)dataPowers.getValue());
+					refresh();
+					layout.next(panels);
+					
+				}catch(POOBSTAIRSException exception) {
+					JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, exception.getMessage());
+				}
 			}
 		});
 
