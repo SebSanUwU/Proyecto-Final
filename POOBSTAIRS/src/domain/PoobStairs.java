@@ -68,7 +68,8 @@ public class PoobStairs {
 		int value=0;
 		for(int i= board.length-1 ; i>=0 ;i--){
 			if(i%2==1){
-				for(int j = board[0].length-1;j>=0;j--){
+				
+				for(int j = 0;j<board[0].length;j++){
 					
 					if(obstacleSquares.contains(value)){
 						board[i][j]=boardLine[value];
@@ -78,7 +79,7 @@ public class PoobStairs {
 					value++;
 				}
 			}else{
-				for(int j = 0;j<board[0].length;j++){
+				for(int j = board[0].length-1;j>=0;j--){
 					if(obstacleSquares.contains(value)){
 						board[i][j]=boardLine[value];
 					}else if(!obstacleSquares.contains(value)){
@@ -91,7 +92,7 @@ public class PoobStairs {
 	}
 
 	public Square[][] board(){
-		//printBoard();
+		printBoard();
 		return board;
 	}
 
