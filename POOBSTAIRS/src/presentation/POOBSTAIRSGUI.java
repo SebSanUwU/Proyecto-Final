@@ -326,15 +326,23 @@ public class POOBSTAIRSGUI extends JFrame {
 		board.setLayout(new GridLayout(poobStairs.board().length, poobStairs.board()[0].length, 0, 0));
 		JLabel square;
 		Color color;
+		ImageIcon wallpaper;
+		Icon icon;
 		for(int i = 0; i < poobStairs.board().length; i++
 				) {
 			for(int j = 0; j < poobStairs.board()[0].length; j++) {
 				square = new JLabel();
-				if((i + j)%2 == 0) color = color2;
-				else color = color1;
-				square.setBackground(color);
-				square.setOpaque(true);
-				square.setText(String.valueOf(poobStairs.board()[i][j].getNumSquareBoardGUI()));
+				try {
+					if(poobStairs.board()[i][j].getObstacle().getType().equals("snake")) {
+						
+					}
+				}catch(POOBSTAIRSException e) {
+					if((i + j)%2 == 0) color = color2;
+					else color = color1;
+					square.setBackground(color);
+					square.setOpaque(true);
+					square.setText(String.valueOf(poobStairs.board()[i][j].getNumSquareBoardGUI()));
+				}
 				board.add(square);
 				
 				

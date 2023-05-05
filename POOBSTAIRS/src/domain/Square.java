@@ -20,8 +20,8 @@ public abstract class Square {
         return numSquare;
     }
     
-    public Obstacle getObstacle() {
-    	
+    public Obstacle getObstacle() throws POOBSTAIRSException{
+    	if(obstacle == null) throw new POOBSTAIRSException(POOBSTAIRSException.NO_OBSTACLE);
     	return obstacle;
     }
 

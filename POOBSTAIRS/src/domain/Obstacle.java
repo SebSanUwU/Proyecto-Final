@@ -19,6 +19,9 @@ public abstract class Obstacle {
         return tail.getNumSquare();
     }
     
+    public String getType() {
+    	return type;
+    }
     
 
 }
