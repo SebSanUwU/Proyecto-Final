@@ -12,6 +12,10 @@ public abstract class Square {
         this.obstacle=obstacle;
     }
 
+    public int getNumSquareBoardGUI(){
+        return numSquare+1;
+    }
+
     public int getNumSquare(){
         return numSquare;
     }
