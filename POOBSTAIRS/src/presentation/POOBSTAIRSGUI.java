@@ -3,6 +3,7 @@ import domain.*;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
@@ -323,7 +324,7 @@ public class POOBSTAIRSGUI extends JFrame {
 		}
 	}
 	private void refresh() {
-		board.setLayout(new GridLayout(poobStairs.board().length, poobStairs.board()[0].length, 0, 0));
+		board.setLayout(new GridLayout(poobStairs.board().length, poobStairs.board()[0].length));
 		JPanel square;
 		Color color;
 		ImageIcon wallpaper;
@@ -331,16 +332,27 @@ public class POOBSTAIRSGUI extends JFrame {
 		for(int i = 0; i < poobStairs.board().length; i++
 				) {
 			for(int j = 0; j < poobStairs.board()[0].length; j++) {
-				square = new JPanel();
-					if((i + j)%2 == 0) color = color2;
-					else color = color1;
+				
+				try {
+					if(poobStairs.board()[i][j].getObstacle().getType().equals("snake")) square = new DiferentSquare("/img/snake.jpg");
+					else square = new DiferentSquare("/img/stair.jpg");
 					
-					JLabel value = new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquareBoardGUI()));
-					square.setBackground(color);
-					square.setOpaque(true);
-					square.add(value);
-					square.setLayout(new FlowLayout());
-					value.setSize(new Dimension((int)Math.round(square.getWidth()* 0.2), (int)Math.round(square.getHeight()* 0.2)));
+				}catch(POOBSTAIRSException e) {
+					if(!(poobStairs.board()[i][j] instanceof Normal)) {
+						square = new DiferentSquare("/img/Special.jpg");
+						
+					}
+					else {
+						square = new JPanel();
+						if((i + j)%2 == 0) color = color2;
+						else color = color1;
+						square.setBackground(color);
+						square.setOpaque(true);
+					}
+				}
+				square.setLayout(new FlowLayout(FlowLayout.LEFT, 8,2));
+				square.setBorder(new LineBorder(Color.BLACK, 1));
+				square.add(new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquareBoardGUI())));
 				board.add(square);
 				
 				
@@ -430,7 +442,7 @@ public class POOBSTAIRSGUI extends JFrame {
 				CardLayout layout = (CardLayout) panels.getLayout();
 				try {
 					setGame((Integer) dataRows.getValue(), (Integer)dataColumns.getValue(), (Integer)dataSnakes.getValue(),(Integer)dataStairs.getValue()
-							,(Double)dataSpecials.getValue(), (Double)dataPowers.getValue());
+							,(Double)dataPowers.getValue(), (Double)dataSpecials.getValue());
 					refresh();
 					layout.next(panels);
 					

@@ -24,7 +24,7 @@ public class DiferentSquare extends JPanel {
 	 * Create the panel.
 	 */
 	public DiferentSquare(String type) {
-		background = this.getClass().getResource("/img/snake.jpg");
+		background = this.getClass().getResource(type);
 		backgroundImage = new ImageIcon(background).getImage();
 	}
 	
