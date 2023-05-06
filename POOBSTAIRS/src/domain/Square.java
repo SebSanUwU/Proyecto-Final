@@ -1,19 +1,17 @@
 package domain;
 
 public abstract class Square {
-    private int numSquare;
-    public Obstacle obstacle;
+    protected int numSquare;
+    private Obstacle obstacle;
+    private Piece[] pieces;
 
     public Square(int numSquare){
         this.numSquare=numSquare;
+        pieces = new Piece[2];
     }
 
     public void addObstacle(Obstacle obstacle){
         this.obstacle=obstacle;
-    }
-
-    public int getNumSquareBoardGUI(){
-        return numSquare+1;
     }
 
     public int getNumSquare(){
@@ -23,6 +21,20 @@ public abstract class Square {
     public Obstacle getObstacle() throws POOBSTAIRSException{
     	if(obstacle == null) throw new POOBSTAIRSException(POOBSTAIRSException.NO_OBSTACLE);
     	return obstacle;
+    }
+    
+    protected void receivePiece(Piece piece) {
+    	if(pieces[0] == null) pieces[0] = piece;
+    	else pieces[1] = piece;
+    }
+    
+    protected void removePiece(Piece piece) {
+    	if(pieces[0] != null) pieces[0] = null;
+    	else pieces[1] = null;
+    }
+    
+    public int useObstacle() throws POOBSTAIRSException{
+    	return getObstacle().use();
     }
 
 }

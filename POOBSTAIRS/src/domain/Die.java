@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 
 public class Die {
-	private byte numPowers;
+	private int numPowers;
 	private ArrayList<Face> faces;
 	private Random random;
 	/**
@@ -22,7 +22,7 @@ public class Die {
 	public Die(int numFaces, float percentage) {
 		faces = new ArrayList<Face>();
 		random = new Random();
-		numPowers = (byte) Math.round(numFaces*percentage);
+		numPowers = (int) Math.round(numFaces*percentage);
 		assemble(numFaces);
 		
 	}
@@ -31,8 +31,8 @@ public class Die {
 	 * @param numFaces, numero de caras quue va a tener el dado.
 	 */
 	private void assemble(int numFaces) {
-		for(int i = 0; i < numFaces; i++) {
-			faces.add(new Face(i+1));
+		for(int i = 1; i <= numFaces; i++) {
+			faces.add(new Face(i));
 		}
 	}
 	/**
@@ -42,7 +42,7 @@ public class Die {
 	 * y la cara en la cual se ubican
 	 */
 	private void assignPowers() {
-		byte powersToGive = numPowers;
+		int powersToGive = numPowers;
 		
 		for(Face f: faces) {
 			f.removePowers();
@@ -65,7 +65,7 @@ public class Die {
 	
 	/**
 	 * Función que simula el lanzamiento de un dado.
-	 * @return faces.get(random.nextInt(faces.size()), cara ganadora selecciona de forma aleatoria
+	 * @return currentFace, cara ganadora selecciona de forma aleatoria
 	 */
 	
 	public Face roll() {
@@ -80,18 +80,18 @@ public class Die {
 	 *
 	 */
 	public class Face{
-		private byte value;
+		private int value;
 		private HashSet<String> powers;
-		private byte limPowers;
+		private static final int LIM_POWERS = 1;
 		
 		/**
 		 * Contructor del objeto de la clase Face
 		 * @param value, valor numero de la cara
 		 */
 		Face(int value) {
-			this.value = (byte)value;
+			this.value = (int)value;
 			powers = new HashSet<String>();
-			limPowers = 1;
+			
 		}
 		/**
 		 * Metodo que se encarga de eliminar los poderes pertenecientes a la cara del dado.
@@ -118,8 +118,12 @@ public class Die {
 		 */
 		
 		private void addPower(String power) throws POOBSTAIRSException{
-			if(powers.size() + 1 > limPowers) throw new POOBSTAIRSException(POOBSTAIRSException.SUP_POWERS);
+			if(powers.size() + 1 > LIM_POWERS) throw new POOBSTAIRSException(POOBSTAIRSException.SUP_POWERS);
 			powers.add(power);
+		}
+		
+		public int getValue() {
+			return value;
 		}
 		
 	}

@@ -40,10 +40,11 @@ public class GameBoard {
 	 *                             numero excesivo
 	 *                             de casillas especiales y obstaculos.
 	 */
-	public void setArea(int numSnakes, int numStairs, float pModifier, float pSpecial) throws POOBSTAIRSException {
-		int aux = (int) ((totalSquares - 2) * pSpecial);
+	public void setArea(int numSnakes, int numStairs, float pSpecial) throws POOBSTAIRSException {
+		int aux = (int) Math.round((totalSquares - 2) * pSpecial);
 		if (numSnakes * 2 + numSnakes * 2 + aux > (totalSquares - 2 - 4))
 			throw new POOBSTAIRSException(POOBSTAIRSException.NUM_OBSTACLE);
+		
 		randomSquareObstacle(numSnakes, false, true);
 		randomSquareObstacle(numStairs, true, false);
 		randomSquareObstacle(aux, false, false);
@@ -216,4 +217,89 @@ public class GameBoard {
 			} 
 		}
 	}
+	
+	public int getTotalSquares() {
+		return totalSquares;
+	}
+	
+	protected void assignPiece(int square, Piece piece) {
+		Square found = findSquare(square);
+		int square1 = square;
+		try {
+			square1 = found.useObstacle();
+		}catch(POOBSTAIRSException e) {
+			square1 = useSquare(found);
+		}
+		if(square1 != square) assignPiece(square1, piece);
+		found.receivePiece(piece);
+		piece.changePositionTo(found);
+			
+		
+	}
+	private int useSquare(Square square) {
+		int newSquare;
+		if(square instanceof Normal) newSquare = square.getNumSquare();
+		else if(square instanceof Jumper) newSquare = square.getNumSquare() + 5;
+		else if(square instanceof ReverseJumper) newSquare = square.getNumSquare() - 5;
+		else if(square instanceof Advance) newSquare = nextStair(square.getNumSquare());
+		else if(square instanceof Regression) newSquare = lastSnake(square.getNumSquare());
+		else newSquare = 0;
+		return newSquare;
+	}
+	
+	private int nextStair(int square) {
+		
+		for(Integer i: obstacleSquares) {
+			try {
+				if(i > square && findSquare(i).getObstacle().equals("stair") && findSquare(i).getObstacle().getNumHead() == i) {
+					square = i;
+					break;
+				}
+			} catch (POOBSTAIRSException e) {
+				e.printStackTrace();
+			}
+		}
+		return square;
+	}
+	
+	private int lastSnake(int square) {
+		
+		for(Integer i: obstacleSquares) {
+			try {
+				if(i < square && findSquare(i).getObstacle().equals("snake") && findSquare(i).getObstacle().getNumHead() == i) {
+					square = i;
+					break;
+				}
+			} catch (POOBSTAIRSException e) {
+				e.printStackTrace();
+			}
+		}
+		return square;
+	}
+	
+	public Square findSquare(int num) {
+		Square found = null;
+		for(int i = squares.length-1; i >= 0; i--) {
+			for(int j = 0; j < squares[0].length; j++) {
+				if(squares[i][j].getNumSquare() == num) {
+					found = squares[i][j];
+					break;
+				}
+			}
+		}
+		return found;
+	}
+	/**
+	public static void main(String[] args) {
+		try {
+			GameBoard juego = new GameBoard(10,10);
+			juego.setArea(5, 3, 0, (float)0.05);
+			juego.getSquares();
+		} catch (POOBSTAIRSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	*/
 }

@@ -1,5 +1,31 @@
 package domain;
 
 public class Player {
-
+	private String name;
+	private int numStairs;
+	private int numSnakes;
+	private int numSpecialSquares;
+	private int maxPosition;
+	private Piece piece;
+	
+	public Player(String name, String color) {
+		this.name = name;
+		piece = new Piece(color,this);
+		numStairs = 0;
+		numSnakes = 0;
+		numSpecialSquares = 0;
+		maxPosition = 0;
+	}
+	
+	public int getPiecePosition() {
+		return piece.getPosition();
+	}
+	
+	public int movePiece(int positions) {
+		return getPiecePosition() + positions;
+	}
+	
+	public Piece getPiece() {
+		return piece;
+	}
 }

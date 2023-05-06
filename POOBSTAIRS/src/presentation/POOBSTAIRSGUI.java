@@ -96,8 +96,9 @@ public class POOBSTAIRSGUI extends JFrame {
 	 *                             de casillas especiales y obstaculos.
 	 */
 	private void setGame(int rows, int columns, int snakes, int stairs, double pSpecials, double pPowers) throws POOBSTAIRSException{
-		 poobStairs = new PoobStairs(rows, columns);
-		 poobStairs.setGame(snakes, stairs, (float) pSpecials, (float) pPowers);
+		 Player[] players = {new Player("Camilo", "red"), new Player("Pollis", "blue")};
+		poobStairs = new PoobStairs(rows, columns,players);
+		poobStairs.setGame(snakes, stairs, (float) pSpecials, (float) pPowers);
 	}
 	/**
 	 * Metodo que inicializa todos los componentes que hacen parte del GUI 
@@ -420,7 +421,7 @@ public class POOBSTAIRSGUI extends JFrame {
 				}
 				square.setLayout(new FlowLayout(FlowLayout.LEFT, 8,2));
 				square.setBorder(new LineBorder(Color.BLACK, 1));
-				square.add(new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquareBoardGUI())));
+				square.add(new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquare() + 1)));
 				board.add(square);
 			}
 		}

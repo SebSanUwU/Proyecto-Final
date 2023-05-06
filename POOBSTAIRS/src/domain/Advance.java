@@ -5,4 +5,7 @@ public class Advance extends Square{
         super(numSquare);
     }
 
+	
+	
+
 }

@@ -23,5 +23,7 @@ public abstract class Obstacle {
     	return type;
     }
     
+    public abstract int use();
+    
 
 }
