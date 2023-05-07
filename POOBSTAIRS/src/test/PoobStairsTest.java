@@ -89,10 +89,10 @@ class PoobStairsTest {
 			for(int i = 0; i < 15; i++) {
 				int position = players[0].getPiecePosition();
 				int extra = game.rollDice().getValue();
-				game.assignPiece(position + extra, players[0].getPiece());
+				game.board().assignPiece(position + extra, players[0].getPiece());
 				if(players[0].getPiecePosition() != position + extra) fail("no se mueve correctamente");
 			}
-			game.assignPiece(5, players[0].getPiece());
+			game.board().assignPiece(5, players[0].getPiece());
 			assertEquals(5,players[0].getPiecePosition());
 			assertTrue(game.findSquare(5).contains(players[0].getPiece()));
 			assertFalse(game.findSquare(0).contains(players[0].getPiece()));

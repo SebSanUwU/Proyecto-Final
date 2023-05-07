@@ -473,15 +473,15 @@ public class POOBSTAIRSGUI extends JFrame {
 		JPanel square;
 		Color color;
 		
-		for(int i = 0; i < poobStairs.board().length; i++
+		for(int i = 0; i < poobStairs.board().getSquares().length; i++
 				) {
-			for(int j = 0; j < poobStairs.board()[0].length; j++) {
+			for(int j = 0; j < poobStairs.board().getSquares()[0].length; j++) {
 				
 				try {
-					Obstacle obstacle= poobStairs.board()[i][j].getObstacle();
+					Obstacle obstacle= poobStairs.board().getSquares()[i][j].getObstacle();
 					if(obstacle.getType().equals("snake")) square = new DiferentSquare("/img/snake.jpg");
 					else square = new DiferentSquare("/img/stair.jpg");
-					square.add(new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquare() + 1)));
+					square.add(new JLabel(String.valueOf(poobStairs.board().getSquares()[i][j].getNumSquare() + 1)));
 					JButton infoButton = new JButton("i");
 					infoButton.addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
@@ -495,11 +495,11 @@ public class POOBSTAIRSGUI extends JFrame {
 					square.add(infoButton);
 					
 				}catch(POOBSTAIRSException e) {
-					if(!(poobStairs.board()[i][j] instanceof Normal)) {
+					if(!(poobStairs.board().getSquares()[i][j] instanceof Normal)) {
 						square = new DiferentSquare("/img/Special.jpg");
-						square.add(new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquare() + 1)));
+						square.add(new JLabel(String.valueOf(poobStairs.board().getSquares()[i][j].getNumSquare() + 1)));
 						JButton infoButton = new JButton("i");
-						String inf = specials(poobStairs.board()[i][j]);
+						String inf = specials(poobStairs.board().getSquares()[i][j]);
 						infoButton.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent e) {
 								JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, 
@@ -515,7 +515,7 @@ public class POOBSTAIRSGUI extends JFrame {
 						else color = color1;
 						square.setBackground(color);
 						square.setOpaque(true);
-						square.add(new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquare() + 1)));
+						square.add(new JLabel(String.valueOf(poobStairs.board().getSquares()[i][j].getNumSquare() + 1)));
 					}
 					
 				}
@@ -524,7 +524,7 @@ public class POOBSTAIRSGUI extends JFrame {
 				square.setLayout(new FlowLayout(FlowLayout.LEFT, 8,2));
 				square.setBorder(new LineBorder(Color.BLACK, 1));
 				
-				for(Piece piece: poobStairs.board()[i][j].getPieces()) {
+				for(Piece piece: poobStairs.board().getSquares()[i][j].getPieces()) {
 					JLabel visualPiece = new JLabel();
 					visualPiece.setPreferredSize(new Dimension((int) Math.round(square.getPreferredSize().height*0.5),(int) Math.round(square.getPreferredSize().height*0.5)));
 					visualPiece.setMaximumSize(new Dimension((int) Math.round(square.getPreferredSize().height*0.5),(int) Math.round(square.getPreferredSize().height*0.5)));
@@ -637,7 +637,7 @@ public class POOBSTAIRSGUI extends JFrame {
 					setGame((Integer) dataRows.getValue(), (Integer)dataColumns.getValue(), (Integer)dataSnakes.getValue(),(Integer)dataStairs.getValue()
 							,(Double)dataPowers.getValue(), (Double)dataSpecials.getValue());
 					changeTemplate("Clasic");
-					board.setLayout(new GridLayout(poobStairs.board().length, poobStairs.board()[0].length));
+					board.setLayout(new GridLayout(poobStairs.board().getSquares().length, poobStairs.board().getSquares()[0].length));
 					
 					POOBSTAIRSGUI.this.setExtendedState(MAXIMIZED_BOTH);
 					

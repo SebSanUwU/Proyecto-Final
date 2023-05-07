@@ -35,5 +35,12 @@ public class Player {
 		return name;
 	}
 	
+	protected void usePower(String power, GameBoard board, int extraMoves) throws POOBSTAIRSException {
+		if(power.equals(Power.EXTRA_MOVE)) {
+			board.advancePlayer(extraMoves + 1, piece);
+		}else {
+			board.advancePlayer(extraMoves - 1, piece);
+		}
+	}
 	
 }
