@@ -224,13 +224,13 @@ public class GameBoard {
 		}
 	}
 	
-	public int getTotalSquares() {
-		return totalSquares;
-	}
 	
-	protected ArrayList<Integer> getObstacleSquares(){
-		return obstacleSquares;
-	}
+	
+	/**
+	 * Metodo que identifica la casilla con cierto valor 
+	 * @param value. valor numerico de la casilla
+	 * @return la casilla con el numero indicado
+	 */
 	protected Square find(int num) {
 		Square found = null;
 		for(int i = squares.length-1; i >= 0; i--) {
@@ -243,17 +243,97 @@ public class GameBoard {
 		}
 		return found;
 	}
-	
-	/*public static void main(String[] args) {
+	/**
+	 * Se encarga de mover cierta ficha atravez del tablero
+	 * @param positions, n casillas que se va a avanzar
+	 * @param piece, pieza que se va a mover
+	 * @throws POOBSTAIRSException NO_SQUARES si el numero de casillas a avanzar super el numero de casillas totales
+	 */
+	public void advancePlayer(int positions, Piece piece) throws POOBSTAIRSException{
+		if(piece.getPosition() + positions > totalSquares) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
+		assignPiece(piece.getPosition() + positions, piece);
+	}
+	/**
+	 * Se encarga de posicionar cierta pieza dentro de cierta casilla
+	 * @param square, numero de la casilla a la cual se va a posicionar al jugador
+	 * @param piece, pieza que se va a mover
+	 */
+	public void assignPiece(int square, Piece piece) {
+		Square found = find(square);
+		found.receivePiece(piece);
+		piece.changePositionTo(found);
 		try {
-			GameBoard juego = new GameBoard(10,10);
-			juego.setArea(15, 12, (float)0.05);
-			juego.getSquares();
+			if(find(square) instanceof Jumper) {
+				advancePlayer(5,piece);
+			}
+			else if(find(square) instanceof ReverseJumper) {
+				negativeMove(5, piece);
+			}
+			else if(find(square) instanceof Advance) {
+				piece.changePositionTo(find(nextStair(square)));
+				find(piece.getPosition()).receivePiece(piece);
+				piece.useObstacle();
+				find(piece.getPosition()).receivePiece(piece);
+			}
+			else if(find(square) instanceof Regression) {
+				piece.changePositionTo(find(lastSnake(square)));
+				find(piece.getPosition()).receivePiece(piece);
+				piece.useObstacle();
+				find(piece.getPosition()).receivePiece(piece);
+			} else if(find(square) instanceof Mortal) {
+				piece.changePositionTo(find(0));
+				find(piece.getPosition()).receivePiece(piece);
+			}else {
+				piece.useObstacle();
+				find(piece.getPosition()).receivePiece(piece);
+			}
 		} catch (POOBSTAIRSException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-	}*/
+	}
 	
+	private void negativeMove(int squares, Piece piece) throws POOBSTAIRSException{
+		if(piece.getPosition() - squares  < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
+		assignPiece(piece.getPosition() - squares, piece);
+	}
+	
+	/**
+	 * Función que busca la proxima escalera a la posición actual de una ficha
+	 * @param square, posición actual de la ficha en cuestion
+	 * @return la posición en la cual se encuentra el inicio de la proxima escalera.
+	 */
+	private int nextStair(int square) {
+		
+		for(Integer i: obstacleSquares) {
+			try {
+				if(i > square && find(i).getObstacle().getType().equals("stair") && find(i).getObstacle().getHead().getNumSquare() == i) {
+					square = i;
+					break;
+				}
+			} catch (POOBSTAIRSException e) {
+				e.printStackTrace();
+			}
+		}
+		return square;
+	}
+	/**
+	 * Función que busca la abterior serpiente a la posición actual de una ficha
+	 * @param square, posición actual de la ficha en cuestion
+	 * @return la posición en la cual se encuentra el inicio de la anterior serpiente.
+	 */
+	private int lastSnake(int square) {
+		
+		for(Integer i: obstacleSquares) {
+			try {
+				if(i < square && find(i).getObstacle().getType().equals("snake") && find(i).getObstacle().getTail().getNumSquare() == i) {
+					square = i;
+					break;
+				}
+			} catch (POOBSTAIRSException e) {
+				e.printStackTrace();
+			}
+		}
+		return square;
+	}
 }
