@@ -141,9 +141,9 @@ public class GameBoard {
 		int random_int;
 		for (int i = 0; i < obstacleSS.length; i++) {
 			for (int j = 0; j < squares.length; j++) {
-				if (obstacleSS[i] <= rangeRow) {
+				if (obstacleSS[i] < rangeRow) {
 					while (true) {
-						random_int = ThreadLocalRandom.current().nextInt(rangeRow + 1, totalSquares - 1);
+						random_int = ThreadLocalRandom.current().nextInt(rangeRow+1, totalSquares - 1);
 						 //System.out.println(obstacleSS[i]+","+random_int+" Range"+rangeRow);
 						if (!obstacleSquares.contains(random_int)) {
 							obstacleSquares.add(random_int);
@@ -151,7 +151,7 @@ public class GameBoard {
 							break;
 						}
 						if (rangeRow > squares[0].length) {
-							random_int = ThreadLocalRandom.current().nextInt(1, rangeRow - squares[0].length - 1);
+							random_int = ThreadLocalRandom.current().nextInt(1, rangeRow - squares[0].length + 1);
 							//System.out.println(obstacleSS[i]+","+random_int+" Range"+rangeRow);
 							if (!obstacleSquares.contains(random_int)) {
 								obstacleSquares.add(random_int);
@@ -186,8 +186,14 @@ public class GameBoard {
 			head = squaresInLine[start];
 			tail = squaresInLine[finish];
 		}
-		squaresInLine[start].addObstacle(new NormalObstacle(head, tail, type));
-		squaresInLine[finish].addObstacle(new NormalObstacle(head, tail, type));
+		//System.out.println(start+","+finish);
+		if(type.equals("stair")){
+			squaresInLine[start].addObstacle(new NormalObstacle(head, tail, type));
+			squaresInLine[finish].addObstacle(new NormalObstacle(head, tail, type));
+		}else{
+			squaresInLine[start].addObstacle(new NormalObstacle(tail, head, type));
+			squaresInLine[finish].addObstacle(new NormalObstacle(tail, head, type));
+		}
 	}
 
 	private void addSpecialSquare(int[] specialSquare){
@@ -237,17 +243,17 @@ public class GameBoard {
 		}
 		return found;
 	}
-	/**
-	public static void main(String[] args) {
+	
+	/*public static void main(String[] args) {
 		try {
 			GameBoard juego = new GameBoard(10,10);
-			juego.setArea(5, 3, 0, (float)0.05);
+			juego.setArea(15, 12, (float)0.05);
 			juego.getSquares();
 		} catch (POOBSTAIRSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-	}
-	*/
+	}*/
+	
 }
