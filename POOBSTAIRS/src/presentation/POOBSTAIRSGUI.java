@@ -469,7 +469,7 @@ public class POOBSTAIRSGUI extends JFrame {
             c.setVisible(false);
         }
 		board.removeAll();
-		whoPlays.setText(poobStairs.getTurn());
+		whoPlays.setText(poobStairs.getTurn().getName());
 		JPanel square;
 		Color color;
 		
@@ -558,6 +558,7 @@ public class POOBSTAIRSGUI extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				int siNo = JOptionPane.showConfirmDialog(POOBSTAIRSGUI.this, "Esta seguro de terminar el juego?");
+				System.out.print(siNo);
 				if (siNo == 0)
 					setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				else
@@ -652,17 +653,16 @@ public class POOBSTAIRSGUI extends JFrame {
 		roll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Face current = poobStairs.rollDice();
-				assignValue(current.getValue());
 				
-				try {
+				assignValue(current.getValue());
 					if(activePower(current)) {
-						
+						poobStairs.usePower();
+					}else {
+						poobStairs.advancePlayer(current.getValue());
 					}
-					poobStairs.advancePlayer(current.getValue());
+					
 					refresh();
-				} catch (POOBSTAIRSException e1) {
-					e1.printStackTrace();
-				}
+				
 
 			}
 		});
@@ -734,6 +734,19 @@ public class POOBSTAIRSGUI extends JFrame {
     }
 	
 	private boolean activePower(Face face) {
-		return false;
+		try {
+			int option;
+			if(!(face.indicatePowers()[0].equals(Power.CHANGE))) {
+				option =JOptionPane.showConfirmDialog(this, face.indicatePowers()[0] + "¿Desea utilizarlo?");
+				if(option == 0) return true;
+				else return false;
+			}else {
+				JOptionPane.showMessageDialog(this, "Usted ha adquirido el poder " + Power.CHANGE);
+				return true;
+			}
+		}catch(POOBSTAIRSException e) {
+			return false;
+		}
+		
 	}
 }

@@ -6,6 +6,7 @@ public class Piece {
 	private Color color;
 	private Square position;
 	private Player owner;
+
 	
 	public Piece(Color color, Player owner) {
 		this.color = color;
@@ -17,6 +18,10 @@ public class Piece {
 	}
 	protected int getPosition() {
 		return position.getNumSquare();
+	}
+	
+	protected Square getSquare() {
+		return position;
 	}
 	
 	public void changePositionTo(Square newPosition) {
@@ -45,5 +50,7 @@ public class Piece {
 			changePositionTo(position.getObstacle().getTail());
 		}
 	}
+	
+	
 	
 }

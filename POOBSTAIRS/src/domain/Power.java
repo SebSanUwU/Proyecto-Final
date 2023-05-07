@@ -1,8 +1,8 @@
 package domain;
 
 public class Power {
-	public static final String EXTRA_MOVE = "Move+";
-	public static final String MINUS_MOVE = "Move-";
+	public static final String EXTRA_MOVE = "Mover una Casilla Adicional";
+	public static final String MINUS_MOVE = "Mover una Casilla Menos";
 	public static final String CHANGE = "Change";
 	
 	public static String[] givePowers() {

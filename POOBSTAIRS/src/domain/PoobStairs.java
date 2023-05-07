@@ -77,13 +77,22 @@ public class PoobStairs {
 	 * @return true si el jugador en turno ya llego a la ultima casilla
 	 * @throws POOBSTAIRSException - NO_MOR_SQUARES, si el jugador va a avnzar más casillas de la que se encuentran en el tablero.
 	 */
-	public boolean advancePlayer(int positions) throws POOBSTAIRSException{
-		if(players[playerOnTurn].getPiecePosition() + positions > board.getTotalSquares()) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
-		int newPosition = players[playerOnTurn].movePiece(positions);
-		assignPiece(newPosition, players[playerOnTurn].getPiece());
+	public boolean advancePlayer(int positions) {
+		try {
+			check(positions);
+			int newPosition = players[playerOnTurn].movePiece(positions);
+			assignPiece(newPosition, players[playerOnTurn].getPiece());
+			if(playerOnTurn == 0) playerOnTurn = 1;
+			else playerOnTurn = 0;
+		}catch(POOBSTAIRSException e){
+			if(playerOnTurn == 0) playerOnTurn = 1;
+			else playerOnTurn = 0;
+		}
+		
 		//useSquare(findSquare(players[playerOnTurn].getPiecePosition()));
-		if(playerOnTurn == 0) playerOnTurn = 1;
-		else playerOnTurn = 0;
+		
+			
+		
 		return false;
 	}
 	
@@ -91,19 +100,12 @@ public class PoobStairs {
 		Square found = findSquare(square);
 		found.receivePiece(piece);
 		piece.changePositionTo(found);
-		
 		try {
-			piece.useObstacle();
-			findSquare(piece.getPosition()).receivePiece(piece);
-		} catch (POOBSTAIRSException e) {
 			if(findSquare(square) instanceof Jumper) {
-				piece.changePositionTo(findSquare(square + 5));
-				findSquare(piece.getPosition()).receivePiece(piece);
-
+				advancePlayer(5);
 			}
 			else if(findSquare(square) instanceof ReverseJumper) {
-				piece.changePositionTo(findSquare(square - 5));
-				findSquare(piece.getPosition()).receivePiece(piece);
+				negativeMove(5);
 
 			}
 			else if(findSquare(square) instanceof Advance) {
@@ -117,9 +119,17 @@ public class PoobStairs {
 			} else if(findSquare(square) instanceof Mortal) {
 				piece.changePositionTo(findSquare(0));
 				findSquare(piece.getPosition()).receivePiece(piece);
+			}else {
+				piece.useObstacle();
+				findSquare(piece.getPosition()).receivePiece(piece);
 			}
+			
+		} catch (POOBSTAIRSException e) {
+			e.printStackTrace();
 		}
+		
 	}
+		
 	
 	
 	private int nextStair(int square) {
@@ -156,10 +166,43 @@ public class PoobStairs {
 		return board.find(value);
 	}
 	
-	public String getTurn() {
-		return players[playerOnTurn].getName();
+	public Player getTurn() {
+		return players[playerOnTurn];
+	}
+	
+	public void usePower() {
+		int firstPosition = players[playerOnTurn].getPiecePosition();
+		try {
+			
+			if(die.getCurrentFace().indicatePowers()[0].equals(Power.CHANGE)) {
+				players[playerOnTurn].getPiece().changePositionTo(findSquare(players[playerOnTurn + 1].getPiecePosition()));
+				findSquare(players[playerOnTurn + 1].getPiecePosition()).receivePiece(players[playerOnTurn].getPiece());
+				players[playerOnTurn + 1].getPiece().changePositionTo(findSquare(firstPosition));
+				findSquare(firstPosition).receivePiece(players[playerOnTurn + 1].getPiece());
+				advancePlayer(die.getCurrentFace().getValue());
+			}else if(die.getCurrentFace().indicatePowers()[0].equals(Power.EXTRA_MOVE)){
+				advancePlayer(die.getCurrentFace() .getValue()+1);
+			}else {
+				advancePlayer(die.getCurrentFace().getValue() - 1);
+			}
+		}catch(IndexOutOfBoundsException e) {
+			players[playerOnTurn].getPiece().changePositionTo(findSquare(players[0].getPiecePosition()));
+			findSquare(players[0].getPiecePosition()).receivePiece(players[playerOnTurn].getPiece());
+			players[0].getPiece().changePositionTo(findSquare(firstPosition));
+			findSquare(firstPosition).receivePiece(players[0].getPiece());
+			advancePlayer(die.getCurrentFace().getValue());
+		}catch (POOBSTAIRSException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void negativeMove(int squares) throws POOBSTAIRSException{
+		if(players[playerOnTurn].getPiecePosition() - squares  < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
+		assignPiece(players[playerOnTurn].getPiecePosition() - squares, players[playerOnTurn].getPiece());
+	}
+	
+	private void check(int positions)throws POOBSTAIRSException{
+		if(players[playerOnTurn].getPiecePosition() + positions > board.getTotalSquares()) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
 	}
 
-	
-	
 }

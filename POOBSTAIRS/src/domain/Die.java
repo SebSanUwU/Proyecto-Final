@@ -12,6 +12,7 @@ public class Die {
 	private int numPowers;
 	private ArrayList<Face> faces;
 	private Random random;
+	private Face currentFace;
 	/**
 	 * Metodo constructor de un Objeto de la clase Dado
 	 * @param numFaces, numero de caras que va a tener el dado.
@@ -47,20 +48,19 @@ public class Die {
 		for(Face f: faces) {
 			f.removePowers();
 		}
-		ArrayList<Face> emptyFaces = (ArrayList<Face>) faces.clone();
+		ArrayList<Face> emptyFaces =  (ArrayList<Face>) faces.clone();
 		int i = 0;
 		while(powersToGive > 0) {
-			if(random.nextBoolean()) {
-				try {
-					emptyFaces.get(i).addPower(Power.givePowers()[random.nextInt(3)]);
-				} catch (POOBSTAIRSException e) {
-					emptyFaces.remove(emptyFaces.get(i));
-				}
-				powersToGive--;
+			try {
+				faces.get(random.nextInt(faces.size())).addPower(Power.givePowers()[random.nextInt(3)]);
+				powersToGive --;
+			} catch (POOBSTAIRSException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			i++;
-			if(i == emptyFaces.size()) i = 0;
+
 		}
+			
 	}
 	
 	/**
@@ -70,7 +70,11 @@ public class Die {
 	
 	public Face roll() {
 		assignPowers();
-		return faces.get(random.nextInt(faces.size()));
+		currentFace = faces.get(random.nextInt(faces.size()));
+		return currentFace;
+	}
+	public Face getCurrentFace() {
+		return currentFace;
 	}
 	
 	/**

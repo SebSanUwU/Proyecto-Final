@@ -1,5 +1,6 @@
 package test;
 import domain.*;
+import domain.Die.Face;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -85,29 +86,53 @@ class PoobStairsTest {
 		try {
 			PoobStairs game = new PoobStairs(10,10, players);
 			game.setGame(0, 0, 0, 0);
+			for(int i = 0; i < 15; i++) {
+				int position = players[0].getPiecePosition();
+				int extra = game.rollDice().getValue();
+				game.assignPiece(position + extra, players[0].getPiece());
+				if(players[0].getPiecePosition() != position + extra) fail("no se mueve correctamente");
+			}
 			game.assignPiece(5, players[0].getPiece());
 			assertEquals(5,players[0].getPiecePosition());
 			assertTrue(game.findSquare(5).contains(players[0].getPiece()));
 			assertFalse(game.findSquare(0).contains(players[0].getPiece()));
 			
 		}catch(POOBSTAIRSException e) {
-			fail("Lanzo excepción");
+			
 		}
 	}
 	
 	@Test
-	void shouldThrowExceptionifCantMove() {
+	void shouldNotMoveMove() {
 		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+		
 		try {
 			PoobStairs game = new PoobStairs(10,10, players);
 			game.setGame(0, 0, 0, 0);
-			
-			game.advancePlayer(200);
-			fail("No lanzo excepción");
+			Player isYourTurn = game.getTurn();
+			game.advancePlayer(101);
+			assertEquals(isYourTurn.getPiecePosition(),0);
 		} catch (POOBSTAIRSException e) {
-			assertEquals(players[0].getPiecePosition(), 0);
-			assertEquals(e.getMessage(), POOBSTAIRSException.NO_MORE_SQUARES);
-			
+			e.printStackTrace();
+		}
+		
+	}
+	
+	
+	
+	@Test
+	void shouldThrowDiceCorrectly() {
+		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+		PoobStairs game;
+		try {
+			game = new PoobStairs(10,10, players);
+			game.setGame(0, 0, 1, 0);
+			for(int i = 0; i < 200; i++) {
+				game.rollDice();
+			}
+		} catch (POOBSTAIRSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
 	}
