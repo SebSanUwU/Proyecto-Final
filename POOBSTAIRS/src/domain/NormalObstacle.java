@@ -5,8 +5,5 @@ public class NormalObstacle extends Obstacle{
         super(head, tail, type);
     }
     
-    public int use() {
-    	if(getType().equals("snake")) return getNumTail();
-    	else return getNumHead();
-    }
+    
 }

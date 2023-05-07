@@ -8,6 +8,8 @@ public class POOBSTAIRSException extends Exception{
 	public static final String NO_OBSTACLE = "La casilla no tiene obstaculos";
 	public static final String NO_MORE_SQUARES = "El numero de pasos supera al numero de casillas";
 	public static final String INACCEPTED_PERCENTAGE = "Los porcentajes no pueden ser mayor a 1";
+	public static final String NO_PIECES= "No ahí piezas en esta casilla";
+	public static final String NO_MORE_PIECES= "La casilla no puede haceptar más piezas";
 	
 	public POOBSTAIRSException(String message) {
 		super(message);

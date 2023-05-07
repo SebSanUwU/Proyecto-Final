@@ -11,19 +11,19 @@ public abstract class Obstacle {
         this.type=type;
     }
 
-    public int getNumHead(){
-        return head.getNumSquare();
+    public Square getHead(){
+        return head;
     }
 
-    public int getNumTail(){
-        return tail.getNumSquare();
+    public Square getTail(){
+        return tail;
     }
     
     public String getType() {
     	return type;
     }
     
-    public abstract int use();
+    
     
 
 }

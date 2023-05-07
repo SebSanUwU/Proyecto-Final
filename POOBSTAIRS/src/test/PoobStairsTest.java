@@ -3,6 +3,7 @@ import domain.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.awt.Color;
 
 import org.junit.jupiter.api.Test;
 
@@ -56,7 +57,7 @@ class PoobStairsTest {
 	
 	@Test
 	void shouldNotshouldThrowExceptionIfLessthanSixNormal() {
-		Player[] players = {new Player("Camilo", "red"), new Player("Pollis", "blue")};
+		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
 		try {
 			PoobStairs game = new PoobStairs(10,10, players);
 			game.setGame(0, 0, 0, (float)0.5);
@@ -78,15 +79,29 @@ class PoobStairsTest {
 		}
 	}
 	
-	
-	
 	@Test
-	void shouldThrowExceptionifCantMove() {
-		Player[] players = {new Player("Camilo", "red"), new Player("Pollis", "blue")};
+	void shouldMovePiece() {
+		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
 		try {
 			PoobStairs game = new PoobStairs(10,10, players);
 			game.setGame(0, 0, 0, 0);
-			int firstTurn = game.getTurn();
+			game.assignPiece(5, players[0].getPiece());
+			assertEquals(5,players[0].getPiecePosition());
+			assertTrue(game.findSquare(5).contains(players[0].getPiece()));
+			assertFalse(game.findSquare(0).contains(players[0].getPiece()));
+			
+		}catch(POOBSTAIRSException e) {
+			fail("Lanzo excepción");
+		}
+	}
+	
+	@Test
+	void shouldThrowExceptionifCantMove() {
+		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+		try {
+			PoobStairs game = new PoobStairs(10,10, players);
+			game.setGame(0, 0, 0, 0);
+			
 			game.advancePlayer(200);
 			fail("No lanzo excepción");
 		} catch (POOBSTAIRSException e) {

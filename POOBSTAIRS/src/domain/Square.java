@@ -1,13 +1,15 @@
 package domain;
 
+import java.util.HashSet;
+
 public abstract class Square {
     protected int numSquare;
     private Obstacle obstacle;
-    private Piece[] pieces;
+    private HashSet<Piece> pieces;
 
     public Square(int numSquare){
         this.numSquare=numSquare;
-        pieces = new Piece[2];
+        pieces = new HashSet<Piece>();
     }
 
     public void addObstacle(Obstacle obstacle){
@@ -24,17 +26,27 @@ public abstract class Square {
     }
     
     protected void receivePiece(Piece piece) {
-    	if(pieces[0] == null) pieces[0] = piece;
-    	else pieces[1] = piece;
+  
+    	pieces.add(piece);
     }
     
-    protected void removePiece(Piece piece) {
-    	if(pieces[0] != null) pieces[0] = null;
-    	else pieces[1] = null;
+    protected void removePiece(Piece piece) throws POOBSTAIRSException{
+    	if(pieces.isEmpty()) throw new POOBSTAIRSException(POOBSTAIRSException.NO_PIECES);
+    	pieces.remove(piece);
     }
     
-    public int useObstacle() throws POOBSTAIRSException{
-    	return getObstacle().use();
+   
+    
+    public Piece[] getPieces() {
+    	Piece[] pieceS = new Piece[pieces.size()];
+    	pieceS = pieces.toArray(pieceS);
+		return pieceS;
     }
+    
+    public boolean contains(Piece piece) {
+    	return pieces.contains(piece);
+    }
+    
+    
 
 }

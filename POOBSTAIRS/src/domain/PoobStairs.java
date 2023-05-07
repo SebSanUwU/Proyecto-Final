@@ -1,9 +1,9 @@
 package domain;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+
+
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
+
 
 import domain.Die.Face;
 
@@ -15,6 +15,7 @@ public class PoobStairs {
 	private GameBoard board;
 	//private Square[] boardLine;
 	private Die die;
+
 
 	/**
 	 * Constructor de la clase PoobStairs
@@ -52,7 +53,7 @@ public class PoobStairs {
 		die = new Die((byte)6,pModifier);
 		for(int i = 0; i < players.length; i++) {
 			Piece piece = players[i].getPiece();
-			board.assignPiece(0, piece);
+			assignPiece(0, piece);
 		}
 		
 	}
@@ -79,14 +80,84 @@ public class PoobStairs {
 	public boolean advancePlayer(int positions) throws POOBSTAIRSException{
 		if(players[playerOnTurn].getPiecePosition() + positions > board.getTotalSquares()) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
 		int newPosition = players[playerOnTurn].movePiece(positions);
-		board.assignPiece(newPosition, players[playerOnTurn].getPiece());
+		assignPiece(newPosition, players[playerOnTurn].getPiece());
+		//useSquare(findSquare(players[playerOnTurn].getPiecePosition()));
 		if(playerOnTurn == 0) playerOnTurn = 1;
 		else playerOnTurn = 0;
 		return false;
 	}
 	
-	public int getTurn() {
-		return playerOnTurn;
+	public void assignPiece(int square, Piece piece) {
+		Square found = findSquare(square);
+		found.receivePiece(piece);
+		piece.changePositionTo(found);
+		
+		try {
+			piece.useObstacle();
+			findSquare(piece.getPosition()).receivePiece(piece);
+		} catch (POOBSTAIRSException e) {
+			if(findSquare(square) instanceof Jumper) {
+				piece.changePositionTo(findSquare(square + 5));
+				findSquare(piece.getPosition()).receivePiece(piece);
+
+			}
+			else if(findSquare(square) instanceof ReverseJumper) {
+				piece.changePositionTo(findSquare(square - 5));
+				findSquare(piece.getPosition()).receivePiece(piece);
+
+			}
+			else if(findSquare(square) instanceof Advance) {
+				piece.changePositionTo(findSquare(nextStair(square)));
+				findSquare(piece.getPosition()).receivePiece(piece);
+
+			}
+			else if(findSquare(square) instanceof Regression) {
+				piece.changePositionTo(findSquare(lastSnake(square)));
+				findSquare(piece.getPosition()).receivePiece(piece);
+			} else if(findSquare(square) instanceof Mortal) {
+				piece.changePositionTo(findSquare(0));
+				findSquare(piece.getPosition()).receivePiece(piece);
+			}
+		}
+	}
+	
+	
+	private int nextStair(int square) {
+		
+		for(Integer i: board.getObstacleSquares()) {
+			try {
+				if(i > square && findSquare(i).getObstacle().getType().equals("stair") && findSquare(i).getObstacle().getHead().getNumSquare() == i) {
+					square = i;
+					break;
+				}
+			} catch (POOBSTAIRSException e) {
+				e.printStackTrace();
+			}
+		}
+		return square;
+	}
+	
+	private int lastSnake(int square) {
+		
+		for(Integer i: board.getObstacleSquares()) {
+			try {
+				if(i < square && findSquare(i).getObstacle().getType().equals("snake") && findSquare(i).getObstacle().getTail().getNumSquare() == i) {
+					square = i;
+					break;
+				}
+			} catch (POOBSTAIRSException e) {
+				e.printStackTrace();
+			}
+		}
+		return square;
+	}
+	
+	public Square findSquare(int value) {
+		return board.find(value);
+	}
+	
+	public String getTurn() {
+		return players[playerOnTurn].getName();
 	}
 
 	

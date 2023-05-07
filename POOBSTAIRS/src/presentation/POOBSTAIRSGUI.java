@@ -1,9 +1,13 @@
 package presentation;
 import domain.*;
+import domain.Die.Face;
+
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.GroupLayout.ParallelGroup;
 import javax.swing.GroupLayout.SequentialGroup;
@@ -43,11 +47,15 @@ public class POOBSTAIRSGUI extends JFrame {
 	
 	/*startPlaying*/
 	private JPanel board;
+	private JLabel whoPlays, die;
+	private JButton roll;
 	
 	/*General*/
 	
 	private Color color1, color2;
 	private PoobStairs poobStairs;
+	
+	
 	
 	/**
 	 * Constructor de la clase POOBSTAIRSGUI
@@ -83,6 +91,13 @@ public class POOBSTAIRSGUI extends JFrame {
 		}
 		refresh();
 	}
+	
+	private Color giveColor(String color) {
+		if(color.equals("RED")) return Color.RED;
+		else if(color.equals("BLUE")) return Color.BLUE;
+		else if(color.equals("GREEN")) return Color.GREEN;
+		else return Color.YELLOW;
+	}
 	/**
 	 * Metodo que inicializa y prepara el juego en el paquete de dominio
 	 * @param rows, numero de filas que va a tener el tablero.
@@ -96,7 +111,13 @@ public class POOBSTAIRSGUI extends JFrame {
 	 *                             de casillas especiales y obstaculos.
 	 */
 	private void setGame(int rows, int columns, int snakes, int stairs, double pSpecials, double pPowers) throws POOBSTAIRSException{
-		 Player[] players = {new Player("Camilo", "red"), new Player("Pollis", "blue")};
+		 Player[] players = new Player[2];
+		 
+		 players[0] = new Player(name1.getText(), giveColor( (String)colors.getSelectedItem()));
+		 if(name2.isEnabled()) players[1] = new Player(name2.getText(), giveColor( (String)colors2.getSelectedItem()));
+		 else if(((String) machineMode.getSelectedItem()).equals("Principiante")) players[1] = new Beginner(giveColor( (String)colors.getSelectedItem()));
+		 else players[1] = new Trainee(giveColor( (String)colors.getSelectedItem()));
+		
 		poobStairs = new PoobStairs(rows, columns,players);
 		poobStairs.setGame(snakes, stairs, (float) pSpecials, (float) pPowers);
 	}
@@ -137,10 +158,14 @@ public class POOBSTAIRSGUI extends JFrame {
 		panels.add(initGame);
 		//Se inicializan los componentes que hacen parte del JPanel startPlaying
 		startPlaying = new JPanel();
-		startPlaying.setLayout(new BorderLayout());
+		startPlaying.setLayout(new BorderLayout(5,5));
 		board = new JPanel();
-		startPlaying.setBorder(new EmptyBorder(20,20,20,20));
-		startPlaying.add(board, BorderLayout.CENTER);
+		
+		whoPlays = new JLabel("");
+		whoPlays.setVerticalAlignment(SwingConstants.TOP);
+		die = new JLabel();
+		roll = new JButton("Lanzar dado");
+		buildGame();
 		panels.add(startPlaying);
 		for (Component panel : panels.getComponents()) {
 			panel.setBackground(new Color(220, 93, 83));
@@ -189,7 +214,7 @@ public class POOBSTAIRSGUI extends JFrame {
 	private void prepareData() {
 		name1 = new JTextField("", 10);
 		name2 = new JTextField("", 10);
-		String[] colorOptions = { "Rojo", "Amarillo", "Azul", "Verde" };
+		String[] colorOptions = { "RED", "YELLOW", "BLUE", "GREEN" };
 		colors = new JComboBox(colorOptions);
 		colors2 = new JComboBox(colorOptions);
 		String[] mode = { "Principiante", "Aprendiz" };
@@ -225,6 +250,7 @@ public class POOBSTAIRSGUI extends JFrame {
 		dataPlayers.setLayout(layout);
 
 		if (machine) {
+			name2.setEnabled(false);
 			layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 					.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
 							.addComponent(title, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
@@ -264,6 +290,7 @@ public class POOBSTAIRSGUI extends JFrame {
 		}
 
 		else {
+			name2.setEnabled(true);
 			layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
 					.addGroup(layout.createParallelGroup(Alignment.TRAILING, false)
 							.addComponent(title, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE,
@@ -378,6 +405,49 @@ public class POOBSTAIRSGUI extends JFrame {
 		buildButton(initGame);
 		
 	}
+	
+	private void  buildGame() {
+		//Se dan las caracteristicas al tablero
+		board.setOpaque(false);
+		startPlaying.setBorder(new EmptyBorder(20,20,20,20));
+		startPlaying.add(board, BorderLayout.CENTER);
+		JPanel gameOptions = new JPanel();
+		//Se crea un JPanel de opciones e indicaciones para realizar el juego de forma correcta 
+		gameOptions.setBorder(new CompoundBorder(new EmptyBorder(1,2,1,2),
+				new TitledBorder("Información Juego")));
+		gameOptions.setLayout(new GridLayout(3,1));
+		gameOptions.setPreferredSize(new Dimension(230,HEIGHT));
+		startPlaying.add(gameOptions, BorderLayout.EAST);
+		
+		//Se crea la división de estado de juego
+		
+		JPanel playerData = new JPanel();
+		
+		gameOptions.add(playerData);
+		playerData.setLayout(new GridLayout(3, 1, 5, 0));
+		
+		JLabel turn = new JLabel("Es el Turno de");
+		turn.setVerticalAlignment(SwingConstants.BOTTOM);
+		turn.setHorizontalAlignment(SwingConstants.CENTER);
+		playerData.add(turn);
+		whoPlays.setHorizontalAlignment(SwingConstants.CENTER);
+		playerData.add(whoPlays);
+		
+		
+		//Se crea la división del dado
+		JPanel dataDie = new JPanel();
+		dataDie.setBorder(new EmptyBorder(3,3,3,3));
+		dataDie.setLayout(new BorderLayout(1,10));
+		dataDie.add(roll,BorderLayout.NORTH);
+		die.setVerticalAlignment(SwingConstants.TOP);
+		die.setHorizontalAlignment(SwingConstants.CENTER);
+		assignValue(1);
+		dataDie.add(die, BorderLayout.CENTER);
+		buildButton(dataDie);
+		
+		gameOptions.add(dataDie);
+		
+	}
 	/**
 	 * Metodo que le asigna de forma general ciertas propiedades a los JLabels
 	 * @param container, componente que contiene a los JLabel
@@ -394,22 +464,50 @@ public class POOBSTAIRSGUI extends JFrame {
 	 * Se encarga de representar de manera visual el estado actual del tablero
 	 */
 	private void refresh() {
+		Component component[] = board.getComponents();
+        for(Component c: component){
+            c.setVisible(false);
+        }
+		board.removeAll();
+		whoPlays.setText(poobStairs.getTurn());
 		JPanel square;
 		Color color;
-		ImageIcon wallpaper;
-		Icon icon;
+		
 		for(int i = 0; i < poobStairs.board().length; i++
 				) {
 			for(int j = 0; j < poobStairs.board()[0].length; j++) {
 				
 				try {
-					if(poobStairs.board()[i][j].getObstacle().getType().equals("snake")) square = new DiferentSquare("/img/snake.jpg");
+					Obstacle obstacle= poobStairs.board()[i][j].getObstacle();
+					if(obstacle.getType().equals("snake")) square = new DiferentSquare("/img/snake.jpg");
 					else square = new DiferentSquare("/img/stair.jpg");
+					square.add(new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquare() + 1)));
+					JButton infoButton = new JButton("i");
+					infoButton.addActionListener(new ActionListener() {
+						public void actionPerformed(ActionEvent e) {
+							JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, 
+							"Head: " + (obstacle.getHead().getNumSquare() + 1) + "//" +
+							"Tail: " + (obstacle.getTail().getNumSquare() + 1));
+
+						}
+					});
+
+					square.add(infoButton);
 					
 				}catch(POOBSTAIRSException e) {
 					if(!(poobStairs.board()[i][j] instanceof Normal)) {
 						square = new DiferentSquare("/img/Special.jpg");
-						
+						square.add(new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquare() + 1)));
+						JButton infoButton = new JButton("i");
+						String inf = specials(poobStairs.board()[i][j]);
+						infoButton.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, 
+								inf);
+
+							}
+						});
+						square.add(infoButton);
 					}
 					else {
 						square = new JPanel();
@@ -417,12 +515,26 @@ public class POOBSTAIRSGUI extends JFrame {
 						else color = color1;
 						square.setBackground(color);
 						square.setOpaque(true);
+						square.add(new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquare() + 1)));
 					}
+					
 				}
+				
+				
 				square.setLayout(new FlowLayout(FlowLayout.LEFT, 8,2));
 				square.setBorder(new LineBorder(Color.BLACK, 1));
-				square.add(new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquare() + 1)));
+				
+				for(Piece piece: poobStairs.board()[i][j].getPieces()) {
+					JLabel visualPiece = new JLabel();
+					visualPiece.setPreferredSize(new Dimension((int) Math.round(square.getPreferredSize().height*0.5),(int) Math.round(square.getPreferredSize().height*0.5)));
+					visualPiece.setMaximumSize(new Dimension((int) Math.round(square.getPreferredSize().height*0.5),(int) Math.round(square.getPreferredSize().height*0.5)));
+					visualPiece.setMinimumSize(new Dimension((int) Math.round(square.getPreferredSize().height*0.5),(int) Math.round(square.getPreferredSize().height*0.5)));
+					visualPiece.setBackground(piece.getColor());
+					visualPiece.setOpaque(true);
+					square.add(visualPiece);
+				}
 				board.add(square);
+				
 			}
 		}
 	}
@@ -441,6 +553,8 @@ public class POOBSTAIRSGUI extends JFrame {
 	}
 
 	private void prepareActions() {
+		
+		/* General*/
 		addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
 				int siNo = JOptionPane.showConfirmDialog(POOBSTAIRSGUI.this, "Esta seguro de terminar el juego?");
@@ -449,7 +563,11 @@ public class POOBSTAIRSGUI extends JFrame {
 				else
 					setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			}
+			
+			
 		});
+		
+		
 		/*principal*/
 		exit.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -473,9 +591,11 @@ public class POOBSTAIRSGUI extends JFrame {
 		principalMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				CardLayout layout = (CardLayout) panels.getLayout();
+				if(startPlaying.isVisible()) POOBSTAIRSGUI.this.setExtendedState(ICONIFIED);
 				layout.first(panels);
 				dataPlayers.removeAll();
 				mode.add(principalMenu);
+				
 			}
 		});
 
@@ -517,6 +637,9 @@ public class POOBSTAIRSGUI extends JFrame {
 							,(Double)dataPowers.getValue(), (Double)dataSpecials.getValue());
 					changeTemplate("Clasic");
 					board.setLayout(new GridLayout(poobStairs.board().length, poobStairs.board()[0].length));
+					
+					POOBSTAIRSGUI.this.setExtendedState(MAXIMIZED_BOTH);
+					
 					layout.next(panels);
 					
 				}catch(POOBSTAIRSException exception) {
@@ -524,6 +647,26 @@ public class POOBSTAIRSGUI extends JFrame {
 				}
 			}
 		});
+		
+		/*startPlaying*/
+		roll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Face current = poobStairs.rollDice();
+				assignValue(current.getValue());
+				
+				try {
+					if(activePower(current)) {
+						
+					}
+					poobStairs.advancePlayer(current.getValue());
+					refresh();
+				} catch (POOBSTAIRSException e1) {
+					e1.printStackTrace();
+				}
+
+			}
+		});
+
 
 	}
 	/**
@@ -537,5 +680,60 @@ public class POOBSTAIRSGUI extends JFrame {
 	public static void main(String[] args) {
 		POOBSTAIRSGUI frame = new POOBSTAIRSGUI();
 		frame.setVisible(true);
+	}
+	
+	private void assignValue(int value) {
+		switch(value) {
+			case 1:
+				die.setIcon(new ImageIcon(POOBSTAIRSGUI.class.getResource("/img/numberOne.jpg")));
+				break;
+			case 2:
+				die.setIcon(new ImageIcon(POOBSTAIRSGUI.class.getResource("/img/numberTwo.jpg")));
+				break;
+			case 3:
+				die.setIcon(new ImageIcon(POOBSTAIRSGUI.class.getResource("/img/numberTree.jpg")));
+				break;
+			case 4:
+				die.setIcon(new ImageIcon(POOBSTAIRSGUI.class.getResource("/img/numberFour.jpg")));
+				break;
+			case 5:
+				die.setIcon(new ImageIcon(POOBSTAIRSGUI.class.getResource("/img/numberFive.jpg")));
+				break;
+			case 6:
+				die.setIcon(new ImageIcon(POOBSTAIRSGUI.class.getResource("/img/number6.jpg")));
+				break;
+			default:
+				die.setIcon(new ImageIcon(POOBSTAIRSGUI.class.getResource("/img/numberOne.jpg")));
+				break;
+		}
+	}
+	
+	private String specials(Square square) {
+		if(square instanceof Jumper) {
+			return "Conmigo avanzas 5 casilla";
+		}
+		else if(square instanceof ReverseJumper) {
+			return "Conmigo retrocedes 5 casilla";
+		}else if(square instanceof Advance) {
+			return "Conmigo Vas hasta la siguiente escalera";
+		}else if(square instanceof Regression) {
+			return "Conmigo Vas hasta la anterior serpiente";
+		}else if(square instanceof QA) {
+			return "A mi me tienes que contestar una pregunta para avanzar";
+		}else {
+			return "Yo te devuelvo a la casilla inicial";
+		}
+		
+	}
+	private static void waitSeconds(int segundos){
+        try{
+            Thread.sleep(segundos*100);
+        }catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+	
+	private boolean activePower(Face face) {
+		return false;
 	}
 }

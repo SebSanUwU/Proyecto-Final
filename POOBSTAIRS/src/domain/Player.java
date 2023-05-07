@@ -1,5 +1,7 @@
 package domain;
 
+import java.awt.Color;
+
 public class Player {
 	private String name;
 	private int numStairs;
@@ -8,7 +10,7 @@ public class Player {
 	private int maxPosition;
 	private Piece piece;
 	
-	public Player(String name, String color) {
+	public Player(String name, Color color) {
 		this.name = name;
 		piece = new Piece(color,this);
 		numStairs = 0;
@@ -27,5 +29,9 @@ public class Player {
 	
 	public Piece getPiece() {
 		return piece;
+	}
+	
+	public String getName() {
+		return name;
 	}
 }
