@@ -84,7 +84,7 @@ public class PoobStairs {
 	 */
 	public boolean advancePlayer(int positions) {
 		try {
-			board.replacePiecePosition(getTurn().getPiecePosition() + positions, getTurn().getPiece());
+			board.replacePiecePosition(getTurn().movePiece(positions), getTurn().getPiece());
 			if(getTurn().getPieceSquare() instanceof SpecialSquare) {
 				board.replacePiecePosition(((SpecialSquare)getTurn().getPieceSquare()).useTrap(), getTurn().getPiece());
 			}
@@ -121,7 +121,8 @@ public class PoobStairs {
 				else nextP = players[0];
 				Power.usSuperPower(power, board, getTurn(), nextP);
 			}else {
-				advancePlayer(Power.usePower(power) + die.getCurrentFace().getValue());
+				
+				advancePlayer(getTurn().movePiece(Power.usePower(power) + die.getCurrentFace().getValue()));
 			}
 		}catch(POOBSTAIRSException e) {
 			e.printStackTrace();
