@@ -33,6 +33,7 @@ public class Piece {
 			e.printStackTrace();
 		}
 		position = newPosition;
+		
 	}
 	
 	protected void setColor(Color newColor) {
@@ -44,10 +45,9 @@ public class Piece {
 	}
 	
 	public void useObstacle() throws POOBSTAIRSException {
-		if(position.getObstacle().getType().equals("snake")) {
-			changePositionTo(position.getObstacle().getHead());
-		}else {
+		
 			changePositionTo(position.getObstacle().getTail());
-		}
+		
 	}
+	
 }

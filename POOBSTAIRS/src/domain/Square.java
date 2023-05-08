@@ -2,7 +2,7 @@ package domain;
 
 import java.util.HashSet;
 
-public abstract class Square {
+public  class Square {
     protected int numSquare;
     private Obstacle obstacle;
     private HashSet<Piece> pieces;
@@ -26,7 +26,6 @@ public abstract class Square {
     }
     
     protected void receivePiece(Piece piece) {
-  
     	pieces.add(piece);
     }
     
@@ -45,6 +44,10 @@ public abstract class Square {
     
     public boolean contains(Piece piece) {
     	return pieces.contains(piece);
+    }
+    
+    public int useTrap() {
+    	return numSquare;
     }
     
     
