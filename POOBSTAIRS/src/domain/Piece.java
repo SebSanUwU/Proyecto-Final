@@ -50,7 +50,4 @@ public class Piece {
 			changePositionTo(position.getObstacle().getTail());
 		}
 	}
-	
-	
-	
 }
