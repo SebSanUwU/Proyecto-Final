@@ -116,7 +116,6 @@ public class PoobStairs {
 	public void usePower() {
 		int firstPosition = players[playerOnTurn].getPiecePosition();
 		try {
-			
 			if(die.getCurrentFace().indicatePowers()[0].equals(Power.CHANGE)) {
 				players[playerOnTurn].getPiece().changePositionTo(findSquare(players[playerOnTurn + 1].getPiecePosition()));
 				findSquare(players[playerOnTurn + 1].getPiecePosition()).receivePiece(players[playerOnTurn].getPiece());
@@ -138,7 +137,4 @@ public class PoobStairs {
 			e.printStackTrace();
 		}
 	}
-	
-	
-
 }
