@@ -47,8 +47,9 @@ public class POOBSTAIRSGUI extends JFrame {
 	
 	/*startPlaying*/
 	private JPanel board;
-	private JLabel whoPlays, die;
-	private JButton roll;
+	private JLabel whoPlays, die, numSnakes, numStairs, numSpecials, numModifiers, maxPosition, extraMoves;
+	private JButton roll, change, endGame;
+	private JComboBox topics;
 	
 	/*General*/
 	
@@ -88,6 +89,12 @@ public class POOBSTAIRSGUI extends JFrame {
 		if (topic.equals("Clasic")) {
 			color1 = new Color(255, 233, 90); //Amarillo
 			color2 = new Color(70, 165, 162); //Azul
+		}else if(topic.equals("Christmas")) {
+			color1 = new Color (255,255,255);
+			color2 = new Color (248,61,31);
+		}else {
+			color1 = new Color (255,255,255);
+			color2 = new Color (0,0,0);
 		}
 		refresh();
 	}
@@ -160,11 +167,23 @@ public class POOBSTAIRSGUI extends JFrame {
 		startPlaying = new JPanel();
 		startPlaying.setLayout(new BorderLayout(5,5));
 		board = new JPanel();
-		
 		whoPlays = new JLabel("");
+		whoPlays.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		whoPlays.setPreferredSize(new Dimension(0, 10));
 		whoPlays.setVerticalAlignment(SwingConstants.TOP);
 		die = new JLabel();
-		roll = new JButton("Lanzar dado");
+		roll = new JButton("Lanzar Dado");
+		numSnakes = new JLabel("");
+		numStairs = new JLabel("");
+		numSpecials = new JLabel("");
+		numModifiers = new JLabel("");
+		maxPosition = new JLabel("");
+		extraMoves = new JLabel("");
+		extraMoves.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		change = new JButton("Cambiar");
+		String[] themes = {"Clasic", "Christmas", "Chess"};
+		endGame = new JButton("Salir del Juego");
+		topics = new JComboBox(themes);
 		buildGame();
 		panels.add(startPlaying);
 		for (Component panel : panels.getComponents()) {
@@ -417,35 +436,77 @@ public class POOBSTAIRSGUI extends JFrame {
 				new TitledBorder("Información Juego")));
 		gameOptions.setLayout(new GridLayout(3,1));
 		gameOptions.setPreferredSize(new Dimension(230,HEIGHT));
+		gameOptions.setOpaque(false);
 		startPlaying.add(gameOptions, BorderLayout.EAST);
 		
 		//Se crea la división de estado de juego
 		
 		JPanel playerData = new JPanel();
+		playerData.setBorder(new LineBorder(new Color(0, 0, 0)));
 		
 		gameOptions.add(playerData);
-		playerData.setLayout(new GridLayout(3, 1, 5, 0));
+		playerData.setLayout(new GridLayout(3, 1, 0, 2));
 		
 		JLabel turn = new JLabel("Es el Turno de");
+		turn.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		turn.setVerticalAlignment(SwingConstants.BOTTOM);
 		turn.setHorizontalAlignment(SwingConstants.CENTER);
 		playerData.add(turn);
 		whoPlays.setHorizontalAlignment(SwingConstants.CENTER);
 		playerData.add(whoPlays);
-		
-		
+		JPanel info = new JPanel();
+		info.setLayout(new GridLayout(5,2,2,2));
+		info.add(new JLabel("Num Snakes: "));
+		info.add(numSnakes);
+		info.add(new JLabel("Num Stairs: "));
+		info.add(numStairs);
+		info.add(new JLabel("Num Specials: "));
+		info.add(numSpecials);
+		info.add(new JLabel("Modifiers: "));
+		info.add(numModifiers);
+		info.add(new JLabel("Max Position: "));
+		info.add(maxPosition);
+		playerData.setOpaque(false);
+		playerData.add(info);
+		for(Component component: info.getComponents()) {
+			((JLabel)component).setOpaque(false);
+		}
+		info.setOpaque(false);
+
 		//Se crea la división del dado
 		JPanel dataDie = new JPanel();
-		dataDie.setBorder(new EmptyBorder(3,3,3,3));
+		dataDie.setBorder(new LineBorder(new Color(0, 0, 0)));
 		dataDie.setLayout(new BorderLayout(1,10));
 		dataDie.add(roll,BorderLayout.NORTH);
-		die.setVerticalAlignment(SwingConstants.TOP);
 		die.setHorizontalAlignment(SwingConstants.CENTER);
+		die.setOpaque(false);
 		assignValue(1);
 		dataDie.add(die, BorderLayout.CENTER);
+		dataDie.add(extraMoves, BorderLayout.SOUTH);
 		buildButton(dataDie);
-		
+		dataDie.setOpaque(false);
 		gameOptions.add(dataDie);
+		
+		//Se crea la división de extra button
+		
+		JPanel extraButtons = new JPanel();
+		extraButtons.setBorder(new LineBorder(new Color(0, 0, 0)));
+		extraButtons.setLayout(new GridLayout(2,1));
+		JPanel topic = new JPanel();
+		topic.setLayout(new GridLayout(1,2,5,5));
+		topic.setBorder(new EmptyBorder(10,5,(int) Math.round(getSize().height * 0.2),5));
+		topic.add(topics);
+		topic.add(change);
+		extraButtons.add(topic);
+		extraButtons.add(endGame);
+		gameOptions.add(extraButtons);
+		extraButtons.setOpaque(false);
+		topic.setOpaque(false);
+		buildButton(extraButtons);
+		buildButton(topic);
+		topics.setBackground(new Color(168, 202, 186));
+		
+		
 		
 	}
 	/**
@@ -472,7 +533,12 @@ public class POOBSTAIRSGUI extends JFrame {
 		whoPlays.setText(poobStairs.getTurn().getName());
 		JPanel square;
 		Color color;
-		
+		numSnakes.setText(String.valueOf(poobStairs.getTurn().getNumSnakes()));
+		numStairs.setText(String.valueOf(poobStairs.getTurn().getNumStairs()));
+		numSpecials.setText(String.valueOf(poobStairs.getTurn().numSpecials()));
+		numModifiers.setText(String.valueOf(poobStairs.getTurn().getNumModifiers()));
+		maxPosition.setText(String.valueOf(poobStairs.getTurn().getMax()));
+		extraMoves.setText("Te vas a mover desde: " + String.valueOf(poobStairs.getTurn().getPiecePosition() + 1));
 		for(int i = 0; i < poobStairs.board().getSquares().length; i++
 				) {
 			for(int j = 0; j < poobStairs.board().getSquares()[0].length; j++) {
@@ -660,13 +726,23 @@ public class POOBSTAIRSGUI extends JFrame {
 					}else {
 						poobStairs.advancePlayer(current.getValue());
 					}
-					
 					refresh();
-				
-
 			}
 		});
-
+		change.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				changeTemplate((String)topics.getSelectedItem());
+				refresh();
+			}
+		});
+		
+		endGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				POOBSTAIRSGUI.this.setExtendedState(NORMAL);
+				CardLayout layout = (CardLayout) panels.getLayout();
+				layout.first(panels);
+			}
+		});
 
 	}
 	/**
