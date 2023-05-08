@@ -84,13 +84,12 @@ public class PoobStairs {
 	 */
 	public boolean advancePlayer(int positions) {
 		try {
-			board.replacePiecePosition(players[playerOnTurn].getPiecePosition() + positions, players[playerOnTurn].getPiece());
-			if(players[playerOnTurn].getPiece().getPosition() instanceof SpecialSquare) {
-				board.replacePiecePosition(((SpecialSquare)players[playerOnTurn].getPiece().getPosition()).useTrap(), players[playerOnTurn].getPiece());
+			board.replacePiecePosition(getTurn().getPiecePosition() + positions, getTurn().getPiece());
+			if(getTurn().getPieceSquare() instanceof SpecialSquare) {
+				board.replacePiecePosition(((SpecialSquare)getTurn().getPieceSquare()).useTrap(), getTurn().getPiece());
 			}
-			board.replacePiecePosition(players[playerOnTurn].getPiece().getPosition().useObstacle(), players[playerOnTurn].getPiece());
+			board.replacePiecePosition(getTurn().getPieceSquare().useObstacle(), getTurn().getPiece());
 		}catch(POOBSTAIRSException e) {
-			
 			e.printStackTrace();
 		}
 		if(playerOnTurn == 0) playerOnTurn = 1;
@@ -111,30 +110,28 @@ public class PoobStairs {
 	/**
 	 * Si el jugador lo decide, se usa el poder del dado.
 	 */
-	/**
+	
 	public void usePower() {
-		int firstPosition = players[playerOnTurn].getPiecePosition();
+		Square nextS;
 		try {
 			if(die.getCurrentFace().indicatePowers()[0].equals(Power.CHANGE)) {
-				players[playerOnTurn].getPiece().changePositionTo(findSquare(players[playerOnTurn + 1].getPiecePosition()));
-				findSquare(players[playerOnTurn + 1].getPiecePosition()).receivePiece(players[playerOnTurn].getPiece());
-				players[playerOnTurn + 1].getPiece().changePositionTo(findSquare(firstPosition));
-				findSquare(firstPosition).receivePiece(players[playerOnTurn + 1].getPiece());
+				if(playerOnTurn == 0) {
+					nextS = players[1].getPieceSquare();
+					board.replacePiecePosition(players[0].getPiecePosition(), players[1].getPiece());
+				}
+				else {
+					nextS = players[0].getPieceSquare();
+					board.replacePiecePosition(players[1].getPiecePosition(), players[0].getPiece());
+
+				}
+				board.replacePiecePosition(nextS.getNumSquare(), getTurn().getPiece());
 				advancePlayer(die.getCurrentFace().getValue());
 			}else {
-				players[playerOnTurn].usePower(die.getCurrentFace().indicatePowers()[0], board, die.getCurrentFace().getValue());
-				if(playerOnTurn == 0) playerOnTurn = 1;
-				else playerOnTurn = 0;
+				advancePlayer(getTurn().usePower(die.getCurrentFace().indicatePowers()[0]) + die.getCurrentFace().getValue());
 			}
-		}catch(IndexOutOfBoundsException e) {
-			players[playerOnTurn].getPiece().changePositionTo(findSquare(players[0].getPiecePosition()));
-			findSquare(players[0].getPiecePosition()).receivePiece(players[playerOnTurn].getPiece());
-			players[0].getPiece().changePositionTo(findSquare(firstPosition));
-			findSquare(firstPosition).receivePiece(players[0].getPiece());
-			advancePlayer(die.getCurrentFace().getValue());
-		}catch (POOBSTAIRSException e) {
+		}catch(POOBSTAIRSException e) {
 			e.printStackTrace();
 		}
-	}
-	*/
+		
+	}	
 }

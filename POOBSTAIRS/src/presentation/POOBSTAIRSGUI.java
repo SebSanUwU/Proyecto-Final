@@ -724,11 +724,11 @@ public class POOBSTAIRSGUI extends JFrame {
 				Face current = poobStairs.rollDice();
 				
 				assignValue(current.getValue());
-					//if(activePower(current)) {
-						//poobStairs.usePower();
-					//}else {
+					if(activePower(current)) {
+						poobStairs.usePower();
+					}else {
 						poobStairs.advancePlayer(current.getValue());
-					//}
+					}
 					refresh();
 			}
 		});

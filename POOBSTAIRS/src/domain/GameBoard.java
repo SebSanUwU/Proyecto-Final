@@ -251,48 +251,10 @@ public class GameBoard {
 		if(newPosition > totalSquares || newPosition < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES) ;
 		piece.changePositionTo(find(newPosition));
 		piece.getPosition().receivePiece(piece);
-		
 	}
 	
 	
-	/**
-	 * Función que busca la proxima escalera a la posición actual de una ficha
-	 * @param square, posición actual de la ficha en cuestion
-	 * @return la posición en la cual se encuentra el inicio de la proxima escalera.
-	 */
-	private int nextStair(int square) {
-		
-		for(Integer i: obstacleSquares) {
-			try {
-				if(i > square && find(i).getObstacle().getType().equals("stair") && find(i).getObstacle().getHead().getNumSquare() == i) {
-					square = i;
-					break;
-				}
-			} catch (POOBSTAIRSException e) {
-				e.printStackTrace();
-			}
-		}
-		return square;
-	}
-	/**
-	 * Función que busca la abterior serpiente a la posición actual de una ficha
-	 * @param square, posición actual de la ficha en cuestion
-	 * @return la posición en la cual se encuentra el inicio de la anterior serpiente.
-	 */
-	private int lastSnake(int square) {
-		
-		for(Integer i: obstacleSquares) {
-			try {
-				if(i < square && find(i).getObstacle().getType().equals("snake") && find(i).getObstacle().getTail().getNumSquare() == i) {
-					square = i;
-					break;
-				}
-			} catch (POOBSTAIRSException e) {
-				e.printStackTrace();
-			}
-		}
-		return square;
-	}
+	
 	
 	public ArrayList<Integer> getObstacleSquares(){
 		return obstacleSquares;

@@ -52,6 +52,6 @@ public  class Square {
     	return getObstacle().getTail().getNumSquare();
     }
     
-    
+   
 
 }

@@ -37,15 +37,19 @@ public class Player {
 	public String getName() {
 		return name;
 	}
-	/**
-	protected void usePower(String power, GameBoard board, int extraMoves) throws POOBSTAIRSException {
+	
+	protected int usePower(String power) throws POOBSTAIRSException {
 		if(power.equals(Power.EXTRA_MOVE)) {
-			board.advancePlayer(extraMoves + 1, piece);
+			return + 1;
 		}else {
-			board.advancePlayer(extraMoves - 1, piece);
+			return -1;
 		}
 	}
-	*/
+	
+	
+	public Square getPieceSquare() {
+		return piece.getPosition();
+	}
 	
 	public int getNumSnakes() {
 		return numSnakes;
