@@ -57,8 +57,8 @@ public class PoobStairs {
 		board.setArea(numSnakes, numStairs,pSpecial);
 		die = new Die((byte)6,pModifier);
 		for(int i = 0; i < players.length; i++) {
-			Piece piece = players[i].getPiece();
-			board.assignPiece(0, piece);
+		
+			board.replacePiecePosition(0, players[i].getPiece());
 		}
 		
 	}
@@ -66,8 +66,8 @@ public class PoobStairs {
 	 * Metodo que le entrega el trablero a PoobStairs
 	 * @return board.getSquares()
 	 */
-	public GameBoard board(){
-		return board;
+	public Square[][] board(){
+		return board.getSquares();
 	}
 	/**
 	 * Función que simula el tiro del dado
@@ -84,8 +84,13 @@ public class PoobStairs {
 	 */
 	public boolean advancePlayer(int positions) {
 		try {
-			board.advancePlayer(positions, players[playerOnTurn].getPiece());
+			board.replacePiecePosition(players[playerOnTurn].getPiecePosition() + positions, players[playerOnTurn].getPiece());
+			if(players[playerOnTurn].getPiece().getPosition() instanceof SpecialSquare) {
+				board.replacePiecePosition(((SpecialSquare)players[playerOnTurn].getPiece().getPosition()).useTrap(), players[playerOnTurn].getPiece());
+			}
+			board.replacePiecePosition(players[playerOnTurn].getPiece().getPosition().useObstacle(), players[playerOnTurn].getPiece());
 		}catch(POOBSTAIRSException e) {
+			
 			e.printStackTrace();
 		}
 		if(playerOnTurn == 0) playerOnTurn = 1;
@@ -95,14 +100,7 @@ public class PoobStairs {
 		return false;
 	}
 	
-	/**
-	 * Metodo que identifica la casilla con cierto valor 
-	 * @param value. valor numerico de la casilla
-	 * @return la casilla con el numero indicado
-	 */
-	public Square findSquare(int value) {
-		return board.find(value);
-	}
+	
 	/**
 	 * Indica el jugador de a quien le toca mover la ficha
 	 * @return
@@ -113,6 +111,7 @@ public class PoobStairs {
 	/**
 	 * Si el jugador lo decide, se usa el poder del dado.
 	 */
+	/**
 	public void usePower() {
 		int firstPosition = players[playerOnTurn].getPiecePosition();
 		try {
@@ -137,4 +136,5 @@ public class PoobStairs {
 			e.printStackTrace();
 		}
 	}
+	*/
 }

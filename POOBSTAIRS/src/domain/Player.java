@@ -23,11 +23,11 @@ public class Player {
 	}
 	
 	public int getPiecePosition() {
-		return piece.getPosition();
+		return piece.getPosition().getNumSquare();
 	}
 	
-	public int movePiece(int positions) {
-		return getPiecePosition() + positions;
+	public void movePiece(Square position) {
+		piece.changePositionTo(position);
 	}
 	
 	public Piece getPiece() {
@@ -37,7 +37,7 @@ public class Player {
 	public String getName() {
 		return name;
 	}
-	
+	/**
 	protected void usePower(String power, GameBoard board, int extraMoves) throws POOBSTAIRSException {
 		if(power.equals(Power.EXTRA_MOVE)) {
 			board.advancePlayer(extraMoves + 1, piece);
@@ -45,6 +45,7 @@ public class Player {
 			board.advancePlayer(extraMoves - 1, piece);
 		}
 	}
+	*/
 	
 	public int getNumSnakes() {
 		return numSnakes;

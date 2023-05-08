@@ -6,8 +6,10 @@ public  class Square {
     protected int numSquare;
     private Obstacle obstacle;
     private HashSet<Piece> pieces;
+    protected GameBoard board;
 
-    public Square(int numSquare){
+    public Square(int numSquare, GameBoard board){
+    	this.board = board;
         this.numSquare=numSquare;
         pieces = new HashSet<Piece>();
     }
@@ -46,8 +48,8 @@ public  class Square {
     	return pieces.contains(piece);
     }
     
-    public int useTrap() {
-    	return numSquare;
+    public int useObstacle() throws POOBSTAIRSException {
+    	return getObstacle().getTail().getNumSquare();
     }
     
     

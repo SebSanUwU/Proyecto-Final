@@ -83,23 +83,37 @@ class PoobStairsTest {
 	@Test
 	void shouldMovePiece() {
 		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+		
 		try {
+			Player isTurn;
+			int lastPosition;
 			PoobStairs game = new PoobStairs(10,10, players);
 			game.setGame(0, 0, 0, 0);
-			for(int i = 0; i < 15; i++) {
-				int position = players[0].getPiecePosition();
-				int extra = game.rollDice().getValue();
-				game.board().assignPiece(position + extra, players[0].getPiece());
-				if(players[0].getPiecePosition() != position + extra) fail("no se mueve correctamente");
-			}
-			game.board().assignPiece(5, players[0].getPiece());
-			assertEquals(5,players[0].getPiecePosition());
-			assertTrue(game.findSquare(5).contains(players[0].getPiece()));
-			assertFalse(game.findSquare(0).contains(players[0].getPiece()));
+			isTurn = game.getTurn();
+			lastPosition = game.getTurn().getPiecePosition();
+			game.advancePlayer(6);
+			assertEquals(lastPosition + 6, isTurn.getPiecePosition());
+			isTurn = game.getTurn();
+			lastPosition = game.getTurn().getPiecePosition();
+			game.advancePlayer(4);
+			assertEquals(lastPosition + 4, isTurn.getPiecePosition());
+			isTurn = game.getTurn();
+			lastPosition = game.getTurn().getPiecePosition();
+			game.advancePlayer(1);
+			assertEquals(lastPosition + 1, isTurn.getPiecePosition());
+			isTurn = game.getTurn();
+			lastPosition = game.getTurn().getPiecePosition();
+			game.advancePlayer(10);
+			assertEquals(lastPosition + 10, isTurn.getPiecePosition());
+			isTurn = game.getTurn();
+			lastPosition = game.getTurn().getPiecePosition();
+			game.advancePlayer(4);
+			assertEquals(lastPosition + 4, isTurn.getPiecePosition());
 			
 		}catch(POOBSTAIRSException e) {
-			
+			fail("Lanzo excepción");
 		}
+		
 	}
 	
 	@Test
@@ -130,6 +144,25 @@ class PoobStairsTest {
 			for(int i = 0; i < 200; i++) {
 				game.rollDice();
 			}
+		} catch (POOBSTAIRSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	@Test
+	void shouldGoDown() {
+		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+
+		PoobStairs game;
+		try {
+			game = new PoobStairs(10,10, players);
+			game.setGame(0, 0, 0, 0);
+			game.board()[0][5].addObstacle(new NormalObstacle(game.board()[3][5],game.board()[0][5],"snake"));
+			game.board()[3][5].addObstacle(new NormalObstacle(game.board()[3][5],game.board()[0][5],"snake"));
+			Player yourTurn = game.getTurn();
+			game.advancePlayer(65);
+			assertTrue(game.board()[0][5].contains(yourTurn.getPiece()));
 		} catch (POOBSTAIRSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

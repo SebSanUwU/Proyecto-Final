@@ -16,11 +16,11 @@ public class Piece {
 	protected void assignStart(Square start) {
 		position = start;
 	}
-	protected int getPosition() {
-		return position.getNumSquare();
+	public Square getPosition() {
+		return position;
 	}
 	
-	protected Square getSquare() {
+	public Square getSquare() {
 		return position;
 	}
 	
@@ -44,10 +44,6 @@ public class Piece {
 		return color;
 	}
 	
-	public void useObstacle() throws POOBSTAIRSException {
-		
-			changePositionTo(position.getObstacle().getTail());
-		
-	}
+	
 	
 }

@@ -64,7 +64,7 @@ public class GameBoard {
 					if(obstacleSquares.contains(value)){
 						squares[i][j]=squaresInLine[value];
 					}else if(!obstacleSquares.contains(value)){
-						squares[i][j]=new Normal(value);
+						squares[i][j]=new Square(value, this);
 					}
 					value++;
 				}
@@ -73,7 +73,7 @@ public class GameBoard {
 					if(obstacleSquares.contains(value)){
 						squares[i][j]=squaresInLine[value];
 					}else if(!obstacleSquares.contains(value)){
-						squares[i][j]=new Normal(value);
+						squares[i][j]=new Square(value, this);
 					}
 					value++;
 				}
@@ -177,8 +177,8 @@ public class GameBoard {
 	private void addTheObstacle(int start, int finish, String type) {
 		Square head;
 		Square tail;
-		squaresInLine[start] = new Normal(start);
-		squaresInLine[finish] = new Normal(finish);
+		squaresInLine[start] = new Square(start,this);
+		squaresInLine[finish] = new Square(finish,this);
 		if (start > finish) {
 			head = squaresInLine[finish];
 			tail = squaresInLine[start];
@@ -203,22 +203,22 @@ public class GameBoard {
 			//System.out.println(specialSquare[i]);
 			switch (random_int) {
 				case 0:
-					squaresInLine[specialSquare[i]]=new Regression(specialSquare[i]);
+					squaresInLine[specialSquare[i]]=new Regression(specialSquare[i], this);
 					break;
 				case 1:
-					squaresInLine[specialSquare[i]]=new QA(specialSquare[i]);
+					squaresInLine[specialSquare[i]]=new QA(specialSquare[i], this);
 					break;
 				case 2:
-					squaresInLine[specialSquare[i]]=new Jumper(specialSquare[i]);	
+					squaresInLine[specialSquare[i]]=new Jumper(specialSquare[i], this);	
 					break;
 				case 3:
-					squaresInLine[specialSquare[i]]=new Mortal(specialSquare[i]);
+					squaresInLine[specialSquare[i]]=new Mortal(specialSquare[i], this);
 					break;
 				case 4:
-					squaresInLine[specialSquare[i]]=new ReverseJumper(specialSquare[i]);
+					squaresInLine[specialSquare[i]]=new ReverseJumper(specialSquare[i], this);
 					break;
 				default:
-					squaresInLine[specialSquare[i]]=new Advance(specialSquare[i]);
+					squaresInLine[specialSquare[i]]=new Advance(specialSquare[i], this);
 					break;
 			} 
 		}
@@ -233,70 +233,27 @@ public class GameBoard {
 	 */
 	protected Square find(int num) {
 		Square found = null;
+		boolean founded = false;
 		for(int i = squares.length-1; i >= 0; i--) {
 			for(int j = 0; j < squares[0].length; j++) {
 				if(squares[i][j].getNumSquare() == num) {
 					found = squares[i][j];
-					break;
+					founded = true;
 				}
+				if(founded) break;
 			}
+			if(founded) break;
 		}
 		return found;
 	}
-	/**
-	 * Se encarga de mover cierta ficha atravez del tablero
-	 * @param positions, n casillas que se va a avanzar
-	 * @param piece, pieza que se va a mover
-	 * @throws POOBSTAIRSException NO_SQUARES si el numero de casillas a avanzar super el numero de casillas totales
-	 */
-	public void advancePlayer(int positions, Piece piece) throws POOBSTAIRSException{
-		if(piece.getPosition() + positions > totalSquares) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
-		assignPiece(piece.getPosition() + positions, piece);
-	}
-	/**
-	 * Se encarga de posicionar cierta pieza dentro de cierta casilla
-	 * @param square, numero de la casilla a la cual se va a posicionar al jugador
-	 * @param piece, pieza que se va a mover
-	 */
-	public void assignPiece(int square, Piece piece) {
-		Square found = find(square);
-		found.receivePiece(piece);
-		piece.changePositionTo(found);
-		try {
-			if(find(square) instanceof Jumper) {
-				advancePlayer(5,piece);
-			}
-			else if(find(square) instanceof ReverseJumper) {
-				negativeMove(5, piece);
-			}
-			else if(find(square) instanceof Advance) {
-				piece.changePositionTo(find(nextStair(square)));
-				find(piece.getPosition()).receivePiece(piece);
-				piece.useObstacle();
-				find(piece.getPosition()).receivePiece(piece);
-			}
-			else if(find(square) instanceof Regression) {
-				piece.changePositionTo(find(lastSnake(square)));
-				find(piece.getPosition()).receivePiece(piece);
-				piece.useObstacle();
-				find(piece.getPosition()).receivePiece(piece);
-			} else if(find(square) instanceof Mortal) {
-				piece.changePositionTo(find(0));
-				find(piece.getPosition()).receivePiece(piece);
-			}else {
-				piece.useObstacle();
-				find(piece.getPosition()).receivePiece(piece);
-			}
-		} catch (POOBSTAIRSException e) {
-			e.printStackTrace();
-		}
+	
+	public void replacePiecePosition(int newPosition, Piece piece) throws POOBSTAIRSException {
+		if(newPosition > totalSquares || newPosition < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES) ;
+		piece.changePositionTo(find(newPosition));
+		piece.getPosition().receivePiece(piece);
 		
 	}
 	
-	private void negativeMove(int squares, Piece piece) throws POOBSTAIRSException{
-		if(piece.getPosition() - squares  < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
-		assignPiece(piece.getPosition() - squares, piece);
-	}
 	
 	/**
 	 * Función que busca la proxima escalera a la posición actual de una ficha
@@ -335,5 +292,9 @@ public class GameBoard {
 			}
 		}
 		return square;
+	}
+	
+	public ArrayList<Integer> getObstacleSquares(){
+		return obstacleSquares;
 	}
 }
