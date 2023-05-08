@@ -789,10 +789,10 @@ public class POOBSTAIRSGUI extends JFrame {
 	
 	private String specials(Square square) {
 		if(square instanceof Jumper) {
-			return "Conmigo avanzas 5 casilla";
+			return "Conmigo avanzas n casilla";
 		}
 		else if(square instanceof ReverseJumper) {
-			return "Conmigo retrocedes 5 casilla";
+			return "Conmigo retrocedes n casilla";
 		}else if(square instanceof Advance) {
 			return "Conmigo Vas hasta la siguiente escalera";
 		}else if(square instanceof Regression) {

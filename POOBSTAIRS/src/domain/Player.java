@@ -38,13 +38,7 @@ public class Player {
 		return name;
 	}
 	
-	protected int usePower(String power) throws POOBSTAIRSException {
-		if(power.equals(Power.EXTRA_MOVE)) {
-			return + 1;
-		}else {
-			return -1;
-		}
-	}
+	
 	
 	
 	public Square getPieceSquare() {

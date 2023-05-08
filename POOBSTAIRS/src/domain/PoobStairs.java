@@ -112,22 +112,16 @@ public class PoobStairs {
 	 */
 	
 	public void usePower() {
-		Square nextS;
+		Player nextP;
 		try {
-			if(die.getCurrentFace().indicatePowers()[0].equals(Power.CHANGE)) {
-				if(playerOnTurn == 0) {
-					nextS = players[1].getPieceSquare();
-					board.replacePiecePosition(players[0].getPiecePosition(), players[1].getPiece());
-				}
-				else {
-					nextS = players[0].getPieceSquare();
-					board.replacePiecePosition(players[1].getPiecePosition(), players[0].getPiece());
-
-				}
-				board.replacePiecePosition(nextS.getNumSquare(), getTurn().getPiece());
-				advancePlayer(die.getCurrentFace().getValue());
+			
+			String power = die.getCurrentFace().indicatePowers()[0];
+			if(power.equals(Power.CHANGE)) {
+				if(playerOnTurn == 0) nextP = players[1];
+				else nextP = players[0];
+				Power.usSuperPower(power, board, getTurn(), nextP);
 			}else {
-				advancePlayer(getTurn().usePower(die.getCurrentFace().indicatePowers()[0]) + die.getCurrentFace().getValue());
+				advancePlayer(Power.usePower(power) + die.getCurrentFace().getValue());
 			}
 		}catch(POOBSTAIRSException e) {
 			e.printStackTrace();

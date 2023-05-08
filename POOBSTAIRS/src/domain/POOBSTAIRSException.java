@@ -10,7 +10,7 @@ public class POOBSTAIRSException extends Exception{
 	public static final String INACCEPTED_PERCENTAGE = "Los porcentajes no pueden ser mayor a 1";
 	public static final String NO_PIECES= "No ahí piezas en esta casilla";
 	public static final String NO_MORE_PIECES= "La casilla no puede haceptar más piezas";
-	
+	public static final String NO_SUPER_POWER= "No es un super poder";
 	public POOBSTAIRSException(String message) {
 		super(message);
 	}
