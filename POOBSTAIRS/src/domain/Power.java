@@ -9,24 +9,17 @@ public class Power {
 		return new String[] {EXTRA_MOVE, MINUS_MOVE, CHANGE};
 	}
 	
-	public static int usePower(String power) {
+	public static int givePower(String power) {
 		if(power.equals(EXTRA_MOVE)) return 1;
 		else return -1;
 		
 	}
-	/**
-	public static void usSuperPower(String power, GameBoard board, Player player1, Player player2){
-
-		Square nextS = player2.getPieceSquare();
-		try {
-			board.replacePiecePosition(player1.getPiecePosition(), player2.getPiece());
-			board.replacePiecePosition(nextS.getNumSquare(), player1.getPiece());
-		} catch (POOBSTAIRSException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+	
+	public static int[] giveSuperPower(String power, Player player1, Player player2){
+		int[] positions = {player2.getPiecePosition() - player1.getPiecePosition(), 
+		player1.getPiecePosition() - player2.getPiecePosition()};
+		return positions;
 		
 	}
-	*/
+	
 }

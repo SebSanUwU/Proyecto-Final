@@ -46,10 +46,11 @@ public class POOBSTAIRSGUI extends JFrame {
 	private JSpinner dataRows, dataColumns, dataSnakes, dataStairs, dataSpecials, dataPowers;
 	
 	/*startPlaying*/
-	private JPanel board;
+	private JPanel board, dataOrChoose;
 	private JLabel whoPlays, die, numSnakes, numStairs, numSpecials, numModifiers, maxPosition, extraMoves;
-	private JButton roll, change, endGame;
+	private JButton roll, change, endGame, confirm;
 	private JComboBox topics;
+	private JComboBox<Integer>specials;
 	
 	/*General*/
 	
@@ -184,6 +185,9 @@ public class POOBSTAIRSGUI extends JFrame {
 		String[] themes = {"Clasic", "Christmas", "Chess"};
 		endGame = new JButton("Salir del Juego");
 		topics = new JComboBox(themes);
+		dataOrChoose = new JPanel();
+		confirm = new JButton("Confirm");
+		specials = new JComboBox<Integer>();
 		buildGame();
 		panels.add(startPlaying);
 		for (Component panel : panels.getComponents()) {
@@ -477,12 +481,25 @@ public class POOBSTAIRSGUI extends JFrame {
 		JPanel dataDie = new JPanel();
 		dataDie.setBorder(new LineBorder(new Color(0, 0, 0)));
 		dataDie.setLayout(new BorderLayout(1,10));
+		
 		dataDie.add(roll,BorderLayout.NORTH);
 		die.setHorizontalAlignment(SwingConstants.CENTER);
 		die.setOpaque(false);
 		assignValue(1);
 		dataDie.add(die, BorderLayout.CENTER);
-		dataDie.add(extraMoves, BorderLayout.SOUTH);
+		dataOrChoose.setLayout(new CardLayout());
+		dataOrChoose.add(extraMoves);
+		dataOrChoose.setOpaque(false);
+		JPanel chooseDie = new JPanel();
+		chooseDie.setLayout(new GridLayout(1,2,4,0));
+		chooseDie.setOpaque(false);
+		chooseDie.setBorder(new EmptyBorder(0,1,2,1));
+		chooseDie.add(specials);
+		chooseDie.add(confirm);
+		specials.setBackground(new Color(168, 202, 186));
+		dataOrChoose.add(chooseDie);
+		dataDie.add(dataOrChoose, BorderLayout.SOUTH);
+		buildButton(chooseDie);
 		buildButton(dataDie);
 		dataDie.setOpaque(false);
 		gameOptions.add(dataDie);
@@ -724,13 +741,17 @@ public class POOBSTAIRSGUI extends JFrame {
 				Face current = poobStairs.rollDice();
 				
 				assignValue(current.getValue());
-				//if(activePower(current)) {
-					//poobStairs.usePower();
-				//}else {
-					//poobStairs.advancePlayer(current.getValue());
-					poobStairs.movePiece(current.getValue());
-				//}
-				refresh();
+				try {
+					specialOptions(current.getValue());
+				}catch(POOBSTAIRSException exception) {
+					if(activePower(current)) {
+						poobStairs.usePower();
+						poobStairs.movePiece(current.getValue());
+					}else {
+						poobStairs.movePiece(current.getValue());
+					}
+					refresh();
+				}
 			}
 		});
 		change.addActionListener(new ActionListener() {
@@ -745,6 +766,15 @@ public class POOBSTAIRSGUI extends JFrame {
 				POOBSTAIRSGUI.this.setExtendedState(NORMAL);
 				CardLayout layout = (CardLayout) panels.getLayout();
 				layout.first(panels);
+			}
+		});
+		confirm.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				poobStairs.movePiece((Integer)specials.getSelectedItem() - poobStairs.getTurn().getPiecePosition() -1 );
+				CardLayout layout = (CardLayout) dataOrChoose.getLayout();
+				layout.next(dataOrChoose);
+				refresh();
+				roll.setEnabled(true);
 			}
 		});
 
@@ -812,7 +842,7 @@ public class POOBSTAIRSGUI extends JFrame {
             System.out.println(e.getMessage());
         }
     }
-	/**
+	
 	private boolean activePower(Face face) {
 		try {
 			int option;
@@ -829,5 +859,17 @@ public class POOBSTAIRSGUI extends JFrame {
 		}
 		
 	}
-	*/
+	
+	private void specialOptions(int movements) throws POOBSTAIRSException {
+		Integer[] specialOp = poobStairs.analize(movements);
+		roll.setEnabled(false);
+		specials.removeAllItems();
+		for(Integer i: specialOp) {
+			specials.addItem(i + 1);
+		}
+		specials.addItem(poobStairs.getTurn().getPiecePosition() + movements + 1);
+		CardLayout layout = (CardLayout) dataOrChoose.getLayout();
+		layout.next(dataOrChoose);
+	}
+	
 }
