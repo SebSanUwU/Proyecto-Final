@@ -52,6 +52,10 @@ public class GameBoard {
 		setSquares();
 		squaresInLine[0].receivePiece(player[0].getPiece());
 		squaresInLine[0].receivePiece(player[1].getPiece());
+		player[0].getPiece().changePositionTo(squaresInLine[0]);
+		player[1].getPiece().changePositionTo(squaresInLine[0]);
+		setActualSquare();
+		
 	}
 	/**
 	 * Ensambla todas las casillas que hacen parte del tablero
@@ -218,7 +222,6 @@ public class GameBoard {
 		int random_int;
 		for(int i= 0; i <specialSquare.length;i++){
 			random_int = ThreadLocalRandom.current().nextInt(0,6);
-			random_int=3;
 			//System.out.println(specialSquare[i]);
 			switch (random_int) {
 				case 0:
@@ -277,11 +280,15 @@ public class GameBoard {
 		int advancePos = player.getPiecePosition()+posicion;
 		int posicionInicial=player.getPiecePosition();
 		if(advancePos >= totalSquares || advancePos < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
-		//verificar si posicion para avanzar es una casilla especial 
+		//verificar si posicion para avanzar es una casilla especial
 		if(squaresInLine[advancePos] instanceof SpecialSquare){
 			SpecialSquare special = (SpecialSquare) squaresInLine[advancePos];
 			if(squaresInLine[advancePos] instanceof Mortal){
-				
+				if(posicionInicial==0){
+					advancePos=-1;
+				}else{
+					advancePos=special.useTrap();
+				}
 			}else if(squaresInLine[advancePos] instanceof QA){
 				/*falta implementar */
 			}else if(squaresInLine[advancePos] instanceof Advance || squaresInLine[advancePos] instanceof Regression){
@@ -296,14 +303,18 @@ public class GameBoard {
 				}
 			}
 		}
-		//Verificar si esta en un obstaculo
-		try{
-			Obstacle trap =squaresInLine[advancePos].getObstacle();
-			changePieceBoard(posicionInicial, trap.use(), player);
-			player.changePositionPiece(squaresInLine[trap.use()]);
-		}catch(POOBSTAIRSException e){
-			changePieceBoard(posicionInicial, advancePos, player);
-			player.changePositionPiece(squaresInLine[advancePos]);
+		if(advancePos>=0){
+			//Verificar si esta en un obstaculo
+			try{
+				Obstacle trap =squaresInLine[advancePos].getObstacle();
+				player.changePositionPiece(squaresInLine[advancePos]);
+				changePieceBoard(posicionInicial, trap.use(), player);
+			}catch(POOBSTAIRSException e){
+				if(advancePos>=0){
+					changePieceBoard(posicionInicial, advancePos, player);
+					player.changePositionPiece(squaresInLine[advancePos]);
+				}
+			}
 		}
 		setActualSquare();
 	}

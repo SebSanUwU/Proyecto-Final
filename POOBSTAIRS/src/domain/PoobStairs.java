@@ -62,9 +62,11 @@ public class PoobStairs {
 		if(pModifier > 1.0 || pSpecial > 1.0) throw new POOBSTAIRSException(POOBSTAIRSException.INACCEPTED_PERCENTAGE);
 		board.setArea(numSnakes, numStairs,pSpecial,players);
 		die = new Die((byte)6,pModifier);
-		for(int i = 0; i < players.length; i++) {
-			board.replacePiecePosition(0, players[i].getPiece());
-		}
+		/*for(int i = 0; i < players.length; i++) {
+			//board.replacePiecePosition(0, players[i].getPiece());
+			movePiece(0);
+		}*/
+		
 	}
 
 	/**
@@ -135,13 +137,8 @@ public class PoobStairs {
 				else nextP = players[0];
 				Power.usSuperPower(power, board, getTurn(), nextP);
 			}else {
-<<<<<<< Updated upstream
-				
-				advancePlayer(getTurn().movePiece(Power.usePower(power) + die.getCurrentFace().getValue()));
-=======
 				//advancePlayer(Power.usePower(power) + die.getCurrentFace().getValue());
 				movePiece(Power.usePower(power) + die.getCurrentFace().getValue());
->>>>>>> Stashed changes
 			}
 		}catch(POOBSTAIRSException e) {
 			e.printStackTrace();

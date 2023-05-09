@@ -1,15 +1,15 @@
 package domain;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
 public  class Square {
     protected int numSquare;
     private Obstacle obstacle;
-    private HashSet<Piece> pieces;
+    private ArrayList<Piece> pieces;
 
     public Square(int numSquare){
         this.numSquare=numSquare;
-        pieces = new HashSet<Piece>();
+        pieces = new ArrayList<Piece>();
     }
 
     public void addObstacle(Obstacle obstacle){

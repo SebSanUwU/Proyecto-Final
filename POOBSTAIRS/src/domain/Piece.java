@@ -26,7 +26,9 @@ public class Piece {
 	
 	public void changePositionTo(Square newPosition) {
 		try {
-			position.removePiece(this);
+			if(position!=null){
+				position.removePiece(this);
+			}
 		} catch (POOBSTAIRSException e) {
 			e.printStackTrace();
 		}catch (NullPointerException e) {
