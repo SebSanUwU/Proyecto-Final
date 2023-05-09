@@ -103,7 +103,7 @@ public class POOBSTAIRSGUI extends JFrame {
 		if(color.equals("RED")) return Color.RED;
 		else if(color.equals("BLUE")) return Color.BLUE;
 		else if(color.equals("GREEN")) return Color.GREEN;
-		else return Color.YELLOW;
+		else return Color.BLACK;
 	}
 	/**
 	 * Metodo que inicializa y prepara el juego en el paquete de dominio
@@ -233,7 +233,7 @@ public class POOBSTAIRSGUI extends JFrame {
 	private void prepareData() {
 		name1 = new JTextField("", 10);
 		name2 = new JTextField("", 10);
-		String[] colorOptions = { "RED", "YELLOW", "BLUE", "GREEN" };
+		String[] colorOptions = { "RED", "BLACK", "BLUE", "GREEN" };
 		colors = new JComboBox(colorOptions);
 		colors2 = new JComboBox(colorOptions);
 		String[] mode = { "Principiante", "Aprendiz" };
@@ -724,12 +724,13 @@ public class POOBSTAIRSGUI extends JFrame {
 				Face current = poobStairs.rollDice();
 				
 				assignValue(current.getValue());
-					if(activePower(current)) {
-						poobStairs.usePower();
-					}else {
-						poobStairs.advancePlayer(current.getValue());
-					}
-					refresh();
+				if(activePower(current)) {
+					poobStairs.usePower();
+				}else {
+					//poobStairs.advancePlayer(current.getValue());
+					poobStairs.movePiece(current.getValue());
+				}
+				refresh();
 			}
 		});
 		change.addActionListener(new ActionListener() {
@@ -794,9 +795,9 @@ public class POOBSTAIRSGUI extends JFrame {
 		else if(square instanceof ReverseJumper) {
 			return "Conmigo retrocedes n casilla";
 		}else if(square instanceof Advance) {
-			return "Conmigo Vas hasta la siguiente escalera";
+			return "Conmigo vas hasta la siguiente escalera";
 		}else if(square instanceof Regression) {
-			return "Conmigo Vas hasta la anterior serpiente";
+			return "Conmigo vas hasta la anterior serpiente";
 		}else if(square instanceof QA) {
 			return "A mi me tienes que contestar una pregunta para avanzar";
 		}else {

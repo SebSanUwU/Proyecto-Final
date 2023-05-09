@@ -1,8 +1,8 @@
 package domain;
 
 public class Mortal extends Square implements SpecialSquare{
-    public Mortal(int numSquare, GameBoard board){
-        super(numSquare, board);
+    public Mortal(int numSquare){
+        super(numSquare);
     }
 
 	@Override

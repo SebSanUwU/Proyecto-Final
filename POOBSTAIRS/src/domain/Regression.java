@@ -1,23 +1,15 @@
 package domain;
 
 public class Regression extends Square implements SpecialSquare{
-    public Regression(int numSquare, GameBoard board){
-        super(numSquare, board);
+	GameBoard board;
+    public Regression(int numSquare,GameBoard board){
+        super(numSquare);
+		this.board=board;
     }
 
 	@Override
 	public int useTrap() {
-		int square = getNumSquare();
-		for(int i = board.getObstacleSquares().indexOf(square) - 1; i >= 0; i--) {
-			try {
-				if(board.getObstacleSquares().get(i) < square && board.find(board.getObstacleSquares().get(i)).getObstacle().getType().equals("snake") ) {
-					square = board.find(board.getObstacleSquares().get(i)).useObstacle();
-					break;
-				}
-			} catch (POOBSTAIRSException e) {
-				e.printStackTrace();
-			}
-		}
-		return square;
+		System.out.println(board.findCloseSnake(numSquare));
+		return board.findCloseSnake(numSquare);
 	}
 }

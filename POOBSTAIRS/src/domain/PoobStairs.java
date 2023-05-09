@@ -2,6 +2,7 @@ package domain;
 
 
 
+import java.util.HashMap;
 import java.util.Random;
 
 
@@ -16,6 +17,7 @@ import domain.Die.Face;
 
 public class PoobStairs {
 	private int playerOnTurn;
+	private HashMap<String,Player> playersHash;
 	private Player[] players;
 	private GameBoard board;
 	//private Square[] boardLine;
@@ -34,7 +36,11 @@ public class PoobStairs {
 	 */
 	public PoobStairs(int rows, int columns, Player[] players) throws POOBSTAIRSException {
 		playerOnTurn = (new Random().nextInt(2));
-		this.players = players;
+		this.playersHash= new HashMap<String,Player>();
+		this.players=players;
+		for(int i = 0;i<players.length;i++){
+			this.playersHash.put(players[i].getName(),players[i]);
+		}
 		board = new GameBoard(rows, columns);
 	}
 
@@ -54,14 +60,13 @@ public class PoobStairs {
 	 */
 	public void setGame(int numSnakes, int numStairs, float pModifier, float pSpecial) throws POOBSTAIRSException {
 		if(pModifier > 1.0 || pSpecial > 1.0) throw new POOBSTAIRSException(POOBSTAIRSException.INACCEPTED_PERCENTAGE);
-		board.setArea(numSnakes, numStairs,pSpecial);
+		board.setArea(numSnakes, numStairs,pSpecial,players);
 		die = new Die((byte)6,pModifier);
 		for(int i = 0; i < players.length; i++) {
-		
 			board.replacePiecePosition(0, players[i].getPiece());
 		}
-		
 	}
+
 	/**
 	 * Metodo que le entrega el trablero a PoobStairs
 	 * @return board.getSquares()
@@ -94,8 +99,17 @@ public class PoobStairs {
 		}
 		if(playerOnTurn == 0) playerOnTurn = 1;
 		else playerOnTurn = 0;
-		
-		
+		return false;
+	}
+
+	public boolean movePiece(int position){
+		if(playerOnTurn == 0) playerOnTurn = 1;
+		else playerOnTurn = 0;
+		try {
+			board.movePiece(getTurn(),position);
+		} catch (Exception e) {
+			System.out.println(e.getMessage()+"Poobstair move piece");
+		}
 		return false;
 	}
 	
@@ -121,8 +135,13 @@ public class PoobStairs {
 				else nextP = players[0];
 				Power.usSuperPower(power, board, getTurn(), nextP);
 			}else {
+<<<<<<< Updated upstream
 				
 				advancePlayer(getTurn().movePiece(Power.usePower(power) + die.getCurrentFace().getValue()));
+=======
+				//advancePlayer(Power.usePower(power) + die.getCurrentFace().getValue());
+				movePiece(Power.usePower(power) + die.getCurrentFace().getValue());
+>>>>>>> Stashed changes
 			}
 		}catch(POOBSTAIRSException e) {
 			e.printStackTrace();

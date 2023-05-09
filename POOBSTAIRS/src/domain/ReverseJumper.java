@@ -1,17 +1,13 @@
 package domain;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class ReverseJumper extends Square implements SpecialSquare{
-    public ReverseJumper(int numSquare, GameBoard board){
-        super(numSquare, board);
+    public ReverseJumper(int numSquare){
+        super(numSquare);
     }
     @Override
 	public int useTrap() {
-		return getNumSquare() - randomN();
-	}
-    private int randomN() {
-		Random random = new Random();
-		return random.nextInt(1,7);
+		return ThreadLocalRandom.current().nextInt(-7, 0);
 	}
 }

@@ -38,9 +38,6 @@ public class Player {
 		return name;
 	}
 	
-	
-	
-	
 	public Square getPieceSquare() {
 		return piece.getPosition();
 	}
@@ -63,5 +60,9 @@ public class Player {
 	
 	public int getNumModifiers() {
 		return modifiers;
+	}
+
+	public void changePositionPiece(Square position){
+		piece.changePositionTo(position);
 	}
 }

@@ -22,8 +22,8 @@ public  abstract class Obstacle {
     public String getType() {
     	return type;
     }
-    
-    
-    
 
+    public int use(){
+        return tail.getNumSquare();
+    }
 }

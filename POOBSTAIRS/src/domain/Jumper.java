@@ -1,17 +1,15 @@
 package domain;
-import java.util.Random;
+
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Jumper extends Square implements SpecialSquare{
-    public Jumper(int numSquare, GameBoard board){
-        super(numSquare, board);
+    public Jumper(int numSquare){
+        super(numSquare);
     }
 
 	@Override
 	public int useTrap() {
-		return getNumSquare() + randomN();
+		return  ThreadLocalRandom.current().nextInt(1, 7);
 	}
-	private int randomN() {
-		Random random = new Random();
-		return random.nextInt(1,7);
-	}
+	
 }

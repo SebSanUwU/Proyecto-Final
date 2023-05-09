@@ -6,10 +6,8 @@ public  class Square {
     protected int numSquare;
     private Obstacle obstacle;
     private HashSet<Piece> pieces;
-    protected GameBoard board;
 
-    public Square(int numSquare, GameBoard board){
-    	this.board = board;
+    public Square(int numSquare){
         this.numSquare=numSquare;
         pieces = new HashSet<Piece>();
     }
@@ -32,7 +30,7 @@ public  class Square {
     }
     
     protected void removePiece(Piece piece) throws POOBSTAIRSException{
-    	if(pieces.isEmpty()) throw new POOBSTAIRSException(POOBSTAIRSException.NO_PIECES);
+    	//if(pieces.isEmpty()) throw new POOBSTAIRSException(POOBSTAIRSException.NO_PIECES);
     	pieces.remove(piece);
     }
     
