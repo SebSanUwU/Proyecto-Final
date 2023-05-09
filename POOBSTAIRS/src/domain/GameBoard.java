@@ -280,7 +280,7 @@ public class GameBoard {
 		int advancePos = player.getPiecePosition()+posicion;
 		int posicionInicial=player.getPiecePosition();
 		if(advancePos >= totalSquares || advancePos < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
-		//verificar si posicion para avanzar es una casilla especial
+		//verificar si posicion para avanzar es una casilla especial 
 		if(squaresInLine[advancePos] instanceof SpecialSquare){
 			SpecialSquare special = (SpecialSquare) squaresInLine[advancePos];
 			if(squaresInLine[advancePos] instanceof Mortal){
@@ -304,16 +304,13 @@ public class GameBoard {
 			}
 		}
 		if(advancePos>=0){
-			//Verificar si esta en un obstaculo
 			try{
 				Obstacle trap =squaresInLine[advancePos].getObstacle();
-				player.changePositionPiece(squaresInLine[advancePos]);
 				changePieceBoard(posicionInicial, trap.use(), player);
+				player.changePositionPiece(squaresInLine[trap.use()]);
 			}catch(POOBSTAIRSException e){
-				if(advancePos>=0){
-					changePieceBoard(posicionInicial, advancePos, player);
-					player.changePositionPiece(squaresInLine[advancePos]);
-				}
+				changePieceBoard(posicionInicial, advancePos, player);
+				player.changePositionPiece(squaresInLine[advancePos]);
 			}
 		}
 		setActualSquare();
