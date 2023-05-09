@@ -15,36 +15,37 @@ class PoobStairsTest {
 	 */
 	@Test
 	void shouldThrowExceptionIfLessthanSixNormal() {
+		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
 		try {
-			PoobStairs game = new PoobStairs(10,10, null);
+			PoobStairs game = new PoobStairs(10,10, players);
 			game.setGame(0, 0, 0, 1);
 			fail("No lanzo excepción");
 		}catch(POOBSTAIRSException e) {
 			assertEquals(e.getMessage(),POOBSTAIRSException.NUM_OBSTACLE);
 		}
 		try {
-			PoobStairs game = new PoobStairs(10,10, null);
+			PoobStairs game = new PoobStairs(10,10, players);
 			game.setGame(20, 4, 0, (float)0.5);
 			fail("No lanzo excepción");
 		}catch(POOBSTAIRSException e) {
 			assertEquals(e.getMessage(),POOBSTAIRSException.NUM_OBSTACLE);
 		}
 		try {
-			PoobStairs game = new PoobStairs(3,3, null);
+			PoobStairs game = new PoobStairs(3,3, players);
 			game.setGame(2, 1, 0, 0);
 			fail("No lanzo excepción");
 		}catch(POOBSTAIRSException e) {
 			assertEquals(e.getMessage(),POOBSTAIRSException.NUM_OBSTACLE);
 		}
 		try {
-			PoobStairs game = new PoobStairs(3,3, null);
+			PoobStairs game = new PoobStairs(3,3, players);
 			game.setGame(0, 0, 0, (float) 0.65);
 			fail("No lanzo excepción");
 		}catch(POOBSTAIRSException e) {
 			assertEquals(e.getMessage(),POOBSTAIRSException.NUM_OBSTACLE);
 		}
 		try {
-			PoobStairs game = new PoobStairs(10,5, null);
+			PoobStairs game = new PoobStairs(10,5, players);
 			game.setGame(15, 15, 0, (float) 0.2);
 			fail("No lanzo excepción");
 		}catch(POOBSTAIRSException e) {
@@ -135,18 +136,26 @@ class PoobStairsTest {
 	
 	
 	@Test
-	void shouldThrowDiceCorrectly() {
+	void shouldTGiveRange() {
 		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
 		PoobStairs game;
+		Square[] testSquare;
 		try {
 			game = new PoobStairs(10,10, players);
-			game.setGame(0, 0, 1, 0);
-			for(int i = 0; i < 200; i++) {
-				game.rollDice();
+			game.setGame(0, 0, 0, 0);
+			testSquare = game.getInLine();
+			testSquare[5] = new Mortal(5);
+			testSquare[9] = new QA(9);
+			testSquare[2] = new Jumper(2);
+			assertEquals(game.analize(15).length, 3);
+			Integer[]shouldBe = {2,5,9};
+			for(int i = 0; i < 3; i++) {
+				assertEquals(game.analize(15)[i], shouldBe[i]);
 			}
+			
 		} catch (POOBSTAIRSException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			fail("Lanzo Excepción");
 		}
 		
 	}

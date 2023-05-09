@@ -269,6 +269,16 @@ public class GameBoard {
 		return found;
 	}
 	
+	public Integer[] analizeSpecials(int movements, Player player) {
+		ArrayList<Integer> inRange = new ArrayList<Integer>();
+		int limInf = player.getPiecePosition();
+		int limSup = limInf + movements;
+		for (int i=limInf + 1; i < limSup; i ++) {
+			if(squaresInLine[i] instanceof SpecialSquare) inRange.add(i);
+		}
+		Integer[] inRangeArray = new Integer[inRange.size()];
+		return inRange.toArray(inRangeArray);
+	}
 	public void replacePiecePosition(int newPosition, Piece piece) throws POOBSTAIRSException {
 		if(newPosition > totalSquares || newPosition < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES) ;
 		piece.changePositionTo(find(newPosition));
@@ -356,5 +366,8 @@ public class GameBoard {
 	
 	public ArrayList<Integer> getObstacleSquares(){
 		return obstacleSquares;
+	}
+	protected Square[] getInLine(){
+		return squaresInLine;
 	}
 }

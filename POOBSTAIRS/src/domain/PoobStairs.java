@@ -89,6 +89,11 @@ public class PoobStairs {
 	 * @return true si el jugador en turno ya llego a la ultima casilla
 	 * 
 	 */
+	
+	public Integer[] analize(int numberPositions) throws POOBSTAIRSException{
+		if(board.analizeSpecials(numberPositions, getTurn()).length == 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_SPECIALS);
+		return board.analizeSpecials(numberPositions, getTurn());
+	}
 	public boolean advancePlayer(int positions) {
 		try {
 			board.replacePiecePosition(getTurn().movePiece(positions), getTurn().getPiece());
@@ -145,4 +150,8 @@ public class PoobStairs {
 		}
 		
 	}	
+	
+	public Square[] getInLine() {
+		return board.getInLine();
+	}
 }
