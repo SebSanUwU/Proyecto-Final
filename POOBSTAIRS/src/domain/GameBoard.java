@@ -273,7 +273,8 @@ public class GameBoard {
 			//En caso de ser una casilla especial se usa 
 			if(squaresInLine[secondPos] instanceof SpecialSquare) {
 				lastPos = ((SpecialSquare)squaresInLine[secondPos]).useTrap();
-				if(lastPos >= totalSquares || lastPos < 0) lastPos = secondPos;
+				if((squaresInLine[secondPos] instanceof Jumper || squaresInLine[secondPos] instanceof ReverseJumper)
+						&&(lastPos >= totalSquares || lastPos < 0)) lastPos = secondPos;
 			}
 		}
 		squaresInLine[firstPos].removePiece(piece);
