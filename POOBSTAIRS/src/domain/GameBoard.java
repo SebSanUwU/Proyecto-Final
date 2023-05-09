@@ -42,7 +42,7 @@ public class GameBoard {
 	 */
 	public void setArea(int numSnakes, int numStairs, float pSpecial,Player[] player) throws POOBSTAIRSException {
 		int aux = (int) Math.round((totalSquares - 2) * pSpecial);
-		if (numSnakes * 2 + numSnakes * 2 + aux > (totalSquares - 2 - 4))
+		if (numSnakes * 2 + numStairs * 2 + aux > (totalSquares - 2 - 4))
 			throw new POOBSTAIRSException(POOBSTAIRSException.NUM_OBSTACLE);
 		
 		randomSquareObstacle(numSnakes, false, true);
@@ -52,9 +52,8 @@ public class GameBoard {
 		setSquares();
 		squaresInLine[0].receivePiece(player[0].getPiece());
 		squaresInLine[0].receivePiece(player[1].getPiece());
-		player[0].getPiece().changePositionTo(squaresInLine[0]);
-		player[1].getPiece().changePositionTo(squaresInLine[0]);
-		setActualSquare();
+		
+		//setActualSquare();
 		
 	}
 	/**
@@ -88,22 +87,7 @@ public class GameBoard {
 		}
 	}
 
-	public void  setActualSquare(){
-		int value=0;
-		for(int i= squares.length-1 ; i>=0 ;i--){
-			if(i%2==1){
-				for(int j = 0;j<squares[0].length;j++){
-					squares[i][j]=squaresInLine[value];
-					value++;
-				}
-			}else{
-				for(int j = squares[0].length-1;j>=0;j--){
-					squares[i][j]=squaresInLine[value];
-					value++;
-				}
-			}
-		}
-	}
+	
 	/**
 	 * Función que indica el estado actual del tablero
 	 * @return squares
@@ -248,44 +232,113 @@ public class GameBoard {
 	
 	
 	
+
 	/**
-	 * Metodo que identifica la casilla con cierto valor 
-	 * @param value. valor numerico de la casilla
-	 * @return la casilla con el numero indicado
+	 * Se encarga de analizar que casillas especiales se encuentran en el rango de movimiento
+	 * la pieza en turno
+	 * @param movements, numero de casillas que va a recorrer la pieza
+	 * @param player, jugador en turno
+	 * @return un arreglo de enteros indicando las casillas especiales dentro del rango entre
+	 * la posicion actual del usuario la casilla final de este mismo
 	 */
-	protected Square find(int num) {
-		Square found = null;
-		boolean founded = false;
-		for(int i = squares.length-1; i >= 0; i--) {
-			for(int j = 0; j < squares[0].length; j++) {
-				if(squares[i][j].getNumSquare() == num) {
-					found = squares[i][j];
-					founded = true;
-				}
-				if(founded) break;
-			}
-			if(founded) break;
-		}
-		return found;
-	}
-	
 	public Integer[] analizeSpecials(int movements, Player player) {
 		ArrayList<Integer> inRange = new ArrayList<Integer>();
 		int limInf = player.getPiecePosition();
 		int limSup = limInf + movements;
+		
 		for (int i=limInf + 1; i < limSup; i ++) {
-			if(squaresInLine[i] instanceof SpecialSquare) inRange.add(i);
+			if(i < totalSquares && squaresInLine[i] instanceof SpecialSquare) inRange.add(i);
+			if (i >= totalSquares) break;
 		}
 		Integer[] inRangeArray = new Integer[inRange.size()];
 		return inRange.toArray(inRangeArray);
 	}
-	public void replacePiecePosition(int newPosition, Piece piece) throws POOBSTAIRSException {
-		if(newPosition > totalSquares || newPosition < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES) ;
-		piece.changePositionTo(find(newPosition));
-		piece.getPosition().receivePiece(piece);
-		//squaresInLine[0].receivePiece(piece);
+	/**
+	 * Reposiciona una pieza dentro del tablero
+	 * @param positions, numero de casillas que va a recorrer la pieza
+	 * @param piece, Pieza que va a reubicada dentro del tablero
+	 * @return La nueva casilla de la pieza
+	 * @throws POOBSTAIRSException NO_MORE_SQUARES si, al hacer el primermovimiento, la ficha se 
+	 * sale de los limites del tablero
+	 */
+	public Square changePiece(int positions, Piece piece) throws POOBSTAIRSException {
+		int firstPos = piece.getIntPosition();
+		int secondPos = firstPos + positions;
+		int lastPos = secondPos;
+		if(secondPos >= totalSquares || secondPos < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
+		//Se trata de utilizar la trampa de la nueva casilla y si la casilla no tiene obstaculo se trata de usar el especial
+		try {
+			lastPos = squaresInLine[secondPos].useObstacle();
+		}catch(POOBSTAIRSException e) {
+			//En caso de ser una casilla especial se usa 
+			if(squaresInLine[secondPos] instanceof SpecialSquare) {
+				lastPos = ((SpecialSquare)squaresInLine[secondPos]).useTrap();
+				if(lastPos >= totalSquares || lastPos < 0) lastPos = secondPos;
+			}
+		}
+		squaresInLine[firstPos].removePiece(piece);
+		squaresInLine[lastPos].receivePiece(piece);
+		return squaresInLine[lastPos];
 	}
 
+	public int findCloseStair(int actualPos){
+		for(int i = actualPos; i<squaresInLine.length;i++){
+			try {
+				Obstacle obstacle = squaresInLine[i].getObstacle();
+				if(obstacle.getType().equals("stair")){
+					return squaresInLine[i].getNumSquare();
+				}
+			} catch (Exception e) {
+				//System.out.println(e.getMessage()+" Board actualizar plis");
+			}
+		}
+		return actualPos;
+		//return -1;
+	}
+
+	public int findCloseSnake(int actualPos){
+		for(int i = actualPos; i>0;i--){
+			try {
+				Obstacle obstacle = squaresInLine[i].getObstacle();
+				if(obstacle.getType().equals("snake")){
+					return squaresInLine[i].getNumSquare();
+				}
+			} catch (Exception e) {
+				
+			}
+		}
+		return actualPos;
+		//return -1;
+	}
+	
+
+	
+	public ArrayList<Integer> getObstacleSquares(){
+		return obstacleSquares;
+	}
+	protected Square[] getInLine(){
+		return squaresInLine;
+	}
+	
+	/**
+	 * Metodos no utilizados
+	 */
+	public void  setActualSquare(){
+		int value=0;
+		for(int i= squares.length-1 ; i>=0 ;i--){
+			if(i%2==1){
+				for(int j = 0;j<squares[0].length;j++){
+					squares[i][j]=squaresInLine[value];
+					value++;
+				}
+			}else{
+				for(int j = squares[0].length-1;j>=0;j--){
+					squares[i][j]=squaresInLine[value];
+					value++;
+				}
+			}
+		}
+	}
 	public void movePiece(Player player,int posicion) throws POOBSTAIRSException  {
 		int advancePos = player.getPiecePosition()+posicion;
 		int posicionInicial=player.getPiecePosition();
@@ -338,39 +391,5 @@ public class GameBoard {
 		}
 	}
 
-	public int findCloseStair(int actualPos){
-		for(int i = actualPos; i<squaresInLine.length;i++){
-			try {
-				Obstacle obstacle = squaresInLine[i].getObstacle();
-				if(obstacle.getType().equals("stair")){
-					return squaresInLine[i].getNumSquare();
-				}
-			} catch (Exception e) {
-				//System.out.println(e.getMessage()+" Board actualizar plis");
-			}
-		}
-		return -1;
-	}
-
-	public int findCloseSnake(int actualPos){
-		for(int i = actualPos; i>0;i--){
-			try {
-				Obstacle obstacle = squaresInLine[i].getObstacle();
-				if(obstacle.getType().equals("snake")){
-					return squaresInLine[i].getNumSquare();
-				}
-			} catch (Exception e) {
-				
-			}
-		}
-		return -1;
-	}
 	
-	
-	public ArrayList<Integer> getObstacleSquares(){
-		return obstacleSquares;
-	}
-	protected Square[] getInLine(){
-		return squaresInLine;
-	}
 }

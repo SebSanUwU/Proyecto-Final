@@ -1,6 +1,6 @@
 package domain;
 
-public  abstract class Obstacle {
+public   class Obstacle {
     private Square head;
     private Square tail;
     private String type;

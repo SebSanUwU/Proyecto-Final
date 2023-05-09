@@ -62,10 +62,9 @@ public class PoobStairs {
 		if(pModifier > 1.0 || pSpecial > 1.0) throw new POOBSTAIRSException(POOBSTAIRSException.INACCEPTED_PERCENTAGE);
 		board.setArea(numSnakes, numStairs,pSpecial,players);
 		die = new Die((byte)6,pModifier);
-		/*for(int i = 0; i < players.length; i++) {
-			//board.replacePiecePosition(0, players[i].getPiece());
-			movePiece(0);
-		}*/
+		int rows = board().length;
+		players[0].changePositionPiece(board()[rows-1][0]);
+		players[1].changePositionPiece(board()[rows-1][0]);
 		
 	}
 
@@ -94,32 +93,41 @@ public class PoobStairs {
 		if(board.analizeSpecials(numberPositions, getTurn()).length == 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_SPECIALS);
 		return board.analizeSpecials(numberPositions, getTurn());
 	}
-	public boolean advancePlayer(int positions) {
+	
+	/**
+	 * Se ecnarga de mover la pieza en juego n posiciones
+	 * @param positions, numero de casillas que el jugador  en turno va a mover su pieza
+	 * @return si algun jugador ha ganado
+	 */
+	public boolean movePiece(int positions) {
+		Piece piece = getTurn().getPiece();
 		try {
-			board.replacePiecePosition(getTurn().movePiece(positions), getTurn().getPiece());
-			if(getTurn().getPieceSquare() instanceof SpecialSquare) {
-				board.replacePiecePosition(((SpecialSquare)getTurn().getPieceSquare()).useTrap(), getTurn().getPiece());
-			}
-			board.replacePiecePosition(getTurn().getPieceSquare().useObstacle(), getTurn().getPiece());
-		}catch(POOBSTAIRSException e) {
-			e.printStackTrace();
+			Square newPosition = board.changePiece(positions, piece);
+			getTurn().changePositionPiece(newPosition);
+			if(playerOnTurn == 0) playerOnTurn = 1;
+			else playerOnTurn = 0;
+			
+		} catch (POOBSTAIRSException e) {
+			if(playerOnTurn == 0) playerOnTurn = 1;
+			else playerOnTurn = 0;
 		}
-		if(playerOnTurn == 0) playerOnTurn = 1;
-		else playerOnTurn = 0;
 		return false;
 	}
-
+	
+	
+	/**
 	public boolean movePiece(int position){
-		if(playerOnTurn == 0) playerOnTurn = 1;
-		else playerOnTurn = 0;
+		
 		try {
 			board.movePiece(getTurn(),position);
 		} catch (Exception e) {
 			System.out.println(e.getMessage()+"Poobstair move piece");
 		}
+		if(playerOnTurn == 0) playerOnTurn = 1;
+		else playerOnTurn = 0;
 		return false;
 	}
-	
+	*/
 	
 	/**
 	 * Indica el jugador de a quien le toca mover la ficha
@@ -131,7 +139,7 @@ public class PoobStairs {
 	/**
 	 * Si el jugador lo decide, se usa el poder del dado.
 	 */
-	
+	/**
 	public void usePower() {
 		Player nextP;
 		try {
@@ -150,6 +158,7 @@ public class PoobStairs {
 		}
 		
 	}	
+	*/
 	
 	public Square[] getInLine() {
 		return board.getInLine();

@@ -9,7 +9,15 @@ public class Jumper extends Square implements SpecialSquare{
 
 	@Override
 	public int useTrap() {
-		return  ThreadLocalRandom.current().nextInt(1, 7);
+		return  ThreadLocalRandom.current().nextInt(1, 7) + getNumSquare();
 	}
+	
+	/**
+	 * @Override
+	public int useTrap() {
+		return  ThreadLocalRandom.current().nextInt(1, 7) + getNumSquare();
+	}
+	 */
+	
 	
 }

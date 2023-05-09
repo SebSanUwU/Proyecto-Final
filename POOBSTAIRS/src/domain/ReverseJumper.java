@@ -8,6 +8,13 @@ public class ReverseJumper extends Square implements SpecialSquare{
     }
     @Override
 	public int useTrap() {
+		return getNumSquare() + ThreadLocalRandom.current().nextInt(-7, 0);
+	}
+    
+    /**
+    @Override
+	public int useTrap() {
 		return ThreadLocalRandom.current().nextInt(-7, 0);
 	}
+	*/
 }

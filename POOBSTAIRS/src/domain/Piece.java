@@ -25,15 +25,7 @@ public class Piece {
 	}
 	
 	public void changePositionTo(Square newPosition) {
-		try {
-			if(position!=null){
-				position.removePiece(this);
-			}
-		} catch (POOBSTAIRSException e) {
-			e.printStackTrace();
-		}catch (NullPointerException e) {
-			e.printStackTrace();
-		}
+		
 		position = newPosition;
 		
 	}
@@ -44,6 +36,10 @@ public class Piece {
 	
 	public Color getColor() {
 		return color;
+	}
+	
+	public int getIntPosition() {
+		return position.getNumSquare();
 	}
 	
 	

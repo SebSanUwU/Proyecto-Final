@@ -26,9 +26,7 @@ public class Player {
 		return piece.getPosition().getNumSquare();
 	}
 	
-	public int movePiece(int positions) {
-		return getPiecePosition() + positions;
-	}
+	
 	
 	public Piece getPiece() {
 		return piece;

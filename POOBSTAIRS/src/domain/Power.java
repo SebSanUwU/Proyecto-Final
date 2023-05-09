@@ -14,7 +14,7 @@ public class Power {
 		else return -1;
 		
 	}
-	
+	/**
 	public static void usSuperPower(String power, GameBoard board, Player player1, Player player2){
 
 		Square nextS = player2.getPieceSquare();
@@ -28,4 +28,5 @@ public class Power {
 		
 		
 	}
+	*/
 }

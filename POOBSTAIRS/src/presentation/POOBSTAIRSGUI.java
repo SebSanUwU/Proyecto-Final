@@ -724,12 +724,12 @@ public class POOBSTAIRSGUI extends JFrame {
 				Face current = poobStairs.rollDice();
 				
 				assignValue(current.getValue());
-				if(activePower(current)) {
-					poobStairs.usePower();
-				}else {
+				//if(activePower(current)) {
+					//poobStairs.usePower();
+				//}else {
 					//poobStairs.advancePlayer(current.getValue());
 					poobStairs.movePiece(current.getValue());
-				}
+				//}
 				refresh();
 			}
 		});
@@ -812,7 +812,7 @@ public class POOBSTAIRSGUI extends JFrame {
             System.out.println(e.getMessage());
         }
     }
-	
+	/**
 	private boolean activePower(Face face) {
 		try {
 			int option;
@@ -829,4 +829,5 @@ public class POOBSTAIRSGUI extends JFrame {
 		}
 		
 	}
+	*/
 }
