@@ -9,7 +9,7 @@ public class Regression extends Square implements SpecialSquare{
 
 	@Override
 	public int useTrap() {
-		System.out.println(board.findCloseSnake(numSquare));
+		//System.out.println(board.findCloseSnake(numSquare));
 		return board.findCloseSnake(numSquare);
 	}
 }

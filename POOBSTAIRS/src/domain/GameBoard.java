@@ -308,16 +308,19 @@ public class GameBoard {
 				}
 			}else{
 				int n =advancePos+special.useTrap();
+				//System.out.println(n);
 				if(n<squaresInLine.length-1 && n>-1){
-					advancePos+=n;
+					advancePos=n;
 				}
 			}
 		}
-		if(advancePos>=0){
+		if(advancePos>=0 && posicionInicial!=advancePos){
 			try{
 				Obstacle trap =squaresInLine[advancePos].getObstacle();
-				changePieceBoard(posicionInicial, trap.use(), player);
-				player.changePositionPiece(squaresInLine[trap.use()]);
+				if(trap.use()!=posicionInicial){
+					changePieceBoard(posicionInicial, trap.use(), player);
+					player.changePositionPiece(squaresInLine[trap.use()]);
+				}
 			}catch(POOBSTAIRSException e){
 				changePieceBoard(posicionInicial, advancePos, player);
 				player.changePositionPiece(squaresInLine[advancePos]);

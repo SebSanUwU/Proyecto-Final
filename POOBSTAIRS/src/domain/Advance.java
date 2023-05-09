@@ -9,7 +9,7 @@ public class Advance extends Square implements SpecialSquare{
 
 	@Override
 	public int useTrap() {
-		System.out.println(board.findCloseStair(numSquare));
+		//System.out.println(board.findCloseStair(numSquare));
 		return board.findCloseStair(numSquare);
 	}
 }
