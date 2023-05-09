@@ -63,9 +63,8 @@ public class PoobStairs {
 		board.setArea(numSnakes, numStairs,pSpecial,players);
 		die = new Die((byte)6,pModifier);
 		int rows = board().length;
-		players[0].changePositionPiece(board()[rows-1][0]);
-		players[1].changePositionPiece(board()[rows-1][0]);
-		
+		players[0].changePositionPiece(board.getInLine()[0]);
+		players[1].changePositionPiece(board.getInLine()[0]);
 	}
 
 	/**
@@ -114,21 +113,6 @@ public class PoobStairs {
 		return false;
 	}
 	
-	
-	/**
-	public boolean movePiece(int position){
-		
-		try {
-			board.movePiece(getTurn(),position);
-		} catch (Exception e) {
-			System.out.println(e.getMessage()+"Poobstair move piece");
-		}
-		if(playerOnTurn == 0) playerOnTurn = 1;
-		else playerOnTurn = 0;
-		return false;
-	}
-	*/
-	
 	/**
 	 * Indica el jugador de a quien le toca mover la ficha
 	 * @return
@@ -136,6 +120,7 @@ public class PoobStairs {
 	public Player getTurn() {
 		return players[playerOnTurn];
 	}
+	
 	/**
 	 * Si el jugador lo decide, se usa el poder del dado.
 	 */

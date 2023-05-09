@@ -52,9 +52,7 @@ public class GameBoard {
 		setSquares();
 		squaresInLine[0].receivePiece(player[0].getPiece());
 		squaresInLine[0].receivePiece(player[1].getPiece());
-		
-		//setActualSquare();
-		
+		setActualSquare();
 	}
 	/**
 	 * Ensambla todas las casillas que hacen parte del tablero
@@ -230,9 +228,6 @@ public class GameBoard {
 		}
 	}
 	
-	
-	
-
 	/**
 	 * Se encarga de analizar que casillas especiales se encuentran en el rango de movimiento
 	 * la pieza en turno
@@ -266,19 +261,24 @@ public class GameBoard {
 		int secondPos = firstPos + positions;
 		int lastPos = secondPos;
 		if(secondPos >= totalSquares || secondPos < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
-		//Se trata de utilizar la trampa de la nueva casilla y si la casilla no tiene obstaculo se trata de usar el especial
-		try {
-			lastPos = squaresInLine[secondPos].useObstacle();
-		}catch(POOBSTAIRSException e) {
-			//En caso de ser una casilla especial se usa 
-			if(squaresInLine[secondPos] instanceof SpecialSquare) {
-				lastPos = ((SpecialSquare)squaresInLine[secondPos]).useTrap();
-				if((squaresInLine[secondPos] instanceof Jumper || squaresInLine[secondPos] instanceof ReverseJumper)
-						&&(lastPos >= totalSquares || lastPos < 0)) lastPos = secondPos;
+		//En caso de ser una casilla especial se usa 
+		if(squaresInLine[secondPos] instanceof SpecialSquare) {
+			lastPos = ((SpecialSquare)squaresInLine[secondPos]).useTrap();
+			if((squaresInLine[secondPos] instanceof Jumper || squaresInLine[secondPos] instanceof ReverseJumper)
+					&&(lastPos >= totalSquares || lastPos < 0)) lastPos = secondPos;
+		}
+		if(firstPos != lastPos){
+			try {
+				//Se trata de utilizar la trampa de la nueva casilla 
+				lastPos = squaresInLine[lastPos].useObstacle();
+				if(lastPos!=firstPos){
+					changePieceBoard(firstPos,lastPos, piece);
+				}
+			}catch(POOBSTAIRSException e) {
+				changePieceBoard(firstPos,lastPos, piece);
 			}
 		}
-		squaresInLine[firstPos].removePiece(piece);
-		squaresInLine[lastPos].receivePiece(piece);
+		setActualSquare();
 		return squaresInLine[lastPos];
 	}
 
@@ -340,57 +340,13 @@ public class GameBoard {
 			}
 		}
 	}
-	public void movePiece(Player player,int posicion) throws POOBSTAIRSException  {
-		int advancePos = player.getPiecePosition()+posicion;
-		int posicionInicial=player.getPiecePosition();
-		if(advancePos >= totalSquares || advancePos < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
-		//verificar si posicion para avanzar es una casilla especial 
-		if(squaresInLine[advancePos] instanceof SpecialSquare){
-			SpecialSquare special = (SpecialSquare) squaresInLine[advancePos];
-			if(squaresInLine[advancePos] instanceof Mortal){
-				if(posicionInicial==0){
-					advancePos=-1;
-				}else{
-					advancePos=special.useTrap();
-				}
-			}else if(squaresInLine[advancePos] instanceof QA){
-				/*falta implementar */
-			}else if(squaresInLine[advancePos] instanceof Advance || squaresInLine[advancePos] instanceof Regression){
-				int nextObstacle = special.useTrap();
-				if(nextObstacle>0){
-					advancePos=nextObstacle;
-				}
-			}else{
-				int n =advancePos+special.useTrap();
-				//System.out.println(n);
-				if(n<squaresInLine.length-1 && n>-1){
-					advancePos=n;
-				}
-			}
-		}
-		if(advancePos>=0 && posicionInicial!=advancePos){
-			try{
-				Obstacle trap =squaresInLine[advancePos].getObstacle();
-				if(trap.use()!=posicionInicial){
-					changePieceBoard(posicionInicial, trap.use(), player);
-					player.changePositionPiece(squaresInLine[trap.use()]);
-				}
-			}catch(POOBSTAIRSException e){
-				changePieceBoard(posicionInicial, advancePos, player);
-				player.changePositionPiece(squaresInLine[advancePos]);
-			}
-		}
-		setActualSquare();
-	}
-
-	public void changePieceBoard(int actualPos,int finalPos,Player player){
+	
+	public void changePieceBoard(int actualPos,int finalPos,Piece piece){
 		try {
-			squaresInLine[finalPos].receivePiece(player.getPiece());
-			squaresInLine[actualPos].removePiece(player.getPiece());
+			squaresInLine[finalPos].receivePiece(piece);
+			squaresInLine[actualPos].removePiece(piece);
 		} catch (Exception ed) {
 			System.out.println(ed.getMessage()+" Move Piece");
 		}
 	}
-
-	
 }
