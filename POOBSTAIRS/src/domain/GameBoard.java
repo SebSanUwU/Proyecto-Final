@@ -25,6 +25,7 @@ public class GameBoard {
 		obstacleSquares = new ArrayList();
 		squaresInLine = new Square[totalSquares];
 	}
+	
 	/**
 	 * Este metodo generara todo el tablero. Para el tablero se generan el
 	 * numero deseado
@@ -54,10 +55,11 @@ public class GameBoard {
 		squaresInLine[0].receivePiece(player[1].getPiece());
 		setActualSquare();
 	}
+	
 	/**
 	 * Ensambla todas las casillas que hacen parte del tablero
 	 */
-	public void setSquares(){
+	private void setSquares(){
 		int value=0;
 		for(int i= squares.length-1 ; i>=0 ;i--){
 			if(i%2==1){
@@ -136,8 +138,8 @@ public class GameBoard {
 	 * Conecta ya sea la escalera o la serpiente a una casilla vacia y la
 	 * inicializa.
 	 * 
-	 * @param obstacleSS , arreglo con una de las casillas donde ira elobstaculo
-	 *                   serpiente o escalera
+	 * @param obstacleSS , arreglo con una de las casillas donde ira el obstaculo
+	 *                   serpiente o escalera.
 	 * @param obstacle   , el tipo de obstaculo(serpiente o escalera)
 	 */
 	private void connectObstacle(int[] obstacleSS, String obstacle) {
@@ -178,7 +180,7 @@ public class GameBoard {
 	 * @param finish, casilla final
 	 * @param type,   tipo de obstaculo(escalera o serpiente)
 	 */
-	private void addTheObstacle(int start, int finish, String type) {
+	public void addTheObstacle(int start, int finish, String type) {
 		Square head;
 		Square tail;
 		squaresInLine[start] = new Square(start);
@@ -199,8 +201,8 @@ public class GameBoard {
 			squaresInLine[finish].addObstacle(new NormalObstacle(tail, head, type));
 		}
 	}
-
-	private void addSpecialSquare(int[] specialSquare){
+	
+	public void addSpecialSquare(int[] specialSquare){
 		int random_int;
 		for(int i= 0; i <specialSquare.length;i++){
 			random_int = ThreadLocalRandom.current().nextInt(0,6);
@@ -248,6 +250,7 @@ public class GameBoard {
 		Integer[] inRangeArray = new Integer[inRange.size()];
 		return inRange.toArray(inRangeArray);
 	}
+	
 	/**
 	 * Reposiciona una pieza dentro del tablero
 	 * @param positions, numero de casillas que va a recorrer la pieza
@@ -282,6 +285,12 @@ public class GameBoard {
 		return squaresInLine[lastPos];
 	}
 
+	/**
+	 * Metodo que encuentra la posicion mas cercana a la escalera siguiente con respecto a 
+	 * la posicion de la pieza en las casillas.
+	 * @param actualPos ,posicion del jugador en el tablero
+	 * @return posicion de la escalera si la encuentra o la posicion acutla si no la encontro
+	 */
 	public int findCloseStair(int actualPos){
 		for(int i = actualPos; i<squaresInLine.length;i++){
 			try {
@@ -294,9 +303,14 @@ public class GameBoard {
 			}
 		}
 		return actualPos;
-		//return -1;
 	}
 
+	/**
+	 * Metodo que encuentra la posicion mas cercana de la serpiente anterior 
+	 * con respecto a la posicion de la pieza en las casillas.
+	 * @param actualPos , posicion del jugador en el tablero
+	 * @return posicion de la serpiente si la encuentra o la posicion actual si no la encontro
+	 */
 	public int findCloseSnake(int actualPos){
 		for(int i = actualPos; i>0;i--){
 			try {
@@ -309,14 +323,12 @@ public class GameBoard {
 			}
 		}
 		return actualPos;
-		//return -1;
 	}
-	
-
 	
 	public ArrayList<Integer> getObstacleSquares(){
 		return obstacleSquares;
 	}
+
 	protected Square[] getInLine(){
 		return squaresInLine;
 	}
@@ -324,7 +336,7 @@ public class GameBoard {
 	/**
 	 * Metodos no utilizados
 	 */
-	public void  setActualSquare(){
+	private void  setActualSquare(){
 		int value=0;
 		for(int i= squares.length-1 ; i>=0 ;i--){
 			if(i%2==1){
@@ -341,6 +353,13 @@ public class GameBoard {
 		}
 	}
 	
+	/**
+	 * Metodo que cambia una pieza de casillas,
+	 *  desde su casilla actual a la casilla final.
+	 * @param actualPos , la casilla donde se sabe que esta la ficha
+	 * @param finalPos , la casilla  donde se quiere posiciona
+	 * @param piece , pieza a la que se quiere hacer el cambio
+	 */
 	public void changePieceBoard(int actualPos,int finalPos,Piece piece){
 		try {
 			squaresInLine[finalPos].receivePiece(piece);
