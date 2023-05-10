@@ -17,7 +17,6 @@ import domain.Die.Face;
 
 public class PoobStairs {
 	private int playerOnTurn;
-	private HashMap<String,Player> playersHash;
 	private Player[] players;
 	private GameBoard board;
 	//private Square[] boardLine;
@@ -36,11 +35,7 @@ public class PoobStairs {
 	 */
 	public PoobStairs(int rows, int columns, Player[] players) throws POOBSTAIRSException {
 		playerOnTurn = (new Random().nextInt(2));
-		this.playersHash= new HashMap<String,Player>();
 		this.players=players;
-		for(int i = 0;i<players.length;i++){
-			this.playersHash.put(players[i].getName(),players[i]);
-		}
 		board = new GameBoard(rows, columns);
 	}
 
