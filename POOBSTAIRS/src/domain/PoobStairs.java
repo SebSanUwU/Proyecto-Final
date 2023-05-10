@@ -123,26 +123,25 @@ public class PoobStairs {
 	
 	/**
 	 * Si el jugador lo decide, se usa el poder del dado.
+	 * @throws POOBSTAIRSException 
 	 */
 	
-	public void usePower() {
+	public void usePower() throws POOBSTAIRSException {
 		
-		try {
-			Player nextP;
-			String power = die.getCurrentFace().indicatePowers()[0];
-			if(power.equals(Power.CHANGE)) {
-				if(playerOnTurn == 0) nextP = players[1];
-				else nextP = players[0];
-				int[] changes = Power.giveSuperPower(power, getTurn(), nextP);
-				movePiece(changes[0]);
-				movePiece(changes[1]);
-			}else {
-				//advancePlayer(Power.usePower(power) + die.getCurrentFace().getValue());
-				movePiece(Power.givePower(power) + die.getCurrentFace().getValue());
-			}
-		}catch(POOBSTAIRSException e) {
+		Player nextP;
+		String power = die.getCurrentFace().indicatePowers()[0];
+		if(power.equals(Power.CHANGE)) {
+			if(playerOnTurn == 0) nextP = players[1];
+			else nextP = players[0];
+			int[] changes = Power.giveSuperPower(power, getTurn(), nextP);
+			movePiece(changes[0]);
+			movePiece(changes[1]);
 			movePiece(die.getCurrentFace().getValue());
+		}else {
+				//advancePlayer(Power.usePower(power) + die.getCurrentFace().getValue());
+			movePiece(Power.givePower(power) + die.getCurrentFace().getValue());
 		}
+		
 		
 	}	
 	
