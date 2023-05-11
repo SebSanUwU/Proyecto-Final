@@ -77,7 +77,11 @@ public class Die {
 	public Face getCurrentFace() {
 		return currentFace;
 	}
-	
+	/**
+	 * Se usa el poder de la cara actual y se retorna el numero de movimientos que se van a hacer
+	 * a partir de ahora
+	 * @return el numero de posiciones que se deben recorrer despues de usar el poder
+	 */
 	protected int usePower() {
 		int actualValue = currentFace.getValue();
 		try {

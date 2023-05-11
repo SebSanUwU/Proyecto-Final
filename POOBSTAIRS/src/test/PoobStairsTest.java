@@ -54,7 +54,7 @@ class PoobStairsTest {
 	}
 	
 	/**
-	 * Se prueba que el programa cree su tablero con casillas especiales, serpientes y escaleras
+	 * Se prueba que el programa crea su tablero con casillas especiales, serpientes y escaleras
 	 */
 	
 	@Test
@@ -80,7 +80,9 @@ class PoobStairsTest {
 			fail("Lanzo excepción");
 		}
 	}
-	
+	/**
+	 * Se prueba que las fichas se mueven por el tablero sin el uso de casillas especiales 
+	 */
 	@Test
 	void shouldMovePiece() {
 		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
@@ -114,33 +116,77 @@ class PoobStairsTest {
 			assertFalse(game.getInLine()[5].contains(isTurn.getPiece()));
 			assertTrue(isTurn.getPiecePosition() == 10);
 			assertTrue(isTurn.getPieceSquare() == game.getInLine()[10]);
-			
-			
-			
 		}catch(POOBSTAIRSException e) {
 			fail("Lanzo excepción");
 		}
-		
+		try {
+			Player isTurn;
+			Square lastPosition;
+			PoobStairs game = new PoobStairs(10,4, players);
+			game.setGame(0, 0, 0, 0);
+			isTurn = game.getTurn();
+			game.movePiece(4);
+			assertTrue(game.getInLine()[4].contains(isTurn.getPiece()));
+			assertFalse(game.getInLine()[0].contains(isTurn.getPiece()));
+			assertTrue(isTurn.getPiecePosition() == 4);
+			assertTrue(isTurn.getPieceSquare() == game.getInLine()[4]);
+			isTurn = game.getTurn();
+			game.movePiece(10);
+			assertTrue(game.getInLine()[10].contains(isTurn.getPiece()));
+			assertFalse(game.getInLine()[0].contains(isTurn.getPiece()));
+			assertTrue(isTurn.getPiecePosition() == 10);
+			assertTrue(isTurn.getPieceSquare() == game.getInLine()[10]);
+			isTurn = game.getTurn();
+			game.movePiece(1);
+			assertTrue(game.getInLine()[5].contains(isTurn.getPiece()));
+			assertFalse(game.getInLine()[4].contains(isTurn.getPiece()));
+			assertTrue(isTurn.getPiecePosition() == 5);
+			assertTrue(isTurn.getPieceSquare() == game.getInLine()[5]);
+			isTurn = game.getTurn();
+			game.movePiece(20);
+			assertTrue(game.getInLine()[30].contains(isTurn.getPiece()));
+			assertFalse(game.getInLine()[10].contains(isTurn.getPiece()));
+			assertTrue(isTurn.getPiecePosition() == 30);
+			assertTrue(isTurn.getPieceSquare() == game.getInLine()[30]);
+		}catch(POOBSTAIRSException e) {
+			fail("Lanzo excepción");
+		}
 	}
+	
 	
 	@Test
-	void shouldNotMoveMove() {
+	/**
+	 * Se prueba que si el numero de posiciones Se sale del tablero, la ficha no cambia de posición
+	 */
+	void shouldNotMove() {
 		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
-		
 		try {
-			PoobStairs game = new PoobStairs(10,10, players);
+			PoobStairs game = new PoobStairs(3,4, players);
 			game.setGame(0, 0, 0, 0);
-			Player isYourTurn = game.getTurn();
-			game.movePiece(101);
-			assertEquals(isYourTurn.getPiecePosition(),0);
-		} catch (POOBSTAIRSException e) {
-			e.printStackTrace();
+			Player isTurn = game.getTurn();
+			int fisrtPosition = isTurn.getPiecePosition();
+			game.movePiece(13);
+			assertFalse(isTurn.getPiecePosition() == 13);
+			assertTrue(isTurn.getPiecePosition() == 0);
+			assertFalse(isTurn == game.getTurn());
+			game.movePiece(6);
+			game.movePiece(4);
+			game.movePiece(5);
+			isTurn = game.getTurn();
+			game.movePiece(0);
+			assertTrue(isTurn.getPieceSquare() == game.getInLine()[4]);
+			isTurn = game.getTurn();
+			game.movePiece(1);
+			assertTrue(isTurn.getPieceSquare() == game.getInLine()[11]);
+			
+		}catch(POOBSTAIRSException e) {
+			fail("Lanzo una excepción");
 		}
-		
 	}
 	
-	
-	
+	/**
+	 * Se prueba que el porgrama analiza que casillas especiales dentro del rango de movimiento de la ficha 
+	 */
 	@Test
 	void shouldTGiveRange() {
 		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
@@ -232,16 +278,15 @@ class PoobStairsTest {
 			// TODO Auto-generated catch block
 			fail("Lanzo Excepción");
 		}
-		
-		
 	}
+	/**
+	 * Se prueba que las piezas bajen por la cabeza de las serpientes.
+	 */
 	@Test
 	void shouldGoDown() {
 		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
 
 		PoobStairs game;
-		
-		
 		try {
 			game = new PoobStairs(10,10, players);
 			game.setGame(0, 0, 0, 0);
@@ -280,7 +325,9 @@ class PoobStairsTest {
 		}
 		
 	}
-	
+	/**
+	 * Se prueba que las serpientes no suban por la cola de la serpeinte
+	 */
 	@Test
 	void shouldNotGoUp() {
 		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
@@ -323,8 +370,6 @@ class PoobStairsTest {
 		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
 
 		PoobStairs game;
-		
-		
 		try {
 			game = new PoobStairs(10,10, players);
 			game.setGame(0, 0, 0, 0);

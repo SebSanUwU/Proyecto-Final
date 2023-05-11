@@ -20,9 +20,7 @@ public class Piece {
 		return position;
 	}
 	
-	public Square getSquare() {
-		return position;
-	}
+	
 	
 	public void changePositionTo(Square newPosition) {
 		
@@ -38,9 +36,6 @@ public class Piece {
 		return color;
 	}
 	
-	public int getIntPosition() {
-		return position.getNumSquare();
-	}
 	
 	
 	

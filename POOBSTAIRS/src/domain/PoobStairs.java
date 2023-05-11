@@ -120,7 +120,11 @@ public class PoobStairs {
 	 * Si el jugador lo decide, se usa el poder del dado.
 	 * @throws POOBSTAIRSException 
 	 */
-	
+	/**
+	 * Se encarga de usar el poder otorgado por la cara, en caso de que la cara no tenga
+	 * poder, se mueven las mismas casillas que son indicadas por el dado.
+	 * @return el valor de posiciones que va a mover el jugador luego de usar el poder
+	 */
 	public int usePower(){
 		Player nextP;
 		String power;
@@ -140,12 +144,12 @@ public class PoobStairs {
 		} catch (POOBSTAIRSException e) {
 			return movements;
 		}
-		
-		
-		
 	}	
 	
-	
+	/**
+	 * Indica cual es el arreglo de casiilas dentro del juego
+	 * @return un arreglo que contiene todas las casillas del tablero
+	 */
 	public Square[] getInLine() {
 		return board.getInLine();
 	}
