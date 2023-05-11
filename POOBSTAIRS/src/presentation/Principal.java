@@ -21,13 +21,12 @@ import java.awt.GradientPaint;
  * 21 de mayo del 2021
  */
 
-public class Principal extends JPanel{
+public class Principal extends IndependentPane{
 	protected JButton newGame, lastGame, exit;
-	private JFrame father;
 	
-	public Principal(JFrame father) {
-		super();
-		this.father = father;
+	
+	protected Principal(JFrame father) {
+		super(father);
 		prepareElements();
 	}
 	
@@ -36,17 +35,17 @@ public class Principal extends JPanel{
 	/**
 	 * Prepala los elementos del Jpanel Principal
 	 */
-	private void prepareElements() {
+	protected void prepareElements() {
 		newGame = new JButton("Nueva Partida");
 		lastGame = new JButton("Cargar Partida");
 		exit = new JButton("Salir del Juego");
-		buildprincipal();
+		build();
 	}
 	/**
 	 * Metodo que se encarga de estructurar el JPanel principal
 	 */
 
-	private void buildprincipal() {
+	protected void build() {
 		JLabel title = new JLabel("POOBSTAIRS", JLabel.CENTER);
 		title.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		this.add(title);

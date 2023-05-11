@@ -36,8 +36,7 @@ import domain.ReverseJumper;
 import domain.SpecialSquare;
 import domain.Square;
 
-public class GamePane extends JPanel {
-	private JFrame father;
+public class GamePane extends IndependentPane {
 	protected JPanel board, dataOrChoose;
 	protected JLabel whoPlays, die, numSnakes, numStairs, numSpecials, numModifiers, maxPosition, extraMoves;
 	protected JButton roll, change, endGame, confirm;
@@ -48,17 +47,16 @@ public class GamePane extends JPanel {
 	 * Create the panel.
 	 */
 	public GamePane(JFrame father) {
-		super();
-		this.father = father;
+		super(father);
 		prepareElements();
-		buildGame();
+		build();
 
 	}
 	
 	/**
 	 * Inicializa todos los elementos del panel
 	 */
-	private void prepareElements() {
+	public void prepareElements() {
 		this.setLayout(new BorderLayout(5,5));
 		board = new JPanel();
 		whoPlays = new JLabel("");
@@ -88,7 +86,7 @@ public class GamePane extends JPanel {
 	 */
 	
 	
-	private void  buildGame() {
+	public void  build() {
 		//Se dan las caracteristicas al tablero
 		board.setOpaque(false);
 		this.setBorder(new EmptyBorder(20,20,20,20));

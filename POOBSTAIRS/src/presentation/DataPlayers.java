@@ -19,7 +19,7 @@ public class DataPlayers extends JPanel{
 	
 	private JTextField name1, name2;
 	private JComboBox<String> colors, machineMode, colors2;
-	public DataPlayers(JFrame father) {
+	protected DataPlayers(JFrame father) {
 		super();
 		this.father = father;
 		prepareData();

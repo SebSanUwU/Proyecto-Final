@@ -9,29 +9,27 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-public class Mode extends JPanel{
+public class Mode extends IndependentPane {
 	protected JButton onePlayer, multiPlayer;
-	private JFrame father;
 		
 	public Mode(JFrame father) {
-		super();
-		this.father = father;
+		super(father);
 		prepareElements();
 	}
 	/**
 	 * Prepara los elementos del Jpanel Mode
 	 */
-	private void prepareElements() {
+	public void prepareElements() {
 		onePlayer = new JButton("Jugar con Maquina");
 		multiPlayer = new JButton("Jugar con Amigo");
-		buildMode();
+		build();
 	}
 	
 	/**
 	 * Metodo que se encarga de estructurar el JPanel mode
 	 */
 
-	private void buildMode() {
+	public void build() {
 		JLabel question = new JLabel();
 		JLabel question1 = new JLabel("¿Qué modo de juego", JLabel.CENTER);
 		JLabel question2 = new JLabel("desea jugar?", JLabel.CENTER);

@@ -87,29 +87,35 @@ class PoobStairsTest {
 		
 		try {
 			Player isTurn;
-			int lastPosition;
+			Square lastPosition;
 			PoobStairs game = new PoobStairs(10,10, players);
 			game.setGame(0, 0, 0, 0);
 			isTurn = game.getTurn();
-			lastPosition = game.getTurn().getPiecePosition();
 			game.movePiece(6);
-			assertEquals(lastPosition + 6, isTurn.getPiecePosition());
+			assertTrue(game.getInLine()[6].contains(isTurn.getPiece()));
+			assertFalse(game.getInLine()[0].contains(isTurn.getPiece()));
+			assertTrue(isTurn.getPiecePosition() == 6);
+			assertTrue(isTurn.getPieceSquare() == game.getInLine()[6]);
 			isTurn = game.getTurn();
-			lastPosition = game.getTurn().getPiecePosition();
-			game.movePiece(4);
-			assertEquals(lastPosition + 4, isTurn.getPiecePosition());
+			game.movePiece(5);
+			assertTrue(game.getInLine()[5].contains(isTurn.getPiece()));
+			assertFalse(game.getInLine()[0].contains(isTurn.getPiece()));
+			assertTrue(isTurn.getPiecePosition() == 5);
+			assertTrue(isTurn.getPieceSquare() == game.getInLine()[5]);
 			isTurn = game.getTurn();
-			lastPosition = game.getTurn().getPiecePosition();
-			game.movePiece(1);
-			assertEquals(lastPosition + 1, isTurn.getPiecePosition());
+			game.movePiece(2);
+			assertTrue(game.getInLine()[8].contains(isTurn.getPiece()));
+			assertFalse(game.getInLine()[6].contains(isTurn.getPiece()));
+			assertTrue(isTurn.getPiecePosition() == 8);
+			assertTrue(isTurn.getPieceSquare() == game.getInLine()[8]);
 			isTurn = game.getTurn();
-			lastPosition = game.getTurn().getPiecePosition();
-			game.movePiece(10);
-			assertEquals(lastPosition + 10, isTurn.getPiecePosition());
-			isTurn = game.getTurn();
-			lastPosition = game.getTurn().getPiecePosition();
-			game.movePiece(4);
-			assertEquals(lastPosition + 4, isTurn.getPiecePosition());
+			game.movePiece(5);
+			assertTrue(game.getInLine()[10].contains(isTurn.getPiece()));
+			assertFalse(game.getInLine()[5].contains(isTurn.getPiece()));
+			assertTrue(isTurn.getPiecePosition() == 10);
+			assertTrue(isTurn.getPieceSquare() == game.getInLine()[10]);
+			
+			
 			
 		}catch(POOBSTAIRSException e) {
 			fail("Lanzo excepción");

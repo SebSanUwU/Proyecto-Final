@@ -13,23 +13,22 @@ import javax.swing.SwingConstants;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.EmptyBorder;
 
-public class InitGame extends JPanel {
+public class InitGame extends IndependentPane{
 	/*initGame*/
 	protected JButton beggin;
 	protected JSpinner dataRows, dataColumns, dataSnakes, dataStairs, dataSpecials, dataPowers;
-	private JFrame father;
+	
 	/**
 	 * Create the panel.
 	 */
 	public InitGame(JFrame father) {
-		super();
-		this.father = father;
-		prepareData();
+		super(father);
+		prepareElements();
 	}
 	/**
 	 * Se encarga de preparar todos los elementos del panel para ser utilizados
 	 */
-	private void prepareData() {
+	public void prepareElements() {
 		beggin = new JButton("Comenzar");
 		dataRows= new JSpinner(new SpinnerNumberModel(3,3,50,1));
 		dataColumns= new JSpinner(new SpinnerNumberModel(3,3,50,1));
@@ -37,10 +36,13 @@ public class InitGame extends JPanel {
 		dataStairs= new JSpinner(new SpinnerNumberModel(0,0,50,1));
 		dataSpecials= new JSpinner(new SpinnerNumberModel(0.0,0.0,1.05,0.05));
 		dataPowers= new JSpinner(new SpinnerNumberModel(0.0,0.0,1.05,0.05));
-		buildInit();
+		build();
 	}
+	/**
+	 * Se encarga de inicializar los elementod del Panel
+	 */
 	
-	protected void buildInit() {
+	public void build() {
 		JLabel title = new JLabel("Datos del Tablero");
 		title.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
