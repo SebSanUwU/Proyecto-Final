@@ -93,10 +93,10 @@ public class PoobStairs {
 	 * @param positions, numero de casillas que el jugador  en turno va a mover su pieza
 	 * @return si algun jugador ha ganado
 	 */
-	public boolean movePiece(int positions, boolean lastMove) {
+	public boolean movePiece(int positions) {
 		Piece piece = getTurn().getPiece();
 		try {
-			Square newPosition = board.changePiece(positions, piece,lastMove);
+			Square newPosition = board.changePiece(positions, piece);
 			getTurn().changePositionPiece(newPosition);
 			if(playerOnTurn == 0) playerOnTurn = 1;
 			else playerOnTurn = 0;
@@ -131,8 +131,8 @@ public class PoobStairs {
 				if(playerOnTurn == 0) nextP = players[1];
 				else nextP = players[0];
 				int[] changes = Power.giveSuperPower(power, getTurn(), nextP);
-				movePiece(changes[0], false);
-				movePiece(changes[1], false);
+				movePiece(changes[0]);
+				movePiece(changes[1]);
 			}else {
 				movements = die.usePower();
 			}

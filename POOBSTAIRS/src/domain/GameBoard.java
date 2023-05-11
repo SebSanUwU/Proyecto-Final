@@ -259,14 +259,14 @@ public class GameBoard {
 	 * @throws POOBSTAIRSException NO_MORE_SQUARES si, al hacer el primermovimiento, la ficha se 
 	 * sale de los limites del tablero
 	 */
-	public Square changePiece(int positions, Piece piece, boolean lastMove) throws POOBSTAIRSException {
+	public Square changePiece(int positions, Piece piece) throws POOBSTAIRSException {
 		if(positions == 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MOVEMENTS);
 		int firstPos = piece.getIntPosition();
 		int secondPos = firstPos + positions;
 		int lastPos = secondPos;
 		if(secondPos >= totalSquares || secondPos < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
 		
-		if(lastMove){
+		
 			//En caso de ser una casilla especial se usa 
 			if(squaresInLine[secondPos] instanceof SpecialSquare) {
 				lastPos = ((SpecialSquare)squaresInLine[secondPos]).useTrap();
@@ -282,7 +282,7 @@ public class GameBoard {
 					changePieceBoard(firstPos,lastPos, piece);
 				}
 			
-			}
+			
 		setActualSquare();
 		return squaresInLine[lastPos];
 	}

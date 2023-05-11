@@ -309,7 +309,7 @@ public class POOBSTAIRSGUI extends JFrame {
 		});
 		startPlaying.confirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				poobStairs.movePiece(startPlaying.getSpecials() - poobStairs.getTurn().getPiecePosition() -1,true );
+				poobStairs.movePiece(startPlaying.getSpecials() - poobStairs.getTurn().getPiecePosition() -1 );
 				CardLayout layout = (CardLayout) startPlaying.dataOrChoose.getLayout();
 				layout.next(startPlaying.dataOrChoose);
 				startPlaying.refresh(poobStairs);
@@ -372,7 +372,7 @@ public class POOBSTAIRSGUI extends JFrame {
 			CardLayout layout = (CardLayout) startPlaying.dataOrChoose.getLayout();
 			layout.next(startPlaying.dataOrChoose);
 		} catch (POOBSTAIRSException e) {
-			poobStairs.movePiece(movements,true);
+			poobStairs.movePiece(movements);
 			startPlaying.refresh(poobStairs);
 			
 		}
