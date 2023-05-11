@@ -91,25 +91,25 @@ class PoobStairsTest {
 			PoobStairs game = new PoobStairs(10,10, players);
 			game.setGame(0, 0, 0, 0);
 			isTurn = game.getTurn();
-			game.movePiece(6);
+			game.movePiece(6,true);
 			assertTrue(game.getInLine()[6].contains(isTurn.getPiece()));
 			assertFalse(game.getInLine()[0].contains(isTurn.getPiece()));
 			assertTrue(isTurn.getPiecePosition() == 6);
 			assertTrue(isTurn.getPieceSquare() == game.getInLine()[6]);
 			isTurn = game.getTurn();
-			game.movePiece(5);
+			game.movePiece(5,true);
 			assertTrue(game.getInLine()[5].contains(isTurn.getPiece()));
 			assertFalse(game.getInLine()[0].contains(isTurn.getPiece()));
 			assertTrue(isTurn.getPiecePosition() == 5);
 			assertTrue(isTurn.getPieceSquare() == game.getInLine()[5]);
 			isTurn = game.getTurn();
-			game.movePiece(2);
+			game.movePiece(2,true);
 			assertTrue(game.getInLine()[8].contains(isTurn.getPiece()));
 			assertFalse(game.getInLine()[6].contains(isTurn.getPiece()));
 			assertTrue(isTurn.getPiecePosition() == 8);
 			assertTrue(isTurn.getPieceSquare() == game.getInLine()[8]);
 			isTurn = game.getTurn();
-			game.movePiece(5);
+			game.movePiece(5,true);
 			assertTrue(game.getInLine()[10].contains(isTurn.getPiece()));
 			assertFalse(game.getInLine()[5].contains(isTurn.getPiece()));
 			assertTrue(isTurn.getPiecePosition() == 10);
@@ -131,7 +131,7 @@ class PoobStairsTest {
 			PoobStairs game = new PoobStairs(10,10, players);
 			game.setGame(0, 0, 0, 0);
 			Player isYourTurn = game.getTurn();
-			game.movePiece(101);
+			game.movePiece(101,true);
 			assertEquals(isYourTurn.getPiecePosition(),0);
 		} catch (POOBSTAIRSException e) {
 			e.printStackTrace();
@@ -204,8 +204,8 @@ class PoobStairsTest {
 			testSquare[32] = new QA(32);
 			testSquare[40] = new Jumper(40);
 			testSquare[50] = new Jumper(50);
-			game.movePiece(16);
-			game.movePiece(1);
+			game.movePiece(16,true);
+			game.movePiece(1,true);
 			Integer[]shouldBe = {30,32,40,50};
 			for(int i = 0; i < 4; i++) {
 				assertEquals(game.analize(40)[i], shouldBe[i]);
@@ -221,8 +221,8 @@ class PoobStairsTest {
 			testSquare = game.getInLine();
 			testSquare[98] = new Mortal(98);
 			testSquare[99] = new QA(99);
-			game.movePiece(97);
-			game.movePiece(1);
+			game.movePiece(97,true);
+			game.movePiece(1,true);
 			Integer[]shouldBe = {98,99};
 			for(int i = 0; i < 2; i++) {
 				assertEquals(game.analize(5)[i], shouldBe[i]);
@@ -258,19 +258,19 @@ class PoobStairsTest {
 			game.getInLine()[92].addObstacle(snake4);
 			game.getInLine()[5].addObstacle(snake4);
 			Player yourTurn = game.getTurn();
-			game.movePiece(75);
+			game.movePiece(75,true);
 			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[23]);
 			assertTrue(game.getInLine()[23].contains(yourTurn.getPiece()));
 			yourTurn = game.getTurn();
-			game.movePiece(24);
+			game.movePiece(24,true);
 			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[1]);
 			assertTrue(game.getInLine()[1].contains(yourTurn.getPiece()));
 			yourTurn = game.getTurn();
-			game.movePiece(75);
+			game.movePiece(75,true);
 			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[88]);
 			assertTrue(game.getInLine()[88].contains(yourTurn.getPiece()));
 			yourTurn = game.getTurn();
-			game.movePiece(91);
+			game.movePiece(91,true);
 			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[5]);
 			assertTrue(game.getInLine()[5].contains(yourTurn.getPiece()));
 			
@@ -304,12 +304,12 @@ class PoobStairsTest {
 			game.getInLine()[92].addObstacle(snake4);
 			game.getInLine()[5].addObstacle(snake4);
 			Player yourTurn = game.getTurn();
-			game.movePiece(23);
+			game.movePiece(23,true);
 			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[23]);
 			assertTrue(game.getInLine()[23].contains(yourTurn.getPiece()));
 			assertFalse(game.getInLine()[75].contains(yourTurn.getPiece()));
 			yourTurn = game.getTurn();
-			game.movePiece(1);
+			game.movePiece(1,true);
 			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[1]);
 			assertTrue(game.getInLine()[1].contains(yourTurn.getPiece()));
 			assertFalse(game.getInLine()[24].contains(yourTurn.getPiece()));
@@ -341,20 +341,20 @@ class PoobStairsTest {
 			game.getInLine()[92].addObstacle(stair4);
 			game.getInLine()[5].addObstacle(stair4);
 			Player yourTurn = game.getTurn();
-			game.movePiece(1);
+			game.movePiece(1,true);
 			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[23]);
 			assertTrue(game.getInLine()[23].contains(yourTurn.getPiece()));
 			yourTurn = game.getTurn();
-			game.movePiece(5);
+			game.movePiece(5,true);
 			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[92]);
 			assertTrue(game.getInLine()[92].contains(yourTurn.getPiece()));
 			yourTurn = game.getTurn();
-			game.movePiece(1);
+			game.movePiece(1,true);
 			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[75]);
 			assertTrue(game.getInLine()[75].contains(yourTurn.getPiece()));
-			game.movePiece(2);
+			game.movePiece(2,true);
 			yourTurn = game.getTurn();
-			game.movePiece(13);
+			game.movePiece(13,true);
 			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[98]);
 			assertTrue(game.getInLine()[98].contains(yourTurn.getPiece()));
 		} catch (POOBSTAIRSException e) {
@@ -382,3 +382,4 @@ class PoobStairsTest {
 	
 
 }
+
