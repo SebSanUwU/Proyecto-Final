@@ -48,7 +48,6 @@ public class GamePane extends IndependentPane {
 	 */
 	public GamePane(JFrame father) {
 		super(father);
-		prepareElements();
 		build();
 
 	}

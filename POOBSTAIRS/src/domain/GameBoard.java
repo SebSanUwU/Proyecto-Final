@@ -259,28 +259,30 @@ public class GameBoard {
 	 * @throws POOBSTAIRSException NO_MORE_SQUARES si, al hacer el primermovimiento, la ficha se 
 	 * sale de los limites del tablero
 	 */
-	public Square changePiece(int positions, Piece piece) throws POOBSTAIRSException {
+	public Square changePiece(int positions, Piece piece, boolean lastMove) throws POOBSTAIRSException {
+		if(positions == 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MOVEMENTS);
 		int firstPos = piece.getIntPosition();
 		int secondPos = firstPos + positions;
 		int lastPos = secondPos;
 		if(secondPos >= totalSquares || secondPos < 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
-		//En caso de ser una casilla especial se usa 
-		if(squaresInLine[secondPos] instanceof SpecialSquare) {
-			lastPos = ((SpecialSquare)squaresInLine[secondPos]).useTrap();
-			if((squaresInLine[secondPos] instanceof Jumper || squaresInLine[secondPos] instanceof ReverseJumper)
-					&&(lastPos >= totalSquares || lastPos < 0)) lastPos = secondPos;
-		}
-		if(firstPos != lastPos){
+		
+		if(lastMove){
+			//En caso de ser una casilla especial se usa 
+			if(squaresInLine[secondPos] instanceof SpecialSquare) {
+				lastPos = ((SpecialSquare)squaresInLine[secondPos]).useTrap();
+				if((squaresInLine[secondPos] instanceof Jumper || squaresInLine[secondPos] instanceof ReverseJumper)
+						&&(lastPos >= totalSquares || lastPos < 0)) lastPos = secondPos;
+			}
 			try {
-				//Se trata de utilizar la trampa de la nueva casilla 
+					//Se trata de utilizar la trampa de la nueva casilla 
+					
 				lastPos = squaresInLine[lastPos].useObstacle();
-				if(lastPos!=firstPos){
+				changePieceBoard(firstPos,lastPos, piece);
+				}catch(POOBSTAIRSException e) {
 					changePieceBoard(firstPos,lastPos, piece);
 				}
-			}catch(POOBSTAIRSException e) {
-				changePieceBoard(firstPos,lastPos, piece);
+			
 			}
-		}
 		setActualSquare();
 		return squaresInLine[lastPos];
 	}

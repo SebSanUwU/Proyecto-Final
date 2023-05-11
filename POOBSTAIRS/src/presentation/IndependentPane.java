@@ -11,6 +11,7 @@ public abstract class IndependentPane extends JPanel {
 	protected IndependentPane(JFrame father) {
 		super();
 		this.father = father;
+		prepareElements();
 	}
 	
 	 

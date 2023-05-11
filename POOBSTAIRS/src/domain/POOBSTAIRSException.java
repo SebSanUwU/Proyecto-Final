@@ -12,6 +12,7 @@ public class POOBSTAIRSException extends Exception{
 	public static final String NO_MORE_PIECES= "La casilla no puede haceptar más piezas";
 	public static final String NO_SUPER_POWER= "No es un super poder";
 	public static final String NO_SPECIALS= "No existen casillas especiales en el rango";
+	public static final String NO_MOVEMENTS= "No se realiza ningun movimiento";
 	public POOBSTAIRSException(String message) {
 		super(message);
 	}

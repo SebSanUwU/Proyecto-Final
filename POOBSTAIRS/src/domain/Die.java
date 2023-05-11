@@ -25,6 +25,7 @@ public class Die {
 		random = new Random();
 		numPowers = (int) Math.round(numFaces*percentage);
 		assemble(numFaces);
+		currentFace = faces.get(0);
 		
 	}
 	/**
@@ -77,6 +78,16 @@ public class Die {
 		return currentFace;
 	}
 	
+	protected int usePower() {
+		int actualValue = currentFace.getValue();
+		try {
+			actualValue += Power.givePower(currentFace.indicatePowers());
+		} catch (POOBSTAIRSException e) {
+			return actualValue;
+		}
+		return actualValue;
+	}
+	
 	/**
 	 * Clase que se encarga de declarar a los objetos de tipo Face que componen a un dado
 	 * @author Castaño-Camargo
@@ -109,11 +120,11 @@ public class Die {
 		 * @throws NO_POWERS, si a la cara no se le asigno ningun poder 
 		 */
 		
-		public String[] indicatePowers() throws POOBSTAIRSException{
+		public String indicatePowers() throws POOBSTAIRSException{
 			if(powers.size() == 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_POWERS);
 			String[] powersS = new String[powers.size()];
 			powersS = powers.toArray(powersS);
-			return powersS;
+			return powersS[0];
 		}
 		/**
 		 * 

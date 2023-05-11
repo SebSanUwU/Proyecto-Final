@@ -39,7 +39,7 @@ public class POOBSTAIRSGUI extends JFrame {
 	
 	
 	/*General*/
-	private JButton principalMenu, next;
+	
 	
 	private PoobStairs poobStairs;
 	
@@ -100,7 +100,7 @@ public class POOBSTAIRSGUI extends JFrame {
 		 String machineMode = dataPlayers.getMachineMode(); 
 		 
 		 players[0] = new Player(name1, giveColor(colors));
-		 if(dataPlayers.name2Enabled()) players[1] = new Player(name2, giveColor(colors2));
+		 if(!dataPlayers.isMachine()) players[1] = new Player(name2, giveColor(colors2));
 		 else if(machineMode.equals("Principiante")) players[1] = new Beginner(giveColor( colors));
 		 else players[1] = new Trainee(giveColor( colors));
 		
@@ -119,9 +119,6 @@ public class POOBSTAIRSGUI extends JFrame {
 		panels.add(principal);
 		//Se inicializan los componentes que hacen parte del JPanel mode
 		mode = new Mode(this);
-		next = new JButton("Siguiente");
-		principalMenu = new JButton("Volver al Menu Principal");
-		mode.add(principalMenu);
 		buildButton(mode);
 		panels.add(mode);
 		//Se inicializan los componentes que hacen parte del JPanel dataPlayers
@@ -204,28 +201,30 @@ public class POOBSTAIRSGUI extends JFrame {
 
 		 principal.newGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mode.add(principalMenu);
 				nextPane();
 			}
 		});
 		
 		/*mode y dataPlayers*/
 
-		principalMenu.addActionListener(new ActionListener() {
+		dataPlayers.principalMenu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				CardLayout layout = (CardLayout) panels.getLayout();
-				if(startPlaying.isVisible()) POOBSTAIRSGUI.this.setExtendedState(ICONIFIED);
-				layout.first(panels);
-				dataPlayers.removeAll();
-				mode.add(principalMenu);
-				
+				firstPane();
+			}
+		});
+		
+		mode.principalMenu.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				firstPane();
 			}
 		});
 
 		 mode.onePlayer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				 dataPlayers.buildData(true, next, principalMenu);
-				 buildButton(dataPlayers);
+				if(!dataPlayers.isMachine()) {
+					dataPlayers.removeAll();
+					 dataPlayers.buildMachine();
+				}
 				nextPane();
 
 			}
@@ -233,16 +232,18 @@ public class POOBSTAIRSGUI extends JFrame {
 
 		mode.multiPlayer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				dataPlayers.buildData(false, next, principalMenu);
-				buildButton(dataPlayers);
+				if(dataPlayers.isMachine()) {
+					dataPlayers.removeAll();
+					 dataPlayers.build();
+				}
 				nextPane();
 
 			}
 		});
 
-		next.addActionListener(new ActionListener() {
+		dataPlayers.next.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (dataPlayers.getColors().equals(dataPlayers.getColors2()))
+				if (!dataPlayers.isMachine() && dataPlayers.getColors().equals(dataPlayers.getColors2()))
 					JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, "Los jugadores no pueden tener el mismo color");
 				
 				else {
@@ -284,13 +285,10 @@ public class POOBSTAIRSGUI extends JFrame {
 				Face current = poobStairs.rollDice();
 				
 				startPlaying.assignValue(current.getValue());
-				try {
+				if(activePower(current) == 0) {
+					specialOptions(poobStairs.usePower());
+				}else if(activePower(current) == 4){
 					specialOptions(current.getValue());
-				}catch(POOBSTAIRSException exception) {
-					if(!activePower(current)) {
-						poobStairs.movePiece(current.getValue());
-					}
-					startPlaying.refresh(poobStairs);
 				}
 			}
 		});
@@ -311,7 +309,7 @@ public class POOBSTAIRSGUI extends JFrame {
 		});
 		startPlaying.confirm.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				poobStairs.movePiece(startPlaying.getSpecials() - poobStairs.getTurn().getPiecePosition() -1 );
+				poobStairs.movePiece(startPlaying.getSpecials() - poobStairs.getTurn().getPiecePosition() -1,true );
 				CardLayout layout = (CardLayout) startPlaying.dataOrChoose.getLayout();
 				layout.next(startPlaying.dataOrChoose);
 				startPlaying.refresh(poobStairs);
@@ -327,6 +325,11 @@ public class POOBSTAIRSGUI extends JFrame {
 		CardLayout layout = (CardLayout) panels.getLayout();
 		layout.next(panels);
 	}
+	
+	private void firstPane() {
+		CardLayout layout = (CardLayout) panels.getLayout();
+		layout.first(panels);
+	}
 
 	public static void main(String[] args) {
 		POOBSTAIRSGUI frame = new POOBSTAIRSGUI();
@@ -338,38 +341,42 @@ public class POOBSTAIRSGUI extends JFrame {
 	
 	
 	
-	private boolean activePower(Face face) {
+	private int activePower(Face face) {
 		try {
 			int option;
-			if(!(face.indicatePowers()[0].equals(Power.CHANGE))) {
-				option =JOptionPane.showConfirmDialog(this, face.indicatePowers()[0] + "¿Desea utilizarlo?");
-				if(option == 0) {
-					poobStairs.usePower();
-					return true;
-				}
-				else {
-					return false;
-				}
+			if(!(face.indicatePowers().equals(Power.CHANGE))) {
+				option =JOptionPane.showConfirmDialog(this, face.indicatePowers() + "¿Desea utilizarlo?");
+				return option;
 			}else {
 				JOptionPane.showMessageDialog(this, "Usted ha adquirido el poder " + Power.CHANGE);
-				poobStairs.usePower();
-				return true;
+				int movements = poobStairs.usePower();
+				startPlaying.refresh(poobStairs);
+				specialOptions(movements);
+				return 3;
 			}
 		}catch(POOBSTAIRSException e) {
-			return false;
+			return 4;
 		}
 	}
 	
-	private void specialOptions(int movements) throws POOBSTAIRSException {
-		Integer[] specialOp = poobStairs.analize(movements);
-		startPlaying.roll.setEnabled(false);
-		startPlaying.specials.removeAllItems();
-		for(Integer i: specialOp) {
-			startPlaying.specials.addItem(i + 1);
+	private void specialOptions(int movements) {
+		Integer[] specialOp;
+		try {
+			specialOp = poobStairs.analize(movements);
+			startPlaying.roll.setEnabled(false);
+			startPlaying.specials.removeAllItems();
+			for(Integer i: specialOp) {
+				startPlaying.specials.addItem(i + 1);
+			}
+			startPlaying.specials.addItem(poobStairs.getTurn().getPiecePosition() + movements + 1);
+			CardLayout layout = (CardLayout) startPlaying.dataOrChoose.getLayout();
+			layout.next(startPlaying.dataOrChoose);
+		} catch (POOBSTAIRSException e) {
+			poobStairs.movePiece(movements,true);
+			startPlaying.refresh(poobStairs);
+			
 		}
-		startPlaying.specials.addItem(poobStairs.getTurn().getPiecePosition() + movements + 1);
-		CardLayout layout = (CardLayout) startPlaying.dataOrChoose.getLayout();
-		layout.next(startPlaying.dataOrChoose);
+		
 	}
 	
 }

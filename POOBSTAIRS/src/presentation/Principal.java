@@ -22,12 +22,13 @@ import java.awt.GradientPaint;
  */
 
 public class Principal extends IndependentPane{
+	
 	protected JButton newGame, lastGame, exit;
 	
 	
 	protected Principal(JFrame father) {
 		super(father);
-		prepareElements();
+		build();
 	}
 	
 	
@@ -39,7 +40,6 @@ public class Principal extends IndependentPane{
 		newGame = new JButton("Nueva Partida");
 		lastGame = new JButton("Cargar Partida");
 		exit = new JButton("Salir del Juego");
-		build();
 	}
 	/**
 	 * Metodo que se encarga de estructurar el JPanel principal

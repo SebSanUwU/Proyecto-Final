@@ -93,10 +93,10 @@ public class PoobStairs {
 	 * @param positions, numero de casillas que el jugador  en turno va a mover su pieza
 	 * @return si algun jugador ha ganado
 	 */
-	public boolean movePiece(int positions) {
+	public boolean movePiece(int positions, boolean lastMove) {
 		Piece piece = getTurn().getPiece();
 		try {
-			Square newPosition = board.changePiece(positions, piece);
+			Square newPosition = board.changePiece(positions, piece,lastMove);
 			getTurn().changePositionPiece(newPosition);
 			if(playerOnTurn == 0) playerOnTurn = 1;
 			else playerOnTurn = 0;
@@ -121,21 +121,26 @@ public class PoobStairs {
 	 * @throws POOBSTAIRSException 
 	 */
 	
-	public void usePower() throws POOBSTAIRSException {
-		
+	public int usePower(){
 		Player nextP;
-		String power = die.getCurrentFace().indicatePowers()[0];
-		if(power.equals(Power.CHANGE)) {
-			if(playerOnTurn == 0) nextP = players[1];
-			else nextP = players[0];
-			int[] changes = Power.giveSuperPower(power, getTurn(), nextP);
-			movePiece(changes[0]);
-			movePiece(changes[1]);
-			movePiece(die.getCurrentFace().getValue());
-		}else {
-				//advancePlayer(Power.usePower(power) + die.getCurrentFace().getValue());
-			movePiece(Power.givePower(power) + die.getCurrentFace().getValue());
+		String power;
+		int movements = die.getCurrentFace().getValue();
+		try {
+			power = die.getCurrentFace().indicatePowers();
+			if(power.equals(Power.CHANGE)) {
+				if(playerOnTurn == 0) nextP = players[1];
+				else nextP = players[0];
+				int[] changes = Power.giveSuperPower(power, getTurn(), nextP);
+				movePiece(changes[0], false);
+				movePiece(changes[1], false);
+			}else {
+				movements = die.usePower();
+			}
+			return movements;
+		} catch (POOBSTAIRSException e) {
+			return movements;
 		}
+		
 		
 		
 	}	

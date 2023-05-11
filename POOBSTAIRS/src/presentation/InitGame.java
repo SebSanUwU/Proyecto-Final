@@ -23,7 +23,7 @@ public class InitGame extends IndependentPane{
 	 */
 	public InitGame(JFrame father) {
 		super(father);
-		prepareElements();
+		build();
 	}
 	/**
 	 * Se encarga de preparar todos los elementos del panel para ser utilizados
@@ -36,7 +36,6 @@ public class InitGame extends IndependentPane{
 		dataStairs= new JSpinner(new SpinnerNumberModel(0,0,50,1));
 		dataSpecials= new JSpinner(new SpinnerNumberModel(0.0,0.0,1.05,0.05));
 		dataPowers= new JSpinner(new SpinnerNumberModel(0.0,0.0,1.05,0.05));
-		build();
 	}
 	/**
 	 * Se encarga de inicializar los elementod del Panel

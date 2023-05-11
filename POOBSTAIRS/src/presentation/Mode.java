@@ -10,11 +10,11 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 public class Mode extends IndependentPane {
-	protected JButton onePlayer, multiPlayer;
+	protected JButton onePlayer, multiPlayer, principalMenu;
 		
 	public Mode(JFrame father) {
 		super(father);
-		prepareElements();
+		build();
 	}
 	/**
 	 * Prepara los elementos del Jpanel Mode
@@ -22,7 +22,7 @@ public class Mode extends IndependentPane {
 	public void prepareElements() {
 		onePlayer = new JButton("Jugar con Maquina");
 		multiPlayer = new JButton("Jugar con Amigo");
-		build();
+		principalMenu = new JButton("Volver al Menu Principal");
 	}
 	
 	/**
@@ -41,7 +41,7 @@ public class Mode extends IndependentPane {
 		this.add(question);
 		this.add(onePlayer);
 		this.add(multiPlayer);
-		
+		this.add(principalMenu);
 		this.setLayout(new GridLayout(4, 1, 0, 6));
 		this.setBorder(new EmptyBorder(100, (int) (father.getSize().width * 0.3), 100, (int) (father.getSize().width * 0.3)));
 	}
