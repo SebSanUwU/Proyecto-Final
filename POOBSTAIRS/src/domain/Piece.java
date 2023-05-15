@@ -19,13 +19,13 @@ public class Piece {
 	public Square getPosition() {
 		return position;
 	}
-	
-	
+
+	public int getIntPosition(){
+		return position.getNumSquare();
+	}
 	
 	public void changePositionTo(Square newPosition) {
-		
 		position = newPosition;
-		
 	}
 	
 	protected void setColor(Color newColor) {
@@ -34,6 +34,13 @@ public class Piece {
 	
 	public Color getColor() {
 		return color;
+	}
+
+	public void changeStats(int numStairs,int numSnakes,int numSpecialSquares,int actualSquare){
+		owner.sumStairs(numStairs);
+		owner.sumSnakes(numSnakes);
+		owner.sumSpecialSquares(numSpecialSquares);
+		owner.maxPositionSquare(actualSquare);
 	}
 	
 	

@@ -96,8 +96,7 @@ public class PoobStairs {
 	public boolean movePiece(int positions) {
 		Piece piece = getTurn().getPiece();
 		try {
-			Square newPosition = board.changePiece(positions, piece);
-			getTurn().changePositionPiece(newPosition);
+			board.changePiece(positions, piece);
 			if(playerOnTurn == 0) playerOnTurn = 1;
 			else playerOnTurn = 0;
 			
@@ -131,6 +130,7 @@ public class PoobStairs {
 		int movements = die.getCurrentFace().getValue();
 		try {
 			power = die.getCurrentFace().indicatePowers();
+			getTurn().sumModifiers();
 			if(power.equals(Power.CHANGE)) {
 				if(playerOnTurn == 0) nextP = players[1];
 				else nextP = players[0];

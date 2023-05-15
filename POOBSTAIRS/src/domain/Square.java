@@ -34,8 +34,6 @@ public  class Square {
     	pieces.remove(piece);
     }
     
-   
-    
     public Piece[] getPieces() {
     	Piece[] pieceS = new Piece[pieces.size()];
     	pieceS = pieces.toArray(pieceS);
@@ -45,9 +43,24 @@ public  class Square {
     public boolean contains(Piece piece) {
     	return pieces.contains(piece);
     }
+
+    public String typeObstacle(){
+        try {
+            return getObstacle().getType();
+        } catch (Exception e) {
+            return "None";
+        }
+    }
+
+    public boolean containsObstacleToUse(){
+        if(obstacle!=null && this.equals(obstacle.getHead())){
+            return true;
+        }
+        return false;
+    }
     
     public int useObstacle() throws POOBSTAIRSException {
-    	return getObstacle().getTail().getNumSquare();
+    	return getObstacle().use();
     }
     
   

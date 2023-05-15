@@ -26,8 +26,6 @@ public class Player {
 		return piece.getPosition().getNumSquare();
 	}
 	
-	
-	
 	public Piece getPiece() {
 		return piece;
 	}
@@ -53,14 +51,36 @@ public class Player {
 	}
 	
 	public int getMax() {
-		return maxPosition;
+		return maxPosition+1;
 	}
 	
 	public int getNumModifiers() {
 		return modifiers;
 	}
-
+	
 	public void changePositionPiece(Square position){
 		piece.changePositionTo(position);
+	}
+
+	public void  sumStairs(int numStairs){
+		this.numStairs+=numStairs;
+	}
+
+	public void sumSnakes(int numSnakes){
+		this.numSnakes+=numSnakes;
+	}
+
+	public void sumSpecialSquares(int numSpecialSquares){
+		this.numSpecialSquares+=numSpecialSquares;
+	}
+	
+	public void maxPositionSquare(int actualSquare){
+		if(maxPosition<actualSquare){
+			maxPosition=actualSquare;
+		}
+	}
+
+	public void sumModifiers(){
+		this.modifiers++;
 	}
 }
