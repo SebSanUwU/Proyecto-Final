@@ -393,7 +393,7 @@ public class GameBoard {
 		for (int i = actualPos; i < squaresInLine.length; i++) {
 			try {
 				Obstacle obstacle = squaresInLine[i].getObstacle();
-				if (obstacle.getType().equals("stair")) {
+				if (squaresInLine[i].containsObstacleToUse() && obstacle.getType().equals("stair")) {
 					return squaresInLine[i].getNumSquare();
 				}
 			} catch (Exception e) {
@@ -415,7 +415,7 @@ public class GameBoard {
 		for (int i = actualPos; i > 0; i--) {
 			try {
 				Obstacle obstacle = squaresInLine[i].getObstacle();
-				if (obstacle.getType().equals("snake")) {
+				if (squaresInLine[i].containsObstacleToUse() && obstacle.getType().equals("snake")){
 					return squaresInLine[i].getNumSquare();
 				}
 			} catch (Exception e) {
