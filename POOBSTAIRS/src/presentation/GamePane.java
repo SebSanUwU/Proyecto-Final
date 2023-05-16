@@ -39,7 +39,7 @@ import domain.Square;
 public class GamePane extends IndependentPane {
 	protected JPanel board, dataOrChoose;
 	protected JLabel whoPlays, die, numSnakes, numStairs, numSpecials, numModifiers, maxPosition, extraMoves;
-	protected JButton roll, change, endGame, confirm;
+	protected JButton roll, change, endGame;
 	protected JComboBox topics;
 	protected JComboBox<Integer>specials;
 	private Color color1, color2;
@@ -76,7 +76,6 @@ public class GamePane extends IndependentPane {
 		endGame = new JButton("Salir del Juego");
 		topics = new JComboBox(themes);
 		dataOrChoose = new JPanel();
-		confirm = new JButton("Confirm");
 		specials = new JComboBox<Integer>();
 		
 	}
@@ -137,25 +136,12 @@ public class GamePane extends IndependentPane {
 		JPanel dataDie = new JPanel();
 		dataDie.setBorder(new LineBorder(new Color(0, 0, 0)));
 		dataDie.setLayout(new BorderLayout(1,10));
-		
 		dataDie.add(roll,BorderLayout.NORTH);
 		die.setHorizontalAlignment(SwingConstants.CENTER);
 		die.setOpaque(false);
 		assignValue(1);
 		dataDie.add(die, BorderLayout.CENTER);
-		dataOrChoose.setLayout(new CardLayout());
-		dataOrChoose.add(extraMoves);
-		dataOrChoose.setOpaque(false);
-		JPanel chooseDie = new JPanel();
-		chooseDie.setLayout(new GridLayout(1,2,4,0));
-		chooseDie.setOpaque(false);
-		chooseDie.setBorder(new EmptyBorder(0,1,2,1));
-		chooseDie.add(specials);
-		chooseDie.add(confirm);
-		specials.setBackground(new Color(168, 202, 186));
-		dataOrChoose.add(chooseDie);
-		dataDie.add(dataOrChoose, BorderLayout.SOUTH);
-		((POOBSTAIRSGUI) father).buildButton(chooseDie);
+		dataDie.add(extraMoves, BorderLayout.SOUTH);
 		((POOBSTAIRSGUI) father).buildButton(dataDie);
 		dataDie.setOpaque(false);
 		gameOptions.add(dataDie);

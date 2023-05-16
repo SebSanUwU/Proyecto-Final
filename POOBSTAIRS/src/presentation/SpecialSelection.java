@@ -1,4 +1,5 @@
 package presentation;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -30,6 +31,7 @@ public class SpecialSelection extends JDialog{
 	POOBSTAIRSGUI owner;
 	SpecialSelection(JFrame owner){
 		super(owner, "Selección de Casillas especiales");
+		getContentPane().setBackground(new Color(232, 202, 175));
 		this.owner = (POOBSTAIRSGUI)owner;
 		prepareDialog();
 		prepareActions();
@@ -42,7 +44,9 @@ public class SpecialSelection extends JDialog{
 		setResizable(false);
 		infoSpecial = new JLabel();
 		selection = new JComboBox<Integer>();
-		confirm = new JButton("Confirmar");
+		confirm = new JButton("Confirm");
+		
+		selection.setBackground(new Color(168, 202, 186));
 		structure();
 	}
 	
@@ -51,7 +55,7 @@ public class SpecialSelection extends JDialog{
 		JLabel title = new JLabel();
 		title.setLayout(new GridLayout(2,1,0,3));
 		JLabel title1 = new JLabel("Escoge la casilla a la cual te quieres mover");
-		JLabel title2 = new JLabel("Y dale click a confirmar ");
+		JLabel title2 = new JLabel("Y dale click a confirm");
 		title.add(title1);
 		title.add(title2);
 		for(Component t: title.getComponents()) {
@@ -68,7 +72,7 @@ public class SpecialSelection extends JDialog{
 		getContentPane().add(infoSpecial);
 		confirm.setBounds(10, 95, 136, 25);
 		getContentPane().add(confirm);
-		owner.buildButton(this);
+		owner.buildButton(getContentPane());
 	}
 	
 	protected void build(Integer[] specialOp, int lastPosition) {
@@ -86,7 +90,7 @@ public class SpecialSelection extends JDialog{
 	 */
 	private String specials(Square square) {
 		if(square instanceof Jumper) {
-			return "Conmigo avanzas n casilla";
+			return "Conmigo avanzas n casillas";
 		}
 		else if(square instanceof ReverseJumper) {
 			return "Conmigo retrocedes n casilla";

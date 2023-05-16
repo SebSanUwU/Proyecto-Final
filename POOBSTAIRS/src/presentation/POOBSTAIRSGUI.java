@@ -34,17 +34,7 @@ public class POOBSTAIRSGUI extends JFrame {
 	private InitGame initGame;
 	private GamePane startPlaying;
 	private SpecialSelection specialDialog;
-	
-	
-	/*startPlaying*/
-	
-	
-	/*General*/
-	
-	
 	private PoobStairs poobStairs;
-	
-	
 	
 	/**
 	 * Constructor de la clase POOBSTAIRSGUI
@@ -53,7 +43,6 @@ public class POOBSTAIRSGUI extends JFrame {
 		prepareFrame();
 		prepareElements();
 		prepareActions();
-		
 	}
 	
 	/**
@@ -103,8 +92,6 @@ public class POOBSTAIRSGUI extends JFrame {
 			 players[1] = new Player(name2);
 			 players[1].setPiece(colors2, piece2);
 		 }
-		 
-		
 		poobStairs = new PoobStairs(rows, columns,players);
 		poobStairs.setGame(snakes, stairs, (float) pSpecials, (float) pPowers);
 	}
@@ -136,15 +123,6 @@ public class POOBSTAIRSGUI extends JFrame {
 		}
 		specialDialog = new SpecialSelection(this);
 	}
-	
-	
-	
-	
-	/**
-	 * Metodo que se encarga de estructurar el JPanel dataPlayers
-	 */
-
-	
 	
 	/**
 	 * Metodo que le asigna de forma general ciertas propiedades a los JLabels
@@ -185,8 +163,6 @@ public class POOBSTAIRSGUI extends JFrame {
 				else
 					setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 			}
-			
-			
 		});
 		
 		
@@ -283,9 +259,7 @@ public class POOBSTAIRSGUI extends JFrame {
 		/*startPlaying*/
 		startPlaying.roll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 				Face current = poobStairs.rollDice();
-				
 				startPlaying.assignValue(current.getValue());
 				int option = activePower(current);
 				if(option == 0) {
@@ -310,15 +284,7 @@ public class POOBSTAIRSGUI extends JFrame {
 				
 			}
 		});
-		startPlaying.confirm.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				poobStairs.movePiece(startPlaying.getSpecials() - poobStairs.getTurn().getPiecePosition() -1 );
-				CardLayout layout = (CardLayout) startPlaying.dataOrChoose.getLayout();
-				layout.next(startPlaying.dataOrChoose);
-				startPlaying.refresh(poobStairs);
-				startPlaying.roll.setEnabled(true);
-			}
-		});
+		
 
 	}
 	/**
@@ -328,22 +294,19 @@ public class POOBSTAIRSGUI extends JFrame {
 		CardLayout layout = (CardLayout) panels.getLayout();
 		layout.next(panels);
 	}
-	
+	/**
+	 * metodo que lleva al panel de inicio
+	 */
 	private void firstPane() {
 		CardLayout layout = (CardLayout) panels.getLayout();
 		layout.first(panels);
 	}
 
-	public static void main(String[] args) {
-		POOBSTAIRSGUI frame = new POOBSTAIRSGUI();
-		frame.setVisible(true);
-	}
-	
-	
-	
-	
-	
-	
+	/**
+	 * Trata de utilizar el poder otorgado por la cara actual del dado
+	 * @param face, Cara actual del dado
+	 * @return, la decición si se utiliza el poder del dado o no a elección del jugador en turno
+	 */
 	private int activePower(Face face) {
 		int option;
 		try {
@@ -363,27 +326,10 @@ public class POOBSTAIRSGUI extends JFrame {
 		}
 		return option;
 	}
-	
-	private void specialOptions(int movements) {
-		Integer[] specialOp;
-		try {
-			specialOp = poobStairs.analize(movements);
-			startPlaying.roll.setEnabled(false);
-			startPlaying.specials.removeAllItems();
-			for(Integer i: specialOp) {
-				startPlaying.specials.addItem(i + 1);
-			}
-			startPlaying.specials.addItem(poobStairs.getTurn().getPiecePosition() + movements + 1);
-			CardLayout layout = (CardLayout) startPlaying.dataOrChoose.getLayout();
-			layout.next(startPlaying.dataOrChoose);
-		} catch (POOBSTAIRSException e) {
-			poobStairs.movePiece(movements);
-			startPlaying.refresh(poobStairs);
-			
-		}
-		
-	}
-	
+	/**
+	 * Mueve la pieza luego de analizar que casillas especiales existen en su rango de movimiento
+	 * @param movements, numero de casillas que va a avanzar la pieza
+	 */
 	private void specialOptionsJD(int movements) {
 		Integer[] specialOp;
 		try {
@@ -392,26 +338,39 @@ public class POOBSTAIRSGUI extends JFrame {
 			specialDialog.build(specialOp, poobStairs.getTurn().getPiecePosition() + movements + 1);
 			specialDialog.setVisible(true);
 		} catch (POOBSTAIRSException e) {
-			Square destination = poobStairs.getInLine()[poobStairs.getTurn().getPiecePosition() + movements];
-			if(destination instanceof SpecialSquare) {
-				JOptionPane.showMessageDialog(this, "Vas a caer en una casilla " + destination.getClass().getName().replace("domain.", ""));
+			Square destination;
+			if(poobStairs.getTurn().getPiecePosition() + movements < poobStairs.getInLine().length - 1) {
+				destination = poobStairs.getInLine()[poobStairs.getTurn().getPiecePosition() + movements];
+				if(destination instanceof SpecialSquare) {
+					JOptionPane.showMessageDialog(this, "Vas a caer en una casilla " + destination.getClass().getName().replace("domain.", ""));
+				}
 			}
 			poobStairs.movePiece(movements);
 			startPlaying.refresh(poobStairs);
-			
 		}
 		
 	}
-	
+	/**
+	 * En caso de que dentro del rango de movimiento de la pieza en juego hallan casillas especiales,
+	 * se mueve dicha pieza a la casilla seleccionada por el jugador
+	 * @param selectedSquare, casilla a la cual se quiere mover el jugador.
+	 */
 	protected void goToSelected(int selectedSquare) {
 		poobStairs.movePiece(selectedSquare- poobStairs.getTurn().getPiecePosition() -1 );
 		startPlaying.refresh(poobStairs);
 		startPlaying.roll.setEnabled(true);
 		
 	}
-	
+	/**
+	 * Indica el arreglo de casillas que tiene el juego en esos momentos
+	 * @return poobStairs.getInline()
+	 */
 	protected Square[] getLineBoard() {
 		return poobStairs.getInLine();
 	}
 	
+	public static void main(String[] args) {
+		POOBSTAIRSGUI frame = new POOBSTAIRSGUI();
+		frame.setVisible(true);
+	}
 }
