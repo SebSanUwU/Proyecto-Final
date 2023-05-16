@@ -253,16 +253,6 @@ public class GamePane extends IndependentPane {
 					if(poobStairs.board()[i][j] instanceof SpecialSquare){
 						square = new DiferentSquare("/img/Special.jpg");
 						square.add(new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquare() + 1)));
-						JButton infoButton = new JButton("i");
-						String inf = specials(poobStairs.board()[i][j]);
-						infoButton.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent e) {
-								JOptionPane.showMessageDialog(father, 
-								inf);
-
-							}
-						});
-						square.add(infoButton);
 					}
 					else {
 						square = new JPanel();
