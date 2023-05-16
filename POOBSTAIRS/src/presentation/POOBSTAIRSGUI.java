@@ -339,7 +339,8 @@ public class POOBSTAIRSGUI extends JFrame {
 			specialDialog.setVisible(true);
 		} catch (POOBSTAIRSException e) {
 			Square destination;
-			if(poobStairs.getTurn().getPiecePosition() + movements < poobStairs.getInLine().length - 1) {
+			if((poobStairs.getTurn().getPiecePosition() + movements < poobStairs.getInLine().length - 1)
+					&& (poobStairs.getTurn().getPiecePosition() + movements >0)) {
 				destination = poobStairs.getInLine()[poobStairs.getTurn().getPiecePosition() + movements];
 				if(destination instanceof SpecialSquare) {
 					JOptionPane.showMessageDialog(this, "Vas a caer en una casilla " + destination.getClass().getName().replace("domain.", ""));

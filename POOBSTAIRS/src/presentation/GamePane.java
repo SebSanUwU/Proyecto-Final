@@ -73,7 +73,7 @@ public class GamePane extends IndependentPane {
 		extraMoves.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		change = new JButton("Cambiar");
 		String[] themes = {"Clasic", "Christmas", "Chess"};
-		endGame = new JButton("Salir del Juego");
+		endGame = new JButton("Salir de la Partida");
 		topics = new JComboBox(themes);
 		dataOrChoose = new JPanel();
 		specials = new JComboBox<Integer>();
@@ -232,13 +232,21 @@ public class GamePane extends IndependentPane {
 
 						}
 					});
-
 					square.add(infoButton);
-					
 				}catch(POOBSTAIRSException e) {
 					if(poobStairs.board()[i][j] instanceof SpecialSquare){
 						square = new DiferentSquare("/img/Special.jpg");
 						square.add(new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquare() + 1)));
+						JButton infoButton = new JButton("i");
+						String inf = (poobStairs.board()[i][j]).getClass().getName().replace("domain.", "");
+						infoButton.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent e) {
+								JOptionPane.showMessageDialog(father, 
+								inf);
+
+							}
+						});
+						square.add(infoButton);
 					}
 					else {
 						square = new JPanel();
@@ -250,11 +258,8 @@ public class GamePane extends IndependentPane {
 					}
 					
 				}
-				
-				
 				square.setLayout(new FlowLayout(FlowLayout.LEFT, 8,2));
 				square.setBorder(new LineBorder(Color.BLACK, 1));
-				
 				for(Piece piece: poobStairs.board()[i][j].getPieces()) {
 					VisualPiece visualPiece = new VisualPiece(piece.getColor(),piece.getRepresentation());
 					visualPiece.setPreferredSize(new Dimension((int) Math.round(square.getPreferredSize().height*1.2),(int) Math.round(square.getPreferredSize().height*1.2)));
@@ -268,28 +273,7 @@ public class GamePane extends IndependentPane {
 			}
 		}
 	}
-	/**
-	 * Construye la información para cierta casilla especial
-	 * @param square, casiila espeacial
-	 * @return, información de la casilla especial que esta siendo estudiada
-	 */
-	private String specials(Square square) {
-		if(square instanceof Jumper) {
-			return "Conmigo avanzas n casilla";
-		}
-		else if(square instanceof ReverseJumper) {
-			return "Conmigo retrocedes n casilla";
-		}else if(square instanceof Advance) {
-			return "Conmigo vas hasta la siguiente escalera";
-		}else if(square instanceof Regression) {
-			return "Conmigo vas hasta la anterior serpiente";
-		}else if(square instanceof QA) {
-			return "A mi me tienes que contestar una pregunta para avanzar";
-		}else {
-			return "Yo te devuelvo a la casilla inicial";
-		}
-		
-	}
+	
 	
 	/**
 	 * metodo que cambia la visión del tablero de juego

@@ -29,6 +29,11 @@ public class SpecialSelection extends JDialog{
 	JLabel infoSpecial;
 	JButton confirm;
 	POOBSTAIRSGUI owner;
+	
+	/**
+	 * Constructor del JDialog para casillas especiales
+	 * @param owner, frame owner del dialog
+	 */
 	SpecialSelection(JFrame owner){
 		super(owner, "Selección de Casillas especiales");
 		getContentPane().setBackground(new Color(232, 202, 175));
@@ -37,7 +42,9 @@ public class SpecialSelection extends JDialog{
 		prepareActions();
 		
 	}
-	
+	/**
+	 * Inicializa los componentes pertenecientes a la ventana
+	 */
 	private void prepareDialog() {
 		setSize(350, 170);
 		setLocation(0,0);
@@ -49,7 +56,9 @@ public class SpecialSelection extends JDialog{
 		selection.setBackground(new Color(168, 202, 186));
 		structure();
 	}
-	
+	/**
+	 * Metodo que le da la estructura a la ventana
+	 */
 	private void structure() {
 		getContentPane().setLayout(null);
 		JLabel title = new JLabel();
@@ -74,7 +83,11 @@ public class SpecialSelection extends JDialog{
 		getContentPane().add(confirm);
 		owner.buildButton(getContentPane());
 	}
-	
+	/**
+	 * Metodo que se encarga de darle los valores a escoger dentro del JComboBox
+	 * @param specialOp, casillas especiales dentro del rango de movimiento de la pieza en juego
+	 * @param lastPosition, Posición maxima a la cual puede llegar la pieza en juego
+	 */
 	protected void build(Integer[] specialOp, int lastPosition) {
 		
 		for(Integer i: specialOp) {
@@ -106,7 +119,9 @@ public class SpecialSelection extends JDialog{
 		else return "Yo soy una casilla Normal";
 		
 	}
-	
+	/**
+	 * Se preparan las acciones pertenecientes a los componentes del JDialog
+	 */
 	private void prepareActions() {
 		
 		addWindowListener(new WindowAdapter() {
