@@ -1,6 +1,7 @@
 package presentation;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 
 import javax.swing.GroupLayout;
@@ -17,7 +18,7 @@ import javax.swing.border.EmptyBorder;
 public class DataPlayers extends IndependentPane{
 	
 	private JTextField name1, name2;
-	private JComboBox<String> colors, machineMode, colors2;
+	private JComboBox<String> colors, machineMode, colors2, pieces, pieces2;
 	protected JButton next, principalMenu;
 	private JLabel name, title;
 	private boolean isMachine;
@@ -52,6 +53,11 @@ public class DataPlayers extends IndependentPane{
 		title = new JLabel("Datos del Juego");
 		title.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
+		String[] piecesOptions = { "Normal", "Hat", "Car" };
+		pieces = new JComboBox<String>(piecesOptions);
+		pieces2 = new JComboBox<String>(piecesOptions);
+		pieces.setBackground(new Color(168, 202, 186));
+		pieces2.setBackground(new Color(168, 202, 186));
 	}
 	/**
 	 * Metodo que contrusye la estrucutra del panel si su modo es jugar co0n amigo
@@ -83,7 +89,11 @@ public class DataPlayers extends IndependentPane{
 								.addGap(5)
 								.addGroup(layout.createParallelGroup(Alignment.LEADING)
 										.addComponent(colors, 0, 100, 100)
-										.addComponent(colors2, 0, 100, 100)))
+										.addComponent(colors2, 0, 100, 100))
+								.addGap(5)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(pieces, 0, 100, 100)
+										.addComponent(pieces2, 0, 100, 100)))
 						.addGroup(layout.createSequentialGroup()
 								.addComponent(next)
 								.addGap(5)
@@ -96,12 +106,14 @@ public class DataPlayers extends IndependentPane{
 								.addGroup(layout.createParallelGroup(Alignment.LEADING)
 										.addComponent(name)
 										.addComponent(name1, 0, 25, 25)
-										.addComponent(colors, 0, 25, 25))
+										.addComponent(colors, 0, 25, 25)
+										.addComponent(pieces,0,25,25))
 								.addGap(20)
 								.addGroup(layout.createParallelGroup(Alignment.LEADING)
 										.addComponent(nameS)
 										.addComponent(name2, 0, 25, 25)
-										.addComponent(colors2, 0, 25, 25))
+										.addComponent(colors2, 0, 25, 25)
+										.addComponent(pieces2,0,25,25))
 								.addGap(20)
 								.addGroup(layout.createParallelGroup(Alignment.LEADING)
 										.addComponent(next)
@@ -178,12 +190,26 @@ public class DataPlayers extends IndependentPane{
 		return (String)colors2.getSelectedItem();
 	}
 	
+	protected String getPiece() {
+		return (String)pieces.getSelectedItem();
+	}
+	
+	protected String getPiece2() {
+		return (String)pieces2.getSelectedItem();
+	}
+	
 	protected String getMachineMode() {
 		return (String)machineMode.getSelectedItem();
 	}
 	
 	protected boolean isMachine() {
 		return isMachine;
+	}
+	
+	private void buildComponents() {
+		for(Component com: this.getComponents()) {
+			setBackground(new Color(168, 202, 186));
+		}
 	}
 	
 }

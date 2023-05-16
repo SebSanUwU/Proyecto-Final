@@ -15,7 +15,9 @@ class PoobStairsTest {
 	 */
 	@Test
 	void shouldThrowExceptionIfLessthanSixNormal() {
-		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+		Player[] players = {new Player("Camilo"), new Player("Pollis")};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
 		try {
 			PoobStairs game = new PoobStairs(10,10, players);
 			game.setGame(0, 0, 0, 1);
@@ -59,7 +61,9 @@ class PoobStairsTest {
 	
 	@Test
 	void shouldNotshouldThrowExceptionIfLessthanSixNormal() {
-		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+		Player[] players = {new Player("Camilo"), new Player("Pollis")};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
 		try {
 			PoobStairs game = new PoobStairs(10,10, players);
 			game.setGame(0, 0, 0, (float)0.5);
@@ -85,7 +89,9 @@ class PoobStairsTest {
 	 */
 	@Test
 	void shouldMovePiece() {
-		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+		Player[] players = {new Player("Camilo"), new Player("Pollis")};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
 		
 		try {
 			Player isTurn;
@@ -159,7 +165,9 @@ class PoobStairsTest {
 	 * Se prueba que si el numero de posiciones Se sale del tablero, la ficha no cambia de posición
 	 */
 	void shouldNotMove() {
-		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+		Player[] players = {new Player("Camilo"), new Player("Pollis")};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
 		try {
 			PoobStairs game = new PoobStairs(3,4, players);
 			game.setGame(0, 0, 0, 0);
@@ -189,7 +197,9 @@ class PoobStairsTest {
 	 */
 	@Test
 	void shouldTGiveRange() {
-		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+		Player[] players = {new Player("Camilo"), new Player("Pollis")};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
 		PoobStairs game;
 		Square[] testSquare;
 		try {
@@ -284,7 +294,9 @@ class PoobStairsTest {
 	 */
 	@Test
 	void shouldGoDown() {
-		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+		Player[] players = {new Player("Camilo"), new Player("Pollis")};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
 
 		PoobStairs game;
 		try {
@@ -330,7 +342,9 @@ class PoobStairsTest {
 	 */
 	@Test
 	void shouldNotGoUp() {
-		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+		Player[] players = {new Player("Camilo"), new Player("Pollis")};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
 
 		PoobStairs game;
 		
@@ -367,7 +381,9 @@ class PoobStairsTest {
 	}
 	@Test
 	void shouldGoUp() {
-		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+		Player[] players = {new Player("Camilo"), new Player("Pollis")};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
 
 		PoobStairs game;
 		try {
@@ -409,7 +425,9 @@ class PoobStairsTest {
 	}
 	@Test
 	void shouldJump() {
-		Player[] players = {new Player("Camilo", Color.red), new Player("Pollis", Color.blue)};
+		Player[] players = {new Player("Camilo"), new Player("Pollis")};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
 
 		PoobStairs game;
 		

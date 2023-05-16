@@ -6,9 +6,13 @@ import java.util.random.*;
 
 public abstract class Machine extends Player{
 
+	public Machine(String name) {
+		super(name);
+		// TODO Auto-generated constructor stub
+	}
+	/**
 	public Machine(Color personColor) {
-		super("Machine", Color.RED);
-		getPiece().setColor(selectColor(personColor));
+		
 	}
 	
 	private Color giveColor(String color) {
@@ -28,5 +32,5 @@ public abstract class Machine extends Player{
 	}
 	
 	protected abstract short makeAMove(String power, int positions, GameBoard toAnalize);
-
+*/
 }

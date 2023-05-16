@@ -12,9 +12,8 @@ public class Player {
 
 	private Piece piece;
 	
-	public Player(String name, Color color) {
+	public Player(String name) {
 		this.name = name;
-		piece = new Piece(color,this);
 		numStairs = 0;
 		numSnakes = 0;
 		numSpecialSquares = 0;
@@ -82,5 +81,9 @@ public class Player {
 
 	public void sumModifiers(){
 		this.modifiers++;
+	}
+	
+	public void setPiece(String color, String shape) {
+		piece = new Piece(color, shape, this);
 	}
 }

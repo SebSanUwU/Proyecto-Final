@@ -73,12 +73,7 @@ public class POOBSTAIRSGUI extends JFrame {
 	 * @param color, color escogido por el jugador
 	 * @return Objeto de la clase Color que le da el color a la ficha del Jugador
 	 */
-	private Color giveColor(String color) {
-		if(color.equals("RED")) return Color.RED;
-		else if(color.equals("BLUE")) return Color.BLUE;
-		else if(color.equals("GREEN")) return Color.GREEN;
-		else return Color.BLACK;
-	}
+	
 	/**
 	 * Metodo que inicializa y prepara el juego en el paquete de dominio
 	 * @param rows, numero de filas que va a tener el tablero.
@@ -97,12 +92,17 @@ public class POOBSTAIRSGUI extends JFrame {
 		 String colors =  dataPlayers.getColors(); 
 		 String name2 = dataPlayers.getName2(); 
 		 String colors2 = dataPlayers.getColors2(); 
+		 String piece = dataPlayers.getPiece(); 
+		 String piece2 = dataPlayers.getPiece2(); 
 		 String machineMode = dataPlayers.getMachineMode(); 
 		 
-		 players[0] = new Player(name1, giveColor(colors));
-		 if(!dataPlayers.isMachine()) players[1] = new Player(name2, giveColor(colors2));
-		 else if(machineMode.equals("Principiante")) players[1] = new Beginner(giveColor( colors));
-		 else players[1] = new Trainee(giveColor( colors));
+		 players[0] = new Player(name1);
+		 players[0].setPiece(colors, piece);
+		 if(!dataPlayers.isMachine()) {
+			 players[1] = new Player(name2);
+			 players[1].setPiece(colors2, piece2);
+		 }
+		 
 		
 		poobStairs = new PoobStairs(rows, columns,players);
 		poobStairs.setGame(snakes, stairs, (float) pSpecials, (float) pPowers);
@@ -285,9 +285,10 @@ public class POOBSTAIRSGUI extends JFrame {
 				Face current = poobStairs.rollDice();
 				
 				startPlaying.assignValue(current.getValue());
-				if(activePower(current) == 0) {
+				int option = activePower(current);
+				if(option == 0) {
 					specialOptions(poobStairs.usePower());
-				}else if(activePower(current) == 4){
+				}else if(option == -1 || (option > 1 && option < 4)){
 					specialOptions(current.getValue());
 				}
 			}
@@ -304,7 +305,7 @@ public class POOBSTAIRSGUI extends JFrame {
 				POOBSTAIRSGUI.this.setExtendedState(NORMAL);
 				CardLayout layout = (CardLayout) panels.getLayout();
 				layout.first(panels);
-				dataPlayers.removeAll();
+				
 			}
 		});
 		startPlaying.confirm.addActionListener(new ActionListener() {
@@ -342,21 +343,23 @@ public class POOBSTAIRSGUI extends JFrame {
 	
 	
 	private int activePower(Face face) {
+		int option;
 		try {
-			int option;
+			
 			if(!(face.indicatePowers().equals(Power.CHANGE))) {
 				option =JOptionPane.showConfirmDialog(this, face.indicatePowers() + "¿Desea utilizarlo?");
-				return option;
+				
 			}else {
 				JOptionPane.showMessageDialog(this, "Usted ha adquirido el poder " + Power.CHANGE);
 				int movements = poobStairs.usePower();
 				startPlaying.refresh(poobStairs);
 				specialOptions(movements);
-				return 3;
+				option =4;
 			}
 		}catch(POOBSTAIRSException e) {
-			return 4;
+			 option = 3;
 		}
+		return option;
 	}
 	
 	private void specialOptions(int movements) {

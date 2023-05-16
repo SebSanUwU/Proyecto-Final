@@ -3,14 +3,16 @@ package domain;
 import java.awt.Color;
 
 public class Piece {
-	private Color color;
+	private String color;
 	private Square position;
 	private Player owner;
+	private String representation;
 
 	
-	public Piece(Color color, Player owner) {
+	public Piece(String color, String representation, Player owner) {
 		this.color = color;
 		this.owner = owner;
+		this.representation = representation;
 	}
 	
 	protected void assignStart(Square start) {
@@ -28,12 +30,16 @@ public class Piece {
 		position = newPosition;
 	}
 	
-	protected void setColor(Color newColor) {
+	protected void setColor(String newColor) {
 		color = newColor;
 	}
 	
-	public Color getColor() {
+	public String getColor() {
 		return color;
+	}
+	
+	public String getRepresentation() {
+		return representation;
 	}
 
 	public void changeStats(int numStairs,int numSnakes,int numSpecialSquares,int actualSquare){

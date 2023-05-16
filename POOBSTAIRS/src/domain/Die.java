@@ -49,15 +49,13 @@ public class Die {
 		for(Face f: faces) {
 			f.removePowers();
 		}
-		ArrayList<Face> emptyFaces =  (ArrayList<Face>) faces.clone();
 		int i = 0;
 		while(powersToGive > 0) {
 			try {
-				faces.get(random.nextInt(faces.size())).addPower(Power.givePowers()[random.nextInt(3)]);
 				powersToGive --;
+				faces.get(random.nextInt(faces.size())).addPower(Power.givePowers()[random.nextInt(3)]);
 			} catch (POOBSTAIRSException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				powersToGive++;
 			}
 
 		}

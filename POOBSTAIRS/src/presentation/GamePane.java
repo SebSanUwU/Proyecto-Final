@@ -280,11 +280,10 @@ public class GamePane extends IndependentPane {
 				square.setBorder(new LineBorder(Color.BLACK, 1));
 				
 				for(Piece piece: poobStairs.board()[i][j].getPieces()) {
-					JLabel visualPiece = new JLabel();
-					visualPiece.setPreferredSize(new Dimension((int) Math.round(square.getPreferredSize().height*0.8),(int) Math.round(square.getPreferredSize().height*0.8)));
-					visualPiece.setMaximumSize(new Dimension((int) Math.round(square.getPreferredSize().height*0.9),(int) Math.round(square.getPreferredSize().height*0.9)));
-					visualPiece.setMinimumSize(new Dimension((int) Math.round(square.getPreferredSize().height*1.5),(int) Math.round(square.getPreferredSize().height*1.5)));
-					visualPiece.setBackground(piece.getColor());
+					VisualPiece visualPiece = new VisualPiece(piece.getColor(),piece.getRepresentation());
+					visualPiece.setPreferredSize(new Dimension((int) Math.round(square.getPreferredSize().height*1.2),(int) Math.round(square.getPreferredSize().height*1.2)));
+					visualPiece.setMaximumSize(new Dimension((int) Math.round(square.getPreferredSize().height*1.5),(int) Math.round(square.getPreferredSize().height*1.5)));
+					visualPiece.setMinimumSize(new Dimension((int) Math.round(square.getPreferredSize().height*2),(int) Math.round(square.getPreferredSize().height*2)));
 					visualPiece.setOpaque(true);
 					square.add(visualPiece);
 				}
