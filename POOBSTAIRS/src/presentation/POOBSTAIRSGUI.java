@@ -33,6 +33,7 @@ public class POOBSTAIRSGUI extends JFrame {
 	private DataPlayers dataPlayers;
 	private InitGame initGame;
 	private GamePane startPlaying;
+	private SpecialSelection specialDialog;
 	
 	
 	/*startPlaying*/
@@ -133,6 +134,7 @@ public class POOBSTAIRSGUI extends JFrame {
 		for (Component panel : panels.getComponents()) {
 			panel.setBackground(new Color(220, 93, 83));
 		}
+		specialDialog = new SpecialSelection(this);
 	}
 	
 	
@@ -287,9 +289,9 @@ public class POOBSTAIRSGUI extends JFrame {
 				startPlaying.assignValue(current.getValue());
 				int option = activePower(current);
 				if(option == 0) {
-					specialOptions(poobStairs.usePower());
+					specialOptionsJD(poobStairs.usePower());
 				}else if(option == -1 || (option > 1 && option < 4)){
-					specialOptions(current.getValue());
+					specialOptionsJD(current.getValue());
 				}
 			}
 		});
@@ -353,7 +355,7 @@ public class POOBSTAIRSGUI extends JFrame {
 				JOptionPane.showMessageDialog(this, "Usted ha adquirido el poder " + Power.CHANGE);
 				int movements = poobStairs.usePower();
 				startPlaying.refresh(poobStairs);
-				specialOptions(movements);
+				specialOptionsJD(movements);
 				option =4;
 			}
 		}catch(POOBSTAIRSException e) {
@@ -380,6 +382,36 @@ public class POOBSTAIRSGUI extends JFrame {
 			
 		}
 		
+	}
+	
+	private void specialOptionsJD(int movements) {
+		Integer[] specialOp;
+		try {
+			specialOp = poobStairs.analize(movements);
+			startPlaying.roll.setEnabled(false);
+			specialDialog.build(specialOp, poobStairs.getTurn().getPiecePosition() + movements + 1);
+			specialDialog.setVisible(true);
+		} catch (POOBSTAIRSException e) {
+			Square destination = poobStairs.getInLine()[poobStairs.getTurn().getPiecePosition() + movements];
+			if(destination instanceof SpecialSquare) {
+				JOptionPane.showMessageDialog(this, "Vas a caer en una casilla " + destination.getClass().getName().replace("domain.", ""));
+			}
+			poobStairs.movePiece(movements);
+			startPlaying.refresh(poobStairs);
+			
+		}
+		
+	}
+	
+	protected void goToSelected(int selectedSquare) {
+		poobStairs.movePiece(selectedSquare- poobStairs.getTurn().getPiecePosition() -1 );
+		startPlaying.refresh(poobStairs);
+		startPlaying.roll.setEnabled(true);
+		
+	}
+	
+	protected Square[] getLineBoard() {
+		return poobStairs.getInLine();
 	}
 	
 }
