@@ -92,7 +92,7 @@ public class POOBSTAIRSGUI extends JFrame {
 			 players[1] = new Player(name2);
 			 players[1].setPiece(colors2, piece2);
 		 }else{
-			players[1] = new MachineLearner(name2, null);
+			players[1] = new MachineLearner("Machine", null);
 			players[1].setPiece(colors2, piece2);
 		 }
 		poobStairs = new PoobStairs(rows, columns,players);
@@ -250,8 +250,8 @@ public class POOBSTAIRSGUI extends JFrame {
 					startPlaying.board.setLayout(new GridLayout(poobStairs.board().length, poobStairs.board()[0].length));
 					startPlaying.refresh(poobStairs);
 					POOBSTAIRSGUI.this.setExtendedState(MAXIMIZED_BOTH);
-					
 					layout.next(panels);
+					machinePlay();
 					
 				}catch(POOBSTAIRSException exception) {
 					JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, exception.getMessage());
@@ -262,21 +262,16 @@ public class POOBSTAIRSGUI extends JFrame {
 		/*startPlaying*/
 		startPlaying.roll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(poobStairs.getTurn() instanceof Machine){
-					Face current = poobStairs.rollDice();
-					startPlaying.assignValue(current.getValue());
-					poobStairs.playMachine();
-					startPlaying.refresh(poobStairs);
-				}else{
-					Face current = poobStairs.rollDice();
-					startPlaying.assignValue(current.getValue());
-					int option = activePower(current);
-					if(option == 0) {
-						specialOptionsJD(poobStairs.usePower());
-					}else if(option == -1 || (option > 1 && option < 4)){
-						specialOptionsJD(current.getValue());
-					}
+				Face current = poobStairs.rollDice();
+				startPlaying.assignValue(current.getValue());
+				int option = activePower(current);
+				if(option == 0) {
+					specialOptionsJD(poobStairs.usePower());
+				}else if(option == -1 || (option > 1 && option < 4)){
+					specialOptionsJD(current.getValue());
 				}
+				startPlaying.refresh(poobStairs);
+				machinePlay();
 				
 			}
 		});
@@ -379,6 +374,34 @@ public class POOBSTAIRSGUI extends JFrame {
 	 */
 	protected Square[] getLineBoard() {
 		return poobStairs.getInLine();
+	}
+	/**
+	 * Duerme el hilo del GUI
+	 * @param seconds, segundos que se desea dormir el hilo
+	 */
+	private void waitSeconds(int seconds) {
+		try
+		{
+		    Thread.sleep (seconds*1000);  
+		} 
+		catch (Exception e)
+		{
+		    
+		}
+	}
+	/**
+	 * En caso de que el jugador en turno sea de tipo maquina, la maquina juega por si misma.
+	 */
+	private void machinePlay() {
+		if(poobStairs.getTurn() instanceof Machine) {
+			startPlaying.roll.setEnabled(false);
+			
+			Face current = poobStairs.rollDice();
+			startPlaying.assignValue(current.getValue());
+			poobStairs.playMachine();
+			startPlaying.refresh(poobStairs);
+			startPlaying.roll.setEnabled(true);
+		}
 	}
 	
 	public static void main(String[] args) {

@@ -494,13 +494,10 @@ public class GameBoard {
 	 * @param piece     , pieza a la que se quiere hacer el cambio
 	 */
 	public void changePieceBoard(int actualPos, int finalPos, Piece piece) {
-		try {
 			squaresInLine[finalPos].receivePiece(piece);
 			squaresInLine[actualPos].removePiece(piece);
 			
-		} catch (Exception ed) {
-			System.out.println(ed.getMessage() + " Move Piece");
-		}
+		
 	}
 
 	
@@ -511,13 +508,11 @@ public class GameBoard {
 	 * @param piece, pieza en juego
 	 */
 	private void changePieceBoard(Square firstPos, Square finalPos,Piece piece) {
-		try {
+		
 			finalPos.receivePiece(piece);
 			firstPos.removePiece(piece);
 			setActualSquare();
-		} catch (Exception ed) {
-			ed.printStackTrace();
-		}
+		
 	}
 
 
@@ -526,11 +521,9 @@ public class GameBoard {
 	}
 
 	public void removePieceBoard(int position,Piece piece){
-		try {
+		
 			squaresInLine[position].removePiece(piece);
-		} catch (Exception e) {
-			System.out.println("the piece does not exist");
-		}
+		
 	}
 
 	public int simulateChangePiece(Integer positions, Piece piece){

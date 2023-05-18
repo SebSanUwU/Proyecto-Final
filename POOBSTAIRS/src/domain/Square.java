@@ -29,9 +29,8 @@ public  class Square {
     	pieces.add(piece);
     }
     
-    protected void removePiece(Piece piece) throws POOBSTAIRSException{
-    	//if(pieces.isEmpty()) throw new POOBSTAIRSException(POOBSTAIRSException.NO_PIECES);
-    	pieces.remove(piece);
+    protected void removePiece(Piece piece) {
+    	if(!pieces.isEmpty())pieces.remove(piece);
     }
     
     public Piece[] getPieces() {
