@@ -62,9 +62,4 @@ public  class Square {
     public int useObstacle() throws POOBSTAIRSException {
     	return getObstacle().use();
     }
-    
-  
-    
-   
-
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
+import javax.naming.AuthenticationException;
+
 public class GameBoard {
 	private int totalSquares;
 	private ArrayList<Integer> obstacleSquares;
@@ -50,11 +52,14 @@ public class GameBoard {
 		int aux = (int) Math.round((totalSquares - 2) * pSpecial);
 		if (numSnakes * 2 + numStairs * 2 + aux > (totalSquares - 2 - 4))
 			throw new POOBSTAIRSException(POOBSTAIRSException.NUM_OBSTACLE);
-
 		randomSquareObstacle(numSnakes, false, true);
 		randomSquareObstacle(numStairs, true, false);
 		randomSquareObstacle(aux, false, false);
 		obstacleSquares.sort(null);
+		if(player[1] instanceof MachineLearner){
+			MachineLearner bot = (MachineLearner) player[1];
+			bot.setBoard(this);
+		}
 		squaresInLine[0].receivePiece(player[0].getPiece());
 		squaresInLine[0].receivePiece(player[1].getPiece());
 		setActualSquare();
@@ -334,7 +339,10 @@ public class GameBoard {
 	 *                             sale de los limites del tablero
 	 
 	public Square changePiece(int positions, Piece piece) throws POOBSTAIRSException {
+<<<<<<< HEAD
 		
+=======
+>>>>>>> f24892bdb53ac499621b3b213199279fe660ae1e
 		int firstPos = piece.getIntPosition();
 		int secondPos = firstPos + positions;
 		if (secondPos >= totalSquares || secondPos < 0)throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
@@ -354,9 +362,10 @@ public class GameBoard {
 		try {
 			// Se trata de utilizar la trampa de la nueva casilla
 			lastPos = squaresInLine[lastPos].useObstacle();
-			if (squaresInLine[lastPos].typeObstacle().equals("stair")) {
+			if (squaresInLine[lastPos].typeObstacle().equals("stair")
+					&& squaresInLine[lastPos].containsObstacleToUse()) {
 				numStairs++;
-			} else {
+			} else if (squaresInLine[lastPos].containsObstacleToUse()) {
 				numSnakes++;
 			}
 			if (lastPos != firstPos) {
@@ -369,7 +378,8 @@ public class GameBoard {
 		}
 		piece.changeStats(numStairs, numSnakes, numSpecialSquares, lastPos);
 		setActualSquare();
-		if ((squaresInLine[lastPos] instanceof SpecialSquare || squaresInLine[lastPos].containsObstacleToUse()) && firstPos!=lastPos)
+		if ((squaresInLine[lastPos] instanceof SpecialSquare || squaresInLine[lastPos].containsObstacleToUse())
+				&& firstPos != lastPos)
 			return changePiece(0, piece);
 		return squaresInLine[lastPos];
 	}
@@ -432,7 +442,7 @@ public class GameBoard {
 	 *         encontro
 	 */
 	public int findCloseStair(int actualPos) {
-		for (int i = actualPos; i < squaresInLine.length; i++) {
+		for (int i = actualPos+1; i < squaresInLine.length; i++) {
 			try {
 				Obstacle obstacle = squaresInLine[i].getObstacle();
 				if (squaresInLine[i].containsObstacleToUse() && obstacle.getType().equals("stair")) {
@@ -457,7 +467,7 @@ public class GameBoard {
 		for (int i = actualPos; i > 0; i--) {
 			try {
 				Obstacle obstacle = squaresInLine[i].getObstacle();
-				if (squaresInLine[i].containsObstacleToUse() && obstacle.getType().equals("snake")){
+				if (squaresInLine[i].containsObstacleToUse() && obstacle.getType().equals("snake")) {
 					return squaresInLine[i].getNumSquare();
 				}
 			} catch (Exception e) {
@@ -492,6 +502,7 @@ public class GameBoard {
 			System.out.println(ed.getMessage() + " Move Piece");
 		}
 	}
+<<<<<<< HEAD
 	*/
 	/**
 	 * Metodo que cambia una pieza de casillas,desde su casilla inicial a la casilla final.
@@ -508,4 +519,48 @@ public class GameBoard {
 			ed.printStackTrace();
 		}
 	}
+=======
+
+	public void addPieceBoard(int position,Piece piece){
+		squaresInLine[position].receivePiece(null);
+	}
+
+	public void removePieceBoard(int position,Piece piece){
+		try {
+			squaresInLine[position].removePiece(piece);
+		} catch (Exception e) {
+			System.out.println("the piece does not exist");
+		}
+	}
+
+	public int simulateChangePiece(Integer positions, Piece piece){
+		int firstPos = piece.getIntPosition();
+		int secondPos = firstPos + positions;
+		int lastPos = secondPos;
+		if (secondPos >= totalSquares || secondPos < 0){
+			return squaresInLine[firstPos].getNumSquare();
+		}
+		if (squaresInLine[secondPos] instanceof SpecialSquare) {
+			lastPos = ((SpecialSquare) squaresInLine[secondPos]).useTrap();
+			if ((squaresInLine[secondPos] instanceof Jumper || squaresInLine[secondPos] instanceof ReverseJumper)
+					&& (lastPos >= totalSquares || lastPos < 0))
+				lastPos = secondPos;
+		}
+		try {
+			lastPos = squaresInLine[lastPos].useObstacle();
+			if (lastPos != firstPos) {
+				changePieceBoard(firstPos, lastPos, piece);
+			}
+		} catch (POOBSTAIRSException e) {
+			if (firstPos != lastPos) {
+				changePieceBoard(firstPos, lastPos, piece);
+			}
+		}
+		setActualSquare();
+		if ((squaresInLine[lastPos] instanceof SpecialSquare || squaresInLine[lastPos].containsObstacleToUse())
+				&& firstPos != lastPos)
+			return simulateChangePiece(0, piece);
+		return squaresInLine[lastPos].getNumSquare();
+	}
+>>>>>>> f24892bdb53ac499621b3b213199279fe660ae1e
 }

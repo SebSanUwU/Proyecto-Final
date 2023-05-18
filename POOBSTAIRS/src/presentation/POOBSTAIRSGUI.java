@@ -91,6 +91,9 @@ public class POOBSTAIRSGUI extends JFrame {
 		 if(!dataPlayers.isMachine()) {
 			 players[1] = new Player(name2);
 			 players[1].setPiece(colors2, piece2);
+		 }else{
+			players[1] = new MachineLearner(name2, null);
+			players[1].setPiece(colors2, piece2);
 		 }
 		poobStairs = new PoobStairs(rows, columns,players);
 		poobStairs.setGame(snakes, stairs, (float) pSpecials, (float) pPowers);
@@ -259,14 +262,22 @@ public class POOBSTAIRSGUI extends JFrame {
 		/*startPlaying*/
 		startPlaying.roll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Face current = poobStairs.rollDice();
-				startPlaying.assignValue(current.getValue());
-				int option = activePower(current);
-				if(option == 0) {
-					specialOptionsJD(poobStairs.usePower());
-				}else if(option == -1 || (option > 1 && option < 4)){
-					specialOptionsJD(current.getValue());
+				if(poobStairs.getTurn() instanceof Machine){
+					Face current = poobStairs.rollDice();
+					startPlaying.assignValue(current.getValue());
+					poobStairs.playMachine();
+					startPlaying.refresh(poobStairs);
+				}else{
+					Face current = poobStairs.rollDice();
+					startPlaying.assignValue(current.getValue());
+					int option = activePower(current);
+					if(option == 0) {
+						specialOptionsJD(poobStairs.usePower());
+					}else if(option == -1 || (option > 1 && option < 4)){
+						specialOptionsJD(current.getValue());
+					}
 				}
+				
 			}
 		});
 		startPlaying.change.addActionListener(new ActionListener() {

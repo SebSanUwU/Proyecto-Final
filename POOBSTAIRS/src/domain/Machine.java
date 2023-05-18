@@ -10,6 +10,8 @@ public abstract class Machine extends Player{
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
+
+	public abstract int play(Die.Face dieFace);
 	/**
 	public Machine(Color personColor) {
 		
