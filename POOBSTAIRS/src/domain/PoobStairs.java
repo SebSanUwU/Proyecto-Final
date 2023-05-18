@@ -2,6 +2,12 @@ package domain;
 
 
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -172,4 +178,30 @@ public class PoobStairs {
 
 		return board;
 	}
+	
+	 /**
+     * Metodo para abrir un archivo(ObjectInputStream).
+     * 
+     * @param file , archivo que se desa abrir
+     * @throws AutomataExeption IN_PROCESS Si el metodo se esta construyendo
+     */
+    public PoobStairs open(File file) throws Exception {
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+        PoobStairs newAutomata = (PoobStairs) in.readObject();
+        in.close();
+        return newAutomata;
+    }
+
+    /**
+     * Metodo para salvar un archivo con extension de programa (ObjectOutputStream).
+     * 
+     * @param file , archivo que se desa abrir
+     * @throws IOException
+     * @throws AutomataExeption IN_PROCESS Si el metodo se esta construyendo
+     */
+    public void save(File file) throws IOException {
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+        out.writeObject(this);
+        out.close();
+    }
 }
