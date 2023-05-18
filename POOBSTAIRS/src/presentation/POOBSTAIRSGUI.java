@@ -92,7 +92,7 @@ public class POOBSTAIRSGUI extends JFrame {
 			 players[1] = new Player(name2);
 			 players[1].setPiece(colors2, piece2);
 		 }else{
-			players[1] = new MachineLearner("Machine", null);
+			players[1] = new MachineBegginer("Machine", null);
 			players[1].setPiece(colors2, piece2);
 		 }
 		poobStairs = new PoobStairs(rows, columns,players);

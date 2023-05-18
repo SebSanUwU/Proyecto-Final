@@ -47,6 +47,7 @@ public  class Square {
         try {
             return getObstacle().getType();
         } catch (Exception e) {
+            
             return "None";
         }
     }
