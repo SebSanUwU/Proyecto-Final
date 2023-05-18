@@ -152,10 +152,13 @@ public class PoobStairs {
 	public Square[] getInLine() {
 		return board.getInLine();
 	}
-<<<<<<< HEAD
+
 	
 	public GameBoard getBoard() {
-=======
+		return board;
+		
+	}
+
 
 	public int playMachine(){
 		Machine bot = (Machine) players[playerOnTurn];
@@ -166,7 +169,7 @@ public class PoobStairs {
 	}
 
 	public GameBoard getGameBoard(){
->>>>>>> f24892bdb53ac499621b3b213199279fe660ae1e
+
 		return board;
 	}
 }
