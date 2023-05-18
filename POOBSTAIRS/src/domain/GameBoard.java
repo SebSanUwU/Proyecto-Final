@@ -414,7 +414,7 @@ public class GameBoard {
 			// Se trata de utilizar la trampa de la nueva casilla
 			if(destination.getObstacle().getHead() == destination ) {
 				destination = chooseFinalDestination(squaresInLine[position].useObstacle(),piece);
-				if (squaresInLine[position].typeObstacle().equals("stair")) numStairs++;
+				if (destination.typeObstacle().equals("stair")) numStairs++;
 				else numSnakes++;
 			}
 		} catch (POOBSTAIRSException e) {
@@ -492,7 +492,7 @@ public class GameBoard {
 	 * @param actualPos , la casilla donde se sabe que esta la ficha
 	 * @param finalPos  , la casilla donde se quiere posiciona
 	 * @param piece     , pieza a la que se quiere hacer el cambio
-	 
+	 */
 	public void changePieceBoard(int actualPos, int finalPos, Piece piece) {
 		try {
 			squaresInLine[finalPos].receivePiece(piece);
@@ -502,8 +502,8 @@ public class GameBoard {
 			System.out.println(ed.getMessage() + " Move Piece");
 		}
 	}
-<<<<<<< HEAD
-	*/
+
+	
 	/**
 	 * Metodo que cambia una pieza de casillas,desde su casilla inicial a la casilla final.
 	 * @param firstPos, posición inicial de la pieza en juego
@@ -519,7 +519,7 @@ public class GameBoard {
 			ed.printStackTrace();
 		}
 	}
-=======
+
 
 	public void addPieceBoard(int position,Piece piece){
 		squaresInLine[position].receivePiece(null);
@@ -562,5 +562,4 @@ public class GameBoard {
 			return simulateChangePiece(0, piece);
 		return squaresInLine[lastPos].getNumSquare();
 	}
->>>>>>> f24892bdb53ac499621b3b213199279fe660ae1e
 }
