@@ -251,7 +251,7 @@ public class POOBSTAIRSGUI extends JFrame {
 					startPlaying.refresh(poobStairs);
 					POOBSTAIRSGUI.this.setExtendedState(MAXIMIZED_BOTH);
 					layout.next(panels);
-					machinePlay();
+					//machinePlay();
 					
 				}catch(POOBSTAIRSException exception) {
 					JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, exception.getMessage());
@@ -262,17 +262,18 @@ public class POOBSTAIRSGUI extends JFrame {
 		/*startPlaying*/
 		startPlaying.roll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Face current = poobStairs.rollDice();
-				startPlaying.assignValue(current.getValue());
-				int option = activePower(current);
-				if(option == 0) {
-					specialOptionsJD(poobStairs.usePower());
-				}else if(option == -1 || (option > 1 && option < 4)){
-					specialOptionsJD(current.getValue());
+				if(machinePlay()){
+				}else{
+					Face current = poobStairs.rollDice();
+					startPlaying.assignValue(current.getValue());
+					int option = activePower(current);
+					if(option == 0) {
+						specialOptionsJD(poobStairs.usePower());
+					}else if(option == -1 || (option > 1 && option < 4)){
+						specialOptionsJD(current.getValue());
+					}
+					startPlaying.refresh(poobStairs);
 				}
-				startPlaying.refresh(poobStairs);
-				machinePlay();
-				
 			}
 		});
 		startPlaying.change.addActionListener(new ActionListener() {
@@ -392,16 +393,17 @@ public class POOBSTAIRSGUI extends JFrame {
 	/**
 	 * En caso de que el jugador en turno sea de tipo maquina, la maquina juega por si misma.
 	 */
-	private void machinePlay() {
+	private boolean machinePlay() {
 		if(poobStairs.getTurn() instanceof Machine) {
 			startPlaying.roll.setEnabled(false);
-			
 			Face current = poobStairs.rollDice();
 			startPlaying.assignValue(current.getValue());
 			poobStairs.playMachine();
 			startPlaying.refresh(poobStairs);
 			startPlaying.roll.setEnabled(true);
+			return true;
 		}
+		return false;
 	}
 	
 	public static void main(String[] args) {

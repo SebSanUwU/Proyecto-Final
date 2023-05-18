@@ -168,7 +168,10 @@ public class PoobStairs {
 
 	public int playMachine(){
 		Machine bot = (Machine) players[playerOnTurn];
+		int extraMovement=usePower();
+		//System.out.println(extraMovement);
 		int valorJugado=bot.play(die.getCurrentFace());
+
 		if(playerOnTurn == 0) playerOnTurn = 1;
 			else playerOnTurn = 0;
 		return valorJugado;

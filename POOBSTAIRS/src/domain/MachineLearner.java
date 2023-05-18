@@ -18,42 +18,41 @@ public class MachineLearner extends Machine {
         Integer[] analizeSpecialsSquares = board.analizeSpecials(dieFace.getValue(), this);
         ArrayList<Integer> simulatePlays = new ArrayList<Integer>();
         int inicial = getPiecePosition();
-        Square inicialSquare = getPieceSquare();
+        int change;
+        
         for (int i = 0; i < analizeSpecialsSquares.length; i++) {
-            getPiece().changePositionTo(inicialSquare);
-            board.addPieceBoard(inicial, getPiece());
-            simulatePlays.add(board.simulateChangePiece(analizeSpecialsSquares[i]-inicial, getPiece()));
-            board.removePieceBoard(simulatePlays.get(i), getPiece());
+            change=board.simulateChangePiece(analizeSpecialsSquares[i]-inicial, getPiece());
+            simulatePlays.add(change);
+            if(inicial!=change){
+                board.changePieceBoard(change, inicial, getPiece());
+            }
         }
         int maxPlay = -1;
         int maxSquare = -1;
-        System.out.println(dieFace.getValue());
 
         for (int i = 0; i < simulatePlays.size(); i++) {
             System.out.println((simulatePlays.get(i) + 1) + " <- simulacion de " + (analizeSpecialsSquares[i] + 1));
             if (simulatePlays.get(i) > maxSquare) {
                 maxSquare = simulatePlays.get(i);
-                maxPlay = analizeSpecialsSquares[i]-inicial;
+                maxPlay = analizeSpecialsSquares[i];
             }
-
         }
-        int aux;
-        getPiece().changePositionTo(inicialSquare);
-        board.addPieceBoard(inicial, getPiece());
-        aux = board.simulateChangePiece(dieFace.getValue(), getPiece());
-        board.removePieceBoard(aux, getPiece());
-        System.out.println((aux + 1) + " <- simulacion de " + (dieFace.getValue()+inicial+1));
-        if (maxSquare<aux) {
-            maxSquare=aux;
-            maxPlay=aux-inicial;
+        
+        change = board.simulateChangePiece(dieFace.getValue(), getPiece());
+        if(inicial!=change){
+            board.changePieceBoard(change, inicial, getPiece());
         }
-        getPiece().changePositionTo(inicialSquare);
-        board.addPieceBoard(inicial, getPiece());
+        System.out.println((change + 1) + " <- simulacion de " + (dieFace.getValue()+inicial+1));
+        if (maxSquare<change) {
+            maxSquare=change;
+            maxPlay=dieFace.getValue();
+        }
+        
         if (inicial != maxSquare) {
             board.changePieceBoard(inicial, maxSquare, getPiece());
         }
-        System.out.println(1 + maxSquare + " casilla jugada " + (inicial + 1) + " casilla inicial");
-        System.out.println(maxPlay);
+        System.out.println(1 + maxSquare + " casilla de llegada, " + (inicial + 1) + " casilla  de inicial");
+        System.out.println((maxPlay+1)+" casilla jugada");
 
         return 0;
         // return analizeSpecialsSquares[maxPlay];
