@@ -80,7 +80,8 @@ public class PoobStairs {
 	 * Función que cambia la posición del jugador en turno
 	 * @param positions, cuantas casillas se va a avanzar
 	 * @return true si el jugador en turno ya llego a la ultima casilla
-	 * 
+	 * throws POOBSTAIRSException -  NO_SPECIALS si el dentro del rango de movimiento de la pieza
+	 * no ahí casillas especiales
 	 */
 	
 	public Integer[] analize(int numberPositions) throws POOBSTAIRSException{
@@ -96,10 +97,10 @@ public class PoobStairs {
 	public boolean movePiece(int positions) {
 		Piece piece = getTurn().getPiece();
 		try {
-			board.changePiece(positions, piece);
+			Square finalDestination = board.changePiece(positions, piece);
+			piece.changePositionTo(finalDestination);
 			if(playerOnTurn == 0) playerOnTurn = 1;
 			else playerOnTurn = 0;
-			
 		} catch (POOBSTAIRSException e) {
 			if(playerOnTurn == 0) playerOnTurn = 1;
 			else playerOnTurn = 0;
@@ -141,7 +142,7 @@ public class PoobStairs {
 				movements = die.usePower();
 			}
 			return movements;
-		} catch (POOBSTAIRSException e) {
+		} catch (FaceException e) {
 			return movements;
 		}
 	}	
@@ -152,5 +153,9 @@ public class PoobStairs {
 	 */
 	public Square[] getInLine() {
 		return board.getInLine();
+	}
+	
+	public GameBoard getBoard() {
+		return board;
 	}
 }

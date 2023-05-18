@@ -45,17 +45,17 @@ public class Die {
 	 */
 	private void assignPowers() {
 		int powersToGive = numPowers;
-		
+		ArrayList<Face> emptyFaces = (ArrayList<Face>) faces.clone();
 		for(Face f: faces) {
 			f.removePowers();
 		}
-		int i = 0;
 		while(powersToGive > 0) {
+			Face powerUp = emptyFaces.get(random.nextInt(emptyFaces.size()));
 			try {
-				powersToGive --;
-				faces.get(random.nextInt(faces.size())).addPower(Power.givePowers()[random.nextInt(3)]);
-			} catch (POOBSTAIRSException e) {
-				powersToGive++;
+				powerUp.addPower(Power.givePowers()[random.nextInt(3)]);
+				powersToGive--;
+			} catch (FaceException e) {
+				emptyFaces.remove(powerUp);
 			}
 
 		}
@@ -84,7 +84,7 @@ public class Die {
 		int actualValue = currentFace.getValue();
 		try {
 			actualValue += Power.givePower(currentFace.indicatePowers());
-		} catch (POOBSTAIRSException e) {
+		} catch (FaceException e) {
 			return actualValue;
 		}
 		return actualValue;
@@ -99,7 +99,7 @@ public class Die {
 	public class Face{
 		private int value;
 		private HashSet<String> powers;
-		private static final int LIM_POWERS = 1;
+		private  final int limPowers = 1;
 		
 		/**
 		 * Contructor del objeto de la clase Face
@@ -122,8 +122,8 @@ public class Die {
 		 * @throws NO_POWERS, si a la cara no se le asigno ningun poder 
 		 */
 		
-		public String indicatePowers() throws POOBSTAIRSException{
-			if(powers.size() == 0) throw new POOBSTAIRSException(POOBSTAIRSException.NO_POWERS);
+		public String indicatePowers() throws FaceException{
+			if(powers.size() == 0) throw new FaceException(FaceException.NO_POWERS);
 			String[] powersS = new String[powers.size()];
 			powersS = powers.toArray(powersS);
 			return powersS[0];
@@ -134,8 +134,8 @@ public class Die {
 		 * @throws SUP_POWERS, si se quieren asignar más poderes de los que puede aceptar el dado.
 		 */
 		
-		private void addPower(String power) throws POOBSTAIRSException{
-			if(powers.size() + 1 > LIM_POWERS) throw new POOBSTAIRSException(POOBSTAIRSException.SUP_POWERS);
+		private void addPower(String power) throws FaceException{
+			if(powers.size() + 1 > limPowers) throw new FaceException(FaceException.SUP_POWERS);
 			powers.add(power);
 		}
 		

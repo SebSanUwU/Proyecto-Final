@@ -122,6 +122,9 @@ class PoobStairsTest {
 			assertFalse(game.getInLine()[5].contains(isTurn.getPiece()));
 			assertTrue(isTurn.getPiecePosition() == 10);
 			assertTrue(isTurn.getPieceSquare() == game.getInLine()[10]);
+			for(Square s: game.getInLine()) {
+				assertTrue(s.getPieces().length == 0 || s.getPieces().length == 1 || s.getPieces().length == 2);
+			}
 		}catch(POOBSTAIRSException e) {
 			fail("Lanzo excepción");
 		}
@@ -154,6 +157,9 @@ class PoobStairsTest {
 			assertFalse(game.getInLine()[10].contains(isTurn.getPiece()));
 			assertTrue(isTurn.getPiecePosition() == 30);
 			assertTrue(isTurn.getPieceSquare() == game.getInLine()[30]);
+			for(Square s: game.getInLine()) {
+				assertTrue(s.getPieces().length == 0 || s.getPieces().length == 1 || s.getPieces().length == 2);
+			}
 		}catch(POOBSTAIRSException e) {
 			fail("Lanzo excepción");
 		}
@@ -186,7 +192,9 @@ class PoobStairsTest {
 			isTurn = game.getTurn();
 			game.movePiece(1);
 			assertTrue(isTurn.getPieceSquare() == game.getInLine()[11]);
-			
+			for(Square s: game.getInLine()) {
+				assertTrue(s.getPieces().length == 0 || s.getPieces().length == 1 || s.getPieces().length == 2);
+			}
 		}catch(POOBSTAIRSException e) {
 			fail("Lanzo una excepción");
 		}
@@ -330,8 +338,9 @@ class PoobStairsTest {
 			game.movePiece(91);
 			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[5]);
 			assertTrue(game.getInLine()[5].contains(yourTurn.getPiece()));
-			
-			
+			for(Square s: game.getInLine()) {
+				assertTrue(s.getPieces().length == 0 || s.getPieces().length == 1 || s.getPieces().length == 2);
+			}
 		} catch (POOBSTAIRSException e) {
 			fail("Lanzo excepción");
 		}
@@ -374,6 +383,9 @@ class PoobStairsTest {
 			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[1]);
 			assertTrue(game.getInLine()[1].contains(yourTurn.getPiece()));
 			assertFalse(game.getInLine()[24].contains(yourTurn.getPiece()));
+			for(Square s: game.getInLine()) {
+				assertTrue(s.getPieces().length == 0 || s.getPieces().length == 1 || s.getPieces().length == 2);
+			}
 		} catch (POOBSTAIRSException e) {
 			fail("Lanzo excepción");
 		}
@@ -381,6 +393,95 @@ class PoobStairsTest {
 	}
 	@Test
 	void shouldGoUp() {
+		Player[] players = {new Player("Camilo"), new Player("Pollis")};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
+
+		PoobStairs game;
+		try {
+			game = new PoobStairs(10,10, players);
+			game.setGame(0, 0, 0, 0);
+			Obstacle stair1 = new Obstacle(game.getInLine()[24], game.getInLine()[75],"stair");
+			game.getInLine()[24].addObstacle(stair1);
+			game.getInLine()[75].addObstacle(stair1);
+			Obstacle stair2 = new Obstacle(game.getInLine()[88], game.getInLine()[98],"stair");
+			game.getInLine()[98].addObstacle(stair2);
+			game.getInLine()[88].addObstacle(stair2);
+			Obstacle stair3 = new Obstacle(game.getInLine()[1], game.getInLine()[23],"stair");
+			game.getInLine()[23].addObstacle(stair3);
+			game.getInLine()[1].addObstacle(stair3);
+			Obstacle stair4 = new Obstacle(game.getInLine()[5], game.getInLine()[92],"stair");
+			game.getInLine()[92].addObstacle(stair4);
+			game.getInLine()[5].addObstacle(stair4);
+			Player yourTurn = game.getTurn();
+			game.movePiece(1);
+			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[23]);
+			assertTrue(game.getInLine()[23].contains(yourTurn.getPiece()));
+			yourTurn = game.getTurn();
+			game.movePiece(5);
+			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[92]);
+			assertTrue(game.getInLine()[92].contains(yourTurn.getPiece()));
+			yourTurn = game.getTurn();
+			game.movePiece(1);
+			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[75]);
+			assertTrue(game.getInLine()[75].contains(yourTurn.getPiece()));
+			game.movePiece(2);
+			yourTurn = game.getTurn();
+			game.movePiece(13);
+			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[98]);
+			assertTrue(game.getInLine()[98].contains(yourTurn.getPiece()));
+			for(Square s: game.getInLine()) {
+				assertTrue(s.getPieces().length == 0 || s.getPieces().length == 1 || s.getPieces().length == 2);
+			}
+		} catch (POOBSTAIRSException e) {
+			fail("Lanzo excepción");
+		}
+		
+	}
+	
+	@Test
+	void shouldAdvance() {
+		Player[] players = {new Player("Camilo"), new Player("Pollis")};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
+
+		PoobStairs game;
+		try {
+			game = new PoobStairs(10,10, players);
+			game.setGame(0, 0, 0, 0);
+			Obstacle stair1 = new Obstacle(game.getInLine()[24], game.getInLine()[75],"stair");
+			game.getInLine()[24].addObstacle(stair1);
+			game.getInLine()[75].addObstacle(stair1);
+			Obstacle stair2 = new Obstacle(game.getInLine()[88], game.getInLine()[98],"stair");
+			game.getInLine()[98].addObstacle(stair2);
+			game.getInLine()[88].addObstacle(stair2);
+			Obstacle stair3 = new Obstacle(game.getInLine()[1], game.getInLine()[23],"stair");
+			game.getInLine()[23].addObstacle(stair3);
+			game.getInLine()[1].addObstacle(stair3);
+			Obstacle stair4 = new Obstacle(game.getInLine()[5], game.getInLine()[92],"stair");
+			game.getInLine()[92].addObstacle(stair4);
+			game.getInLine()[5].addObstacle(stair4);
+			game.getInLine()[2] = new Advance(2,game.getBoard());
+			game.getInLine()[22] = new Advance(22,game.getBoard());
+			Player yourTurn = game.getTurn();
+			game.movePiece(2);
+			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[92]);
+			assertTrue(game.getInLine()[92].contains(yourTurn.getPiece()));
+			yourTurn = game.getTurn();
+			game.movePiece(22);
+			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[75]);
+			assertTrue(game.getInLine()[75].contains(yourTurn.getPiece()));
+			for(Square s: game.getInLine()) {
+				assertTrue(s.getPieces().length == 0 || s.getPieces().length == 1 || s.getPieces().length == 2);
+			}
+		} catch (POOBSTAIRSException e) {
+			fail("Lanzo excepción");
+		}
+		
+	}
+	
+	@Test
+	void shouldNotAdvance() {
 		Player[] players = {new Player("Camilo"), new Player("Pollis")};
 		players[0].setPiece("RED", "Normal");
 		players[1].setPiece("RED", "Normal");
@@ -401,48 +502,26 @@ class PoobStairsTest {
 			Obstacle stair4 = new Obstacle(game.getInLine()[5], game.getInLine()[92],"snake");
 			game.getInLine()[92].addObstacle(stair4);
 			game.getInLine()[5].addObstacle(stair4);
+			game.getInLine()[2] = new Advance(2,game.getBoard());
+			game.getInLine()[22] = new Advance(22,game.getBoard());
 			Player yourTurn = game.getTurn();
-			game.movePiece(1);
-			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[23]);
-			assertTrue(game.getInLine()[23].contains(yourTurn.getPiece()));
-			yourTurn = game.getTurn();
-			game.movePiece(5);
-			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[92]);
-			assertTrue(game.getInLine()[92].contains(yourTurn.getPiece()));
-			yourTurn = game.getTurn();
-			game.movePiece(1);
-			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[75]);
-			assertTrue(game.getInLine()[75].contains(yourTurn.getPiece()));
 			game.movePiece(2);
+			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[2]);
+			assertTrue(game.getInLine()[2].contains(yourTurn.getPiece()));
+			assertFalse(game.getInLine()[92].contains(yourTurn.getPiece()));
 			yourTurn = game.getTurn();
-			game.movePiece(13);
-			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[98]);
-			assertTrue(game.getInLine()[98].contains(yourTurn.getPiece()));
+			game.movePiece(22);
+			assertTrue(yourTurn.getPieceSquare() == game.getInLine()[22]);
+			assertTrue(game.getInLine()[22].contains(yourTurn.getPiece()));
+			assertFalse(game.getInLine()[75].contains(yourTurn.getPiece()));
+			for(Square s: game.getInLine()) {
+				assertTrue(s.getPieces().length == 0 || s.getPieces().length == 1 || s.getPieces().length == 2);
+			}
 		} catch (POOBSTAIRSException e) {
 			fail("Lanzo excepción");
 		}
 		
 	}
-	@Test
-	void shouldJump() {
-		Player[] players = {new Player("Camilo"), new Player("Pollis")};
-		players[0].setPiece("RED", "Normal");
-		players[1].setPiece("RED", "Normal");
-
-		PoobStairs game;
-		
-		
-		try {
-			game = new PoobStairs(10,10, players);
-			game.setGame(0, 0, 0, 0);
-			game.getInLine()[5] = new Jumper(5);
-			
-		} catch (POOBSTAIRSException e) {
-			fail("Lanzo excepción");
-		}
-		
-	}
-	
 
 }
 

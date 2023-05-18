@@ -285,10 +285,10 @@ public class GameBoard {
 					squaresInLine[specialSquare[i]] = new Jumper(specialSquare[i]);
 					break;
 				case 3:
-					squaresInLine[specialSquare[i]] = new Mortal(specialSquare[i]);
+					squaresInLine[specialSquare[i]] = new ReverseJumper(specialSquare[i]);
 					break;
 				case 4:
-					squaresInLine[specialSquare[i]] = new ReverseJumper(specialSquare[i]);
+					squaresInLine[specialSquare[i]] = new Mortal(specialSquare[i]);
 					break;
 				default:
 					squaresInLine[specialSquare[i]] = new Advance(specialSquare[i], this);
@@ -332,22 +332,16 @@ public class GameBoard {
 	 * @throws POOBSTAIRSException NO_MORE_SQUARES si, al hacer el primermovimiento,
 	 *                             la ficha se
 	 *                             sale de los limites del tablero
-	 */
+	 
 	public Square changePiece(int positions, Piece piece) throws POOBSTAIRSException {
-		/*
-		 * if (positions == 0)
-		 * throw new POOBSTAIRSException(POOBSTAIRSException.NO_MOVEMENTS);
-		 */
+		
 		int firstPos = piece.getIntPosition();
 		int secondPos = firstPos + positions;
+		if (secondPos >= totalSquares || secondPos < 0)throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
 		int lastPos = secondPos;
 		int numStairs = 0;
 		int numSnakes = 0;
 		int numSpecialSquares = 0;
-
-		if (secondPos >= totalSquares || secondPos < 0)
-			throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
-
 		// En caso de ser una casilla especial se usa
 		if (squaresInLine[secondPos] instanceof SpecialSquare) {
 			lastPos = ((SpecialSquare) squaresInLine[secondPos]).useTrap();
@@ -379,7 +373,55 @@ public class GameBoard {
 			return changePiece(0, piece);
 		return squaresInLine[lastPos];
 	}
-
+	*/
+	/**
+	 * Mueve la pieza en turno dentro del tablero
+	 * @param positions, numero de posiciones que se va a mover la pieza
+	 * @param piece, pieza que se va a mover
+	 * @return
+	 * @throws POOBSTAIRSException- NO_MORE_SQUARES si las casillas a moverse superan el numero de casillas
+	 * dentro del tablero.
+	 */
+	public Square changePiece(int positions, Piece piece) throws POOBSTAIRSException{
+		int firstPos = piece.getIntPosition();
+		if (firstPos+positions >= totalSquares || firstPos+positions < 0)throw new POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
+		Square destination = chooseFinalDestination(firstPos+positions,piece);
+		changePieceBoard(squaresInLine[firstPos],destination,piece);
+		return destination;
+	}
+	/**
+	 * Escoge la casilla final a la cual se va a mover la pieza en juego
+	 * @param position, posible posiciòn final de la pieza
+	 * @param piece, pieza en juego
+	 * @return casilla a la cual se va a mover la pieza despuès de hacer todo el analisis
+	 */
+	private Square chooseFinalDestination(int position, Piece piece)  {
+		Square destination = squaresInLine[position];
+		int numStairs = 0;
+		int numSnakes = 0;
+		int numSpecialSquares = 0;
+		try {
+			// Se trata de utilizar la trampa de la nueva casilla
+			if(destination.getObstacle().getHead() == destination ) {
+				destination = chooseFinalDestination(squaresInLine[position].useObstacle(),piece);
+				if (squaresInLine[position].typeObstacle().equals("stair")) numStairs++;
+				else numSnakes++;
+			}
+		} catch (POOBSTAIRSException e) {
+			// En caso de ser una casilla especial se usa
+			if (destination instanceof SpecialSquare) {
+				int newDestination = ((SpecialSquare) destination).useTrap();
+				if(squaresInLine[newDestination] != destination) {
+					destination = chooseFinalDestination(newDestination,piece);
+					numSpecialSquares++;
+				}
+			}
+		}
+		
+		piece.changeStats(numStairs, numSnakes, numSpecialSquares, destination.getNumSquare());
+		return destination;
+	}
+	
 	/**
 	 * Metodo que encuentra la posicion mas cercana a la escalera siguiente con
 	 * respecto a
@@ -440,14 +482,30 @@ public class GameBoard {
 	 * @param actualPos , la casilla donde se sabe que esta la ficha
 	 * @param finalPos  , la casilla donde se quiere posiciona
 	 * @param piece     , pieza a la que se quiere hacer el cambio
-	 */
+	 
 	public void changePieceBoard(int actualPos, int finalPos, Piece piece) {
 		try {
 			squaresInLine[finalPos].receivePiece(piece);
 			squaresInLine[actualPos].removePiece(piece);
-			piece.changePositionTo(squaresInLine[finalPos]);
+			
 		} catch (Exception ed) {
 			System.out.println(ed.getMessage() + " Move Piece");
+		}
+	}
+	*/
+	/**
+	 * Metodo que cambia una pieza de casillas,desde su casilla inicial a la casilla final.
+	 * @param firstPos, posición inicial de la pieza en juego
+	 * @param finalPos, posición final de la pieza 
+	 * @param piece, pieza en juego
+	 */
+	private void changePieceBoard(Square firstPos, Square finalPos,Piece piece) {
+		try {
+			finalPos.receivePiece(piece);
+			firstPos.removePiece(piece);
+			setActualSquare();
+		} catch (Exception ed) {
+			ed.printStackTrace();
 		}
 	}
 }

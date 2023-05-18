@@ -321,7 +321,7 @@ public class POOBSTAIRSGUI extends JFrame {
 				specialOptionsJD(movements);
 				option =4;
 			}
-		}catch(POOBSTAIRSException e) {
+		}catch(FaceException e) {
 			 option = 3;
 		}
 		return option;
