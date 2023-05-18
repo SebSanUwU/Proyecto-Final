@@ -19,7 +19,6 @@ public class PoobStairs {
 	private int playerOnTurn;
 	private Player[] players;
 	private GameBoard board;
-	//private Square[] boardLine;
 	private Die die;
 
 
@@ -57,7 +56,6 @@ public class PoobStairs {
 		if(pModifier > 1.0 || pSpecial > 1.0) throw new POOBSTAIRSException(POOBSTAIRSException.INACCEPTED_PERCENTAGE);
 		board.setArea(numSnakes, numStairs,pSpecial,players);
 		die = new Die((byte)6,pModifier);
-		int rows = board().length;
 		players[0].changePositionPiece(board.getInLine()[0]);
 		players[1].changePositionPiece(board.getInLine()[0]);
 	}
@@ -89,7 +87,7 @@ public class PoobStairs {
 	}
 	
 	/**
-	 * Se ecnarga de mover la pieza en juego n posiciones
+	 * Se ecncarga de mover la pieza en juego n posiciones
 	 * @param positions, numero de casillas que el jugador  en turno va a mover su pieza
 	 * @return si algun jugador ha ganado
 	 */
@@ -152,5 +150,17 @@ public class PoobStairs {
 	 */
 	public Square[] getInLine() {
 		return board.getInLine();
+	}
+
+	public int playMachine(){
+		Machine bot = (Machine) players[playerOnTurn];
+		int valorJugado=bot.play(die.getCurrentFace());
+		if(playerOnTurn == 0) playerOnTurn = 1;
+			else playerOnTurn = 0;
+		return valorJugado;
+	}
+
+	public GameBoard getGameBoard(){
+		return board;
 	}
 }
