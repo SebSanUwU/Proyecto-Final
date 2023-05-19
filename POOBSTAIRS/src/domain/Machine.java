@@ -12,7 +12,8 @@ public abstract class Machine extends Player{
 		// TODO Auto-generated constructor stub
 	}
 
-	public abstract int play(Die.Face dieFace);
+	public abstract int[] play(int value);
+	public abstract void setBoard(GameBoard board);
 	/**
 	public Machine(Color personColor) {
 		

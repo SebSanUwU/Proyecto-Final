@@ -167,23 +167,21 @@ public class PoobStairs implements Serializable{
 	}
 
 
-	public int playMachine(){
-		Machine bot = (Machine) players[playerOnTurn];
-		int extraMovement=usePower();
-		//System.out.println(extraMovement);
-		int valorJugado=bot.play(die.getCurrentFace());
 
-		if(playerOnTurn == 0) playerOnTurn = 1;
-			else playerOnTurn = 0;
-		return valorJugado;
-	}
-
-	public GameBoard getGameBoard(){
-
-		return board;
-	}
 	
-	
+	 /**
+     * Metodo para abrir un archivo(ObjectInputStream).
+     * 
+     * @param file , archivo que se desa abrir
+     * @throws AutomataExeption IN_PROCESS Si el metodo se esta construyendo
+     */
+    public PoobStairs open(String name) throws Exception {
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("../partidas/" + name + ".stairs")));
+        PoobStairs newAutomata = (PoobStairs) in.readObject();
+        in.close();
+        return newAutomata;
+    }
+
     /**
      * Metodo para salvar un archivo con extension de programa (ObjectOutputStream).
      * 

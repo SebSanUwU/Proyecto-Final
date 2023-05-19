@@ -57,8 +57,8 @@ public class GameBoard implements Serializable{
 		randomSquareObstacle(numStairs, true, false);
 		randomSquareObstacle(aux, false, false);
 		obstacleSquares.sort(null);
-		if (player[1] instanceof MachineLearner) {
-			MachineLearner bot = (MachineLearner) player[1];
+		if (player[1] instanceof Machine) {
+			Machine bot = (Machine) player[1];
 			bot.setBoard(this);
 		}
 		squaresInLine[0].receivePiece(player[0].getPiece());
@@ -534,22 +534,29 @@ public class GameBoard implements Serializable{
 		firstPos.removePiece(piece);
 	}
 
-
-	public int simulateChangePiece(Integer positions, Piece piece) {
+	public int[] simulateChangePiece(Integer positions, Piece piece, int numStairs, int numSnakes,
+			int numSpecialSquares) {
 		int firstPos = piece.getIntPosition();
 		int secondPos = firstPos + positions;
 		int lastPos = secondPos;
-		if (secondPos >= totalSquares || secondPos < 0) {
-			return squaresInLine[firstPos].getNumSquare();
+		if (secondPos >= totalSquares-1 || secondPos < 0) {
+			return new int[] { squaresInLine[firstPos].getNumSquare(), numStairs, numSnakes, numSpecialSquares };
 		}
 		if (squaresInLine[secondPos] instanceof SpecialSquare) {
 			lastPos = ((SpecialSquare) squaresInLine[secondPos]).useTrap();
 			if ((squaresInLine[secondPos] instanceof Jumper || squaresInLine[secondPos] instanceof ReverseJumper)
 					&& (lastPos >= totalSquares || lastPos < 0))
 				lastPos = secondPos;
+			numSpecialSquares++;
 		}
 		try {
-			lastPos = squaresInLine[lastPos].useObstacle();
+			if (squaresInLine[lastPos].typeObstacle().equals("stair") && squaresInLine[lastPos].containsObstacleToUse()){
+				lastPos = squaresInLine[lastPos].useObstacle();
+				numStairs++;
+			}else if(squaresInLine[lastPos].typeObstacle().equals("snake") && squaresInLine[lastPos].containsObstacleToUse()){
+				lastPos = squaresInLine[lastPos].useObstacle();
+				numSnakes++;
+			}
 			if (lastPos != firstPos) {
 				changePieceBoard(firstPos, lastPos, piece);
 			}
@@ -561,7 +568,7 @@ public class GameBoard implements Serializable{
 		setActualSquare();
 		if ((squaresInLine[lastPos] instanceof SpecialSquare || squaresInLine[lastPos].containsObstacleToUse())
 				&& firstPos != lastPos)
-			return simulateChangePiece(0, piece);
-		return squaresInLine[lastPos].getNumSquare();
+			return simulateChangePiece(0, piece, numStairs, numSnakes, numSpecialSquares);
+		return new int[] { squaresInLine[lastPos].getNumSquare(), numStairs, numSnakes, numSpecialSquares };
 	}
 }
