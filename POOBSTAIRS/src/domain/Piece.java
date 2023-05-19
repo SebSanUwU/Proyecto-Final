@@ -1,8 +1,9 @@
 package domain;
 
 import java.awt.Color;
+import java.io.Serializable;
 
-public class Piece {
+public class Piece implements Serializable{
 	private String color;
 	private Square position;
 	private Player owner;

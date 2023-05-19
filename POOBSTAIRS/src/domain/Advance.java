@@ -1,6 +1,8 @@
 package domain;
 
-public class Advance extends Square implements SpecialSquare{
+import java.io.Serializable;
+
+public class Advance extends Square implements SpecialSquare, Serializable{
 	GameBoard board;
     public Advance(int numSquare,GameBoard board){
         super(numSquare);

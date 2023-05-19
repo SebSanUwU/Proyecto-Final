@@ -1,6 +1,7 @@
 package domain;
 import java.util.Random;
 import java.util.HashSet;
+import java.io.Serializable;
 import java.util.ArrayList;
 /**
  * Clase que se encarga de abstraer un dado compuesto por caras.
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  *04 de Mayo del 2023
  */
 
-public class Die {
+public class Die implements Serializable{
 	private int numPowers;
 	private ArrayList<Face> faces;
 	private Random random;
@@ -96,7 +97,7 @@ public class Die {
 	 * 04 de Mayo del 2023
 	 *
 	 */
-	public class Face{
+	public class Face implements Serializable{
 		private int value;
 		private HashSet<String> powers;
 		private  final int limPowers = 1;

@@ -1,8 +1,9 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class MachineLearner extends Machine {
+public class MachineLearner extends Machine{
     private GameBoard board;
 
     public MachineLearner(String name, GameBoard board) {

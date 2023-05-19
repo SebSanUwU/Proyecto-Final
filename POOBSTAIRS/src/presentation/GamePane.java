@@ -7,17 +7,22 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -39,10 +44,12 @@ import domain.Square;
 public class GamePane extends IndependentPane {
 	protected JPanel board, dataOrChoose;
 	protected JLabel whoPlays, die, numSnakes, numStairs, numSpecials, numModifiers, maxPosition, extraMoves;
-	protected JButton roll, change, endGame;
+	protected JButton roll, change, endGame, saveGame, save;
 	protected JComboBox topics;
+	protected JTextField saveName;
 	protected JComboBox<Integer> specials;
 	private Color color1, color2;
+	protected JDialog saveDialog;
 
 	/**
 	 * Create the panel.
@@ -50,6 +57,8 @@ public class GamePane extends IndependentPane {
 	public GamePane(JFrame father) {
 		super(father);
 		build();
+		buildDialog();
+		
 
 	}
 
@@ -78,7 +87,10 @@ public class GamePane extends IndependentPane {
 		topics = new JComboBox(themes);
 		dataOrChoose = new JPanel();
 		specials = new JComboBox<Integer>();
-
+		saveGame = new JButton("Salvar Partida");
+		save = new JButton("Salvar");
+		saveName = new JTextField();
+		saveDialog = new JDialog(father, "Salvar Partida");
 	}
 
 	/**
@@ -99,15 +111,11 @@ public class GamePane extends IndependentPane {
 		gameOptions.setPreferredSize(new Dimension(230, HEIGHT));
 		gameOptions.setOpaque(false);
 		this.add(gameOptions, BorderLayout.EAST);
-
 		// Se crea la división de estado de juego
-
 		JPanel playerData = new JPanel();
 		playerData.setBorder(new LineBorder(new Color(0, 0, 0)));
-
 		gameOptions.add(playerData);
 		playerData.setLayout(new GridLayout(3, 1, 0, 2));
-
 		JLabel turn = new JLabel("Es el Turno de");
 		turn.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		turn.setVerticalAlignment(SwingConstants.BOTTOM);
@@ -152,17 +160,19 @@ public class GamePane extends IndependentPane {
 
 		JPanel extraButtons = new JPanel();
 		extraButtons.setBorder(new LineBorder(new Color(0, 0, 0)));
-		extraButtons.setLayout(new GridLayout(2, 1));
+		extraButtons.setLayout(new GridLayout(3, 1,0,5));
 		JPanel topic = new JPanel();
 		topic.setLayout(new GridLayout(1, 2, 5, 5));
-		topic.setBorder(new EmptyBorder(10, 5, (int) Math.round(father.getSize().height * 0.2), 5));
+		topic.setBorder(new EmptyBorder(5, 5, (int) Math.round(father.getSize().height * 0.1), 5));
 		topic.add(topics);
 		topic.add(change);
 		extraButtons.add(topic);
+		extraButtons.add(saveGame);
 		extraButtons.add(endGame);
 		gameOptions.add(extraButtons);
 		extraButtons.setOpaque(false);
 		topic.setOpaque(false);
+		
 		((POOBSTAIRSGUI) father).buildButton(extraButtons);
 		((POOBSTAIRSGUI) father).buildButton(topic);
 		topics.setBackground(new Color(168, 202, 186));
@@ -316,5 +326,69 @@ public class GamePane extends IndependentPane {
 	protected Integer getSpecials() {
 		return (Integer) specials.getSelectedItem();
 	}
+	
+	protected void buildDialog() {
+		Dimension windowSize = father.getSize();
+		saveDialog.setSize(windowSize.width / 2, windowSize.height / 2);
+		Dimension dialogSize = saveDialog.getSize();
+		saveDialog.setLocation((windowSize.width + dialogSize.width) / 2, (windowSize.height + dialogSize.height) / 2);
+		saveDialog.setResizable(false);
+		JPanel dialog = new JPanel();
+		dialog.setBackground(new Color(232, 202, 175));
+		dialog.setLayout(new GridBagLayout());
+		JLabel title1 = new JLabel("Indique el Nombre de la Partida", JLabel.CENTER);
+		title1.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		JLabel title2 = new JLabel("que Desea Abrir", JLabel.CENTER);
+		title2.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		saveName.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+		saveName.setBackground(new Color(168, 202, 186));
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.fill = GridBagConstraints.BOTH;
+		constraints.weightx = 1.0;
+		constraints.weighty = 0.0;
+		dialog.add(title1, constraints);
+		
+		GridBagConstraints constraints2 = new GridBagConstraints();
+		constraints2.gridx = 0;
+		constraints2.gridy = 1;
+		constraints2.gridwidth = 1;
+		constraints2.gridheight = 1;
+		constraints2.fill = GridBagConstraints.BOTH;
+		constraints2.weightx = 1.0;
+		constraints2.weighty = 0.0;
+		dialog.add(title2, constraints2);
 
+		GridBagConstraints constraints3 = new GridBagConstraints();
+		constraints3.insets = new Insets(10, 20, 0, 20);
+		constraints3.gridx = 0;
+		constraints3.gridy = 2;
+		constraints3.gridwidth = 1;
+		constraints3.gridheight = 1;
+		constraints3.fill = GridBagConstraints.BOTH;
+		
+		dialog.add(saveName, constraints3);
+		
+		
+		GridBagConstraints constraints4 = new GridBagConstraints();
+		constraints4.insets = new Insets(10, 120, 0, 120);
+		constraints4.gridx = 0;
+		constraints4.gridy = 3;
+		constraints4.gridwidth = 1;
+		constraints4.gridheight = 1;
+		constraints4.fill = GridBagConstraints.BOTH;
+		
+		dialog.add(save, constraints4);
+		((POOBSTAIRSGUI) father).buildButton(dialog);
+		saveDialog.setContentPane(dialog);
+		
+	}
+	
+	protected String getSaveName() {
+		return saveName.getText();
+	}
+	
 }

@@ -1,5 +1,6 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Jumper extends Square implements SpecialSquare{

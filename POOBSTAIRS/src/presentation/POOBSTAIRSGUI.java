@@ -14,6 +14,11 @@ import javax.swing.GroupLayout.SequentialGroup;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.awt.event.ActionEvent;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
@@ -250,6 +255,7 @@ public class POOBSTAIRSGUI extends JFrame {
 					startPlaying.board.setLayout(new GridLayout(poobStairs.board().length, poobStairs.board()[0].length));
 					startPlaying.refresh(poobStairs);
 					POOBSTAIRSGUI.this.setExtendedState(MAXIMIZED_BOTH);
+					startPlaying.saveName.setText("");
 					layout.next(panels);
 					//machinePlay();
 					
@@ -269,7 +275,7 @@ public class POOBSTAIRSGUI extends JFrame {
 					int option = activePower(current);
 					if(option == 0) {
 						specialOptionsJD(poobStairs.usePower());
-					}else if(option == -1 || (option > 1 && option < 4)){
+					}else if(option == -1 || (option > 0 && option < 4)){
 						specialOptionsJD(current.getValue());
 					}
 					startPlaying.refresh(poobStairs);
@@ -289,6 +295,63 @@ public class POOBSTAIRSGUI extends JFrame {
 				CardLayout layout = (CardLayout) panels.getLayout();
 				layout.first(panels);
 				
+			}
+		});
+		
+		startPlaying.saveGame.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String name = startPlaying.getSaveName();
+				name.trim();
+				if(name.equals("")) {
+					startPlaying.saveDialog.setVisible(true);
+				}else {
+					try {
+						poobStairs.save(name);
+					} catch (Exception e1) {
+	                    JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, "Se ha producido un error ");
+					}
+				}
+			}
+		});
+		
+		startPlaying.save.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String name = startPlaying.getSaveName();
+				name.trim();
+				if(name != "") {
+					startPlaying.saveDialog.setVisible(false);
+					try {
+						poobStairs.save(name);
+					} catch (Exception e1) {
+	                    JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, "Se ha producido un error ");
+					}
+				}else {
+					JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, "Debe especificar un nombre");
+				}
+			}
+		});
+		
+		principal.open.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String name = principal.getOpenName();
+				name.trim();
+				if(name != "") {
+					principal.openGame.setVisible(false);
+					try {
+						poobStairs = open(name);
+						startPlaying.board.setLayout(new GridLayout(poobStairs.board().length, poobStairs.board()[0].length));
+						startPlaying.changeTemplate("Clasic");
+						startPlaying.refresh(poobStairs);
+						CardLayout layout = (CardLayout) panels.getLayout();
+						layout.last(panels);
+						POOBSTAIRSGUI.this.setExtendedState(MAXIMIZED_BOTH);
+						
+					} catch (Exception e1) {
+	                    JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, "Se ha producido un error ");
+					}
+				}else {
+					JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, "Debe especificar un nombre");
+				}
 			}
 		});
 		
@@ -368,6 +431,7 @@ public class POOBSTAIRSGUI extends JFrame {
 		startPlaying.refresh(poobStairs);
 		startPlaying.roll.setEnabled(true);
 		
+		
 	}
 	/**
 	 * Indica el arreglo de casillas que tiene el juego en esos momentos
@@ -405,7 +469,21 @@ public class POOBSTAIRSGUI extends JFrame {
 		}
 		return false;
 	}
-	
+	  private PoobStairs open(String name) throws Exception {
+	        ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("../partidas/" + name + ".stairs")));
+	        PoobStairs newPoobStairs = null;
+	        try {
+	        	while(true) {
+	        		newPoobStairs= (PoobStairs) in.readObject();
+	        	}
+	        	
+	        }catch(EOFException e) {
+	        	if(newPoobStairs == null) JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, "No existe versión que se pueda cargar");
+	        	else startPlaying.saveName.setText(name);
+	        }
+	        in.close();
+	        return newPoobStairs;
+	    }
 	public static void main(String[] args) {
 		POOBSTAIRSGUI frame = new POOBSTAIRSGUI();
 		frame.setVisible(true);

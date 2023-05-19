@@ -1,6 +1,8 @@
 package domain;
 
-public   class Obstacle {
+import java.io.Serializable;
+
+public   class Obstacle implements Serializable{
     private Square head;
     private Square tail;
     private String type;

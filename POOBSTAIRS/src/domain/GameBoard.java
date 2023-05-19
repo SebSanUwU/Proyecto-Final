@@ -1,12 +1,13 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.naming.AuthenticationException;
 
-public class GameBoard {
+public class GameBoard implements Serializable{
 	private int totalSquares;
 	private ArrayList<Integer> obstacleSquares;
 	private Square[][] squares;
@@ -442,7 +443,8 @@ public class GameBoard {
 			// En caso de ser una casilla especial se usa
 			if (destination instanceof SpecialSquare) {
 				int newDestination = ((SpecialSquare) destination).useTrap();
-				if (squaresInLine[newDestination] != destination) {
+				if (!(newDestination>= totalSquares || newDestination < 0) 
+						&&squaresInLine[newDestination] != destination) {
 					destination = chooseFinalDestination(newDestination, piece);
 					numSpecialSquares++;
 				}

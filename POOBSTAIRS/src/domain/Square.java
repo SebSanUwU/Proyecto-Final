@@ -1,8 +1,9 @@
 package domain;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public  class Square {
+public  class Square implements Serializable{
     protected int numSquare;
     private Obstacle obstacle;
     private ArrayList<Piece> pieces;

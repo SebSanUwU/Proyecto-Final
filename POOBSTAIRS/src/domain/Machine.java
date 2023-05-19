@@ -1,6 +1,7 @@
 package domain;
 
 import java.awt.Color;
+import java.io.Serializable;
 import java.util.Random;
 import java.util.random.*;
 
