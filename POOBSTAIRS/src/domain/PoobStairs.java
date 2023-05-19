@@ -176,11 +176,10 @@ public class PoobStairs implements Serializable{
         	while(true) {
         		newPoobStairs= (PoobStairs) in.readObject();
         	}
-        	
         }catch(EOFException e) {
-        	//Fin del archivo
+        	 in.close();
         }
-        in.close();
+       
         return newPoobStairs;
     }
 
