@@ -31,7 +31,7 @@ public class MachineLearner extends Machine {
         int[] maxSquare=new int[5];
 
         for (int i = 0; i < simulatePlays.size(); i++) {
-            System.out.println((simulatePlays.get(i)[0] + 1) + " <- simulacion de " + (analizeSpecialsSquares[i] + 1));
+            //System.out.println((simulatePlays.get(i)[0] + 1) + " <- simulacion de " + (analizeSpecialsSquares[i] + 1));
             if (simulatePlays.get(i)[0] > maxSquare[0]) {
                 maxSquare = simulatePlays.get(i);
                 maxPlay = analizeSpecialsSquares[i];
