@@ -2,6 +2,7 @@ package domain;
 
 
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,8 +13,10 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
 
 import domain.Die.Face;
+import presentation.POOBSTAIRSGUI;
 
 /**
  * Clase principal del modelo para lograr que el juego POOBSTAIRS funcione correctamente
@@ -166,7 +169,20 @@ public class PoobStairs implements Serializable{
 		
 	}
 
-
+	public static PoobStairs open(String name) throws Exception {
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("../partidas/" + name + ".stairs")));
+        PoobStairs newPoobStairs = null;
+        try {
+        	while(true) {
+        		newPoobStairs= (PoobStairs) in.readObject();
+        	}
+        	
+        }catch(EOFException e) {
+        	//Fin del archivo
+        }
+        in.close();
+        return newPoobStairs;
+    }
 
 
     /**

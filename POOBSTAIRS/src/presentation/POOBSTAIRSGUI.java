@@ -17,6 +17,7 @@ import java.awt.event.WindowEvent;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.awt.event.ActionEvent;
@@ -343,15 +344,17 @@ public class POOBSTAIRSGUI extends JFrame {
 				if(name != "") {
 					principal.openGame.setVisible(false);
 					try {
-						poobStairs = open(name);
+						poobStairs = PoobStairs.open(name);
 						startPlaying.board.setLayout(new GridLayout(poobStairs.board().length, poobStairs.board()[0].length));
 						startPlaying.changeTemplate("Clasic");
 						startPlaying.refresh(poobStairs);
 						CardLayout layout = (CardLayout) panels.getLayout();
 						layout.last(panels);
 						POOBSTAIRSGUI.this.setExtendedState(MAXIMIZED_BOTH);
-						
-					} catch (Exception e1) {
+						startPlaying.saveName.setText(name);
+					} catch(FileNotFoundException ex) {
+						JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, "No existe una partida con ese nombre ");
+					}catch (Exception e1) {
 	                    JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, "Se ha producido un error ");
 					}
 				}else {
@@ -459,25 +462,9 @@ public class POOBSTAIRSGUI extends JFrame {
 		    
 		}
 	}
-	/**
-	 * En caso de que el jugador en turno sea de tipo maquina, la maquina juega por si misma.
-	 */
 	
-	  private PoobStairs open(String name) throws Exception {
-	        ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("../partidas/" + name + ".stairs")));
-	        PoobStairs newPoobStairs = null;
-	        try {
-	        	while(true) {
-	        		newPoobStairs= (PoobStairs) in.readObject();
-	        	}
-	        	
-	        }catch(EOFException e) {
-	        	if(newPoobStairs == null) JOptionPane.showMessageDialog(POOBSTAIRSGUI.this, "No existe versión que se pueda cargar");
-	        	else startPlaying.saveName.setText(name);
-	        }
-	        in.close();
-	        return newPoobStairs;
-	    }
+	
+	  
 	public static void main(String[] args) {
 		POOBSTAIRSGUI frame = new POOBSTAIRSGUI();
 		frame.setVisible(true);
