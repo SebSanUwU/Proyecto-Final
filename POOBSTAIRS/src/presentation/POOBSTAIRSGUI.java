@@ -274,6 +274,7 @@ public class POOBSTAIRSGUI extends JFrame {
 		startPlaying.roll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
+				
 					Face current = poobStairs.rollDice();
 					startPlaying.assignValue(current.getValue());
 					int option = activePower(current);
@@ -458,6 +459,9 @@ public class POOBSTAIRSGUI extends JFrame {
 		    
 		}
 	}
+	/**
+	 * En caso de que el jugador en turno sea de tipo maquina, la maquina juega por si misma.
+	 */
 	
 	  private PoobStairs open(String name) throws Exception {
 	        ObjectInputStream in = new ObjectInputStream(new FileInputStream(new File("../partidas/" + name + ".stairs")));
