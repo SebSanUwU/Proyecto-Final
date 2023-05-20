@@ -48,7 +48,6 @@ public  class Square implements Serializable{
         try {
             return getObstacle().getType();
         } catch (Exception e) {
-            
             return "None";
         }
     }

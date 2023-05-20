@@ -15,10 +15,7 @@ public class Piece implements Serializable{
 		this.owner = owner;
 		this.representation = representation;
 	}
-	
-	protected void assignStart(Square start) {
-		position = start;
-	}
+
 	public Square getPosition() {
 		return position;
 	}
@@ -44,13 +41,6 @@ public class Piece implements Serializable{
 	}
 
 	public void changeStats(int numStairs,int numSnakes,int numSpecialSquares,int actualSquare){
-		owner.sumStairs(numStairs);
-		owner.sumSnakes(numSnakes);
-		owner.sumSpecialSquares(numSpecialSquares);
-		owner.maxPositionSquare(actualSquare);
+		owner.changeStats(numStairs, numSnakes, numSpecialSquares, actualSquare);
 	}
-	
-	
-	
-	
 }

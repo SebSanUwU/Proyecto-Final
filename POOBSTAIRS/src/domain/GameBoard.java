@@ -7,7 +7,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import javax.naming.AuthenticationException;
 
-public class GameBoard implements Serializable{
+public class GameBoard implements Serializable {
 	private int totalSquares;
 	private ArrayList<Integer> obstacleSquares;
 	private Square[][] squares;
@@ -50,17 +50,19 @@ public class GameBoard implements Serializable{
 	 *                             de casillas especiales y obstaculos.
 	 */
 	public void setArea(int numSnakes, int numStairs, float pSpecial, Player[] player) throws POOBSTAIRSException {
-		int aux = (int) Math.round((totalSquares - 2) * pSpecial);
-		if (numSnakes * 2 + numStairs * 2 + aux > (totalSquares - 2 - 4))
+		int specialSquares= (int) Math.round((totalSquares - 2) * pSpecial);
+		if (numSnakes * 2 + numStairs * 2 + specialSquares > (totalSquares - 2 - 4))
 			throw new POOBSTAIRSException(POOBSTAIRSException.NUM_OBSTACLE);
 		randomSquareObstacle(numSnakes, false, true);
 		randomSquareObstacle(numStairs, true, false);
-		randomSquareObstacle(aux, false, false);
+		randomSquareObstacle(specialSquares, false, false);
 		obstacleSquares.sort(null);
 		if (player[1] instanceof Machine) {
 			Machine bot = (Machine) player[1];
 			bot.setBoard(this);
 		}
+		player[0].changePositionPiece(squaresInLine[0]);
+		player[1].changePositionPiece(squaresInLine[0]);
 		squaresInLine[0].receivePiece(player[0].getPiece());
 		squaresInLine[0].receivePiece(player[1].getPiece());
 		setActualSquare();
@@ -203,7 +205,7 @@ public class GameBoard implements Serializable{
 		} else if (isSnake) {
 			connectObstacle(obstacle, "snake");
 		} else {
-			addSpecialSquare(obstacle);
+			addSpecialSquares(obstacle);
 		}
 	}
 
@@ -275,7 +277,25 @@ public class GameBoard implements Serializable{
 		}
 	}
 
-	public void addSpecialSquare(int[] specialSquare) {
+	public void addTheSpecialSquare(int start,String type){
+		if(squaresInLine[start] instanceof Square){
+			if(type.equals("Regression")){
+				squaresInLine[start] = new Regression(start, this);
+			}else if(type.equals("QA")){
+				squaresInLine[start] = new QA(start);
+			}else if(type.equals("Jumper")){
+				squaresInLine[start] = new Jumper(start);
+			}else if(type.equals("ReverseJumper")){
+				squaresInLine[start] = new ReverseJumper(start);
+			}else if(type.equals("Mortal")){
+				squaresInLine[start] = new Mortal(start);
+			}else{
+				squaresInLine[start] = new Advance(start, this);
+			}
+		}
+	}
+
+	public void addSpecialSquares(int[] specialSquare) {
 		int random_int;
 		for (int i = 0; i < specialSquare.length; i++) {
 			random_int = ThreadLocalRandom.current().nextInt(0, 6);
@@ -330,74 +350,6 @@ public class GameBoard implements Serializable{
 	}
 
 	/**
-	 * Reposiciona una pieza dentro del tablero
-	 * 
-	 * @param positions, numero de casillas que va a recorrer la pieza
-	 * @param piece,     Pieza que va a reubicada dentro del tablero
-	 * @return La nueva casilla de la pieza
-	 * @throws POOBSTAIRSException NO_MORE_SQUARES si, al hacer el primermovimiento,
-	 *                             la ficha se
-	 *                             sale de los limites del tablero
-	 * 
-	 *                             public Square changePiece(int positions, Piece
-	 *                             piece) throws POOBSTAIRSException {
-	 * 
-	 *                             int firstPos = piece.getIntPosition();
-	 *                             int secondPos = firstPos + positions;
-	 *                             if (secondPos >= totalSquares || secondPos <
-	 *                             0)throw new
-	 *                             POOBSTAIRSException(POOBSTAIRSException.NO_MORE_SQUARES);
-	 *                             int lastPos = secondPos;
-	 *                             int numStairs = 0;
-	 *                             int numSnakes = 0;
-	 *                             int numSpecialSquares = 0;
-	 *                             // En caso de ser una casilla especial se usa
-	 *                             if (squaresInLine[secondPos] instanceof
-	 *                             SpecialSquare) {
-	 *                             lastPos = ((SpecialSquare)
-	 *                             squaresInLine[secondPos]).useTrap();
-	 *                             if ((squaresInLine[secondPos] instanceof Jumper
-	 *                             || squaresInLine[secondPos] instanceof
-	 *                             ReverseJumper)
-	 *                             && (lastPos >= totalSquares || lastPos < 0))
-	 *                             lastPos = secondPos;
-	 *                             numSpecialSquares++;
-	 *                             }
-	 * 
-	 *                             try {
-	 *                             // Se trata de utilizar la trampa de la nueva
-	 *                             casilla
-	 *                             lastPos = squaresInLine[lastPos].useObstacle();
-	 *                             if
-	 *                             (squaresInLine[lastPos].typeObstacle().equals("stair")
-	 *                             &&
-	 *                             squaresInLine[lastPos].containsObstacleToUse()) {
-	 *                             numStairs++;
-	 *                             } else if
-	 *                             (squaresInLine[lastPos].containsObstacleToUse())
-	 *                             {
-	 *                             numSnakes++;
-	 *                             }
-	 *                             if (lastPos != firstPos) {
-	 *                             changePieceBoard(firstPos, lastPos, piece);
-	 *                             }
-	 *                             } catch (POOBSTAIRSException e) {
-	 *                             if (firstPos != lastPos) {
-	 *                             changePieceBoard(firstPos, lastPos, piece);
-	 *                             }
-	 *                             }
-	 *                             piece.changeStats(numStairs, numSnakes,
-	 *                             numSpecialSquares, lastPos);
-	 *                             setActualSquare();
-	 *                             if ((squaresInLine[lastPos] instanceof
-	 *                             SpecialSquare ||
-	 *                             squaresInLine[lastPos].containsObstacleToUse())
-	 *                             && firstPos != lastPos)
-	 *                             return changePiece(0, piece);
-	 *                             return squaresInLine[lastPos];
-	 *                             }
-	 */
-	/**
 	 * Mueve la pieza en turno dentro del tablero
 	 * 
 	 * @param positions, numero de posiciones que se va a mover la pieza
@@ -443,8 +395,8 @@ public class GameBoard implements Serializable{
 			// En caso de ser una casilla especial se usa
 			if (destination instanceof SpecialSquare) {
 				int newDestination = ((SpecialSquare) destination).useTrap();
-				if (!(newDestination>= totalSquares || newDestination < 0) 
-						&&squaresInLine[newDestination] != destination) {
+				if (!(newDestination >= totalSquares || newDestination < 0)
+						&& squaresInLine[newDestination] != destination) {
 					destination = chooseFinalDestination(newDestination, piece);
 					numSpecialSquares++;
 				}
@@ -525,21 +477,35 @@ public class GameBoard implements Serializable{
 	 * Metodo que cambia una pieza de casillas,desde su casilla inicial a la casilla
 	 * final.
 	 * 
-	 * @param firstPos, posición inicial de la pieza en juego
-	 * @param finalPos, posición final de la pieza
-	 * @param piece,    pieza en juego
+	 * @param firstPos , posición inicial de la pieza en juego
+	 * @param finalPos , posición final de la pieza
+	 * @param piece    , pieza en juego
 	 */
 	private void changePieceBoard(Square firstPos, Square finalPos, Piece piece) {
 		finalPos.receivePiece(piece);
 		firstPos.removePiece(piece);
 	}
 
+	/**
+	 * Simula el movimineto de la pieza a una casilla guardando sus estadisticas del
+	 * recorrido. Sobre el recorrido pueden haber obstaculos y casillas especiales.
+	 * 
+	 * @param positions         , posicion de la casila a la que va a moverse la
+	 *                          pieza.
+	 * @param piece             , pieza del jugador que se va a mover.
+	 * @param numStairs         , numero de escaleras usadas en el recorrido.
+	 * @param numSnakes         , numero de serpientes usadas en el recorrido.
+	 * @param numSpecialSquares , numero de casillas especiales usadas en el
+	 *                          recoorido.
+	 * @return Un arreglo de toda la inforamcion del recorrido (posicion
+	 *         llegada,escaleras usadas, serpientes usadas, casillas usadas)
+	 */
 	public int[] simulateChangePiece(Integer positions, Piece piece, int numStairs, int numSnakes,
 			int numSpecialSquares) {
 		int firstPos = piece.getIntPosition();
 		int secondPos = firstPos + positions;
 		int lastPos = secondPos;
-		if (secondPos >= totalSquares-1 || secondPos < 0) {
+		if (secondPos >= totalSquares - 1 || secondPos < 0) {
 			return new int[] { squaresInLine[firstPos].getNumSquare(), numStairs, numSnakes, numSpecialSquares };
 		}
 		if (squaresInLine[secondPos] instanceof SpecialSquare) {
@@ -550,10 +516,12 @@ public class GameBoard implements Serializable{
 			numSpecialSquares++;
 		}
 		try {
-			if (squaresInLine[lastPos].typeObstacle().equals("stair") && squaresInLine[lastPos].containsObstacleToUse()){
+			if (squaresInLine[lastPos].typeObstacle().equals("stair")
+					&& squaresInLine[lastPos].containsObstacleToUse()) {
 				lastPos = squaresInLine[lastPos].useObstacle();
 				numStairs++;
-			}else if(squaresInLine[lastPos].typeObstacle().equals("snake") && squaresInLine[lastPos].containsObstacleToUse()){
+			} else if (squaresInLine[lastPos].typeObstacle().equals("snake")
+					&& squaresInLine[lastPos].containsObstacleToUse()) {
 				lastPos = squaresInLine[lastPos].useObstacle();
 				numSnakes++;
 			}

@@ -6,6 +6,7 @@ import java.util.Random;
 import java.util.random.*;
 
 public abstract class Machine extends Player{
+	protected GameBoard board;
 
 	public Machine(String name) {
 		super(name);
@@ -13,7 +14,10 @@ public abstract class Machine extends Player{
 	}
 
 	public abstract int[] play(int value);
-	public abstract void setBoard(GameBoard board);
+	
+	public void setBoard(GameBoard board) {
+        this.board = board;
+    }
 	/**
 	public Machine(Color personColor) {
 		

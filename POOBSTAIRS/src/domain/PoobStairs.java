@@ -13,6 +13,7 @@ import java.util.Random;
 
 import javax.swing.JOptionPane;
 
+
 import domain.Die.Face;
 import presentation.POOBSTAIRSGUI;
 
@@ -62,14 +63,15 @@ public class PoobStairs implements Serializable {
 	 *                             llega a tener un
 	 *                             numero excesivo
 	 *                             de casillas especiales y obstaculos.
+	 *                             INACCEPTED_PERCENTAGE si el porcentaje de
+	 *                             modifcadores o casillas especiales supera el
+	 *                             limite
 	 */
 	public void setGame(int numSnakes, int numStairs, float pModifier, float pSpecial) throws POOBSTAIRSException {
-		if (pModifier > 1.0 || pSpecial > 1.0)
+		if (pModifier > 1.0 || pSpecial > 0.8)
 			throw new POOBSTAIRSException(POOBSTAIRSException.INACCEPTED_PERCENTAGE);
 		board.setArea(numSnakes, numStairs, pSpecial, players);
 		die = new Die((byte) 6, pModifier);
-		players[0].changePositionPiece(board.getInLine()[0]);
-		players[1].changePositionPiece(board.getInLine()[0]);
 	}
 
 	/**
@@ -141,11 +143,6 @@ public class PoobStairs implements Serializable {
 	}
 
 	/**
-	 * Si el jugador lo decide, se usa el poder del dado.
-	 * 
-	 * @throws POOBSTAIRSException
-	 */
-	/**
 	 * Se encarga de usar el poder otorgado por la cara, en caso de que la cara no
 	 * tenga
 	 * poder, se mueven las mismas casillas que son indicadas por el dado.
@@ -177,6 +174,16 @@ public class PoobStairs implements Serializable {
 		}
 	}
 
+	public boolean someWinner(){
+		return false;
+	}
+
+	/**
+	 * Metodo que toma la desicion de que casilla jugar depenendiendo de su
+	 * comportamiento.
+	 * 
+	 * @return Aun por definir
+	 */
 	public int playMachine() {
 		Machine bot = (Machine) players[playerOnTurn];
 		int extraMovement = usePower();
@@ -192,7 +199,7 @@ public class PoobStairs implements Serializable {
 		} else {
 			betterMove = movementSimulate2;
 		}
-		getTurn().changeStats(betterMove[1], betterMove[2], betterMove[3],betterMove[0]);
+		getTurn().changeStats(betterMove[1], betterMove[2], betterMove[3], betterMove[0]);
 		if (getTurn().getPiecePosition() != betterMove[0]) {
 			board.changePieceBoard(getTurn().getPiecePosition(), betterMove[0], getTurn().getPiece());
 		}
@@ -212,6 +219,11 @@ public class PoobStairs implements Serializable {
 		return board.getInLine();
 	}
 
+	/**
+	 * Devuelve el objeto board de clase GameBoard de poobstairs.
+	 * 
+	 * @return Objeto Board de poobstairs.
+	 */
 	public GameBoard getBoard() {
 		return board;
 
@@ -243,5 +255,13 @@ public class PoobStairs implements Serializable {
 				new FileOutputStream(new File("../partidas/" + name + ".stairs")));
 		out.writeObject(this);
 		out.close();
+	}
+
+	public void addObstacle(int start,int finish,String type){
+		board.addTheObstacle(start, finish, type);
+	}
+
+	public void addSpecialSquare(int start,String type){
+		board.addTheSpecialSquare(start,type);
 	}
 }

@@ -99,11 +99,9 @@ public class POOBSTAIRSGUI extends JFrame {
 			 players[1].setPiece(colors2, piece2);
 		 }else{
 			if(dataPlayers.getMachineMode().equals("Principiante")){
-			
-				players[1] = new MachineBegginer("Machine", null);
-				System.out.println("prin");
+				players[1] = new MachineBegginer("Maquina principiante", null);
 			}else{
-				players[1] = new MachineLearner("Machine", null);
+				players[1] = new MachineLearner("Maquina aprendiz", null);
 			}
 			players[1].setPiece(colors2, piece2);
 		 }

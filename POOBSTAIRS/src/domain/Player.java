@@ -62,24 +62,6 @@ public class Player implements Serializable{
 		piece.changePositionTo(position);
 	}
 
-	public void sumStairs(int numStairs) {
-		this.numStairs += numStairs;
-	}
-
-	public void sumSnakes(int numSnakes) {
-		this.numSnakes += numSnakes;
-	}
-
-	public void sumSpecialSquares(int numSpecialSquares) {
-		this.numSpecialSquares += numSpecialSquares;
-	}
-
-	public void maxPositionSquare(int actualSquare) {
-		if (maxPosition < actualSquare) {
-			maxPosition = actualSquare;
-		}
-	}
-
 	public void sumModifiers() {
 		this.modifiers++;
 	}
@@ -89,9 +71,11 @@ public class Player implements Serializable{
 	}
 
 	public void changeStats(int numStairs,int numSnakes,int numSpecialSquares,int actualSquare) {
-		sumStairs(numStairs);
-		sumSnakes(numSnakes);
-		sumSpecialSquares(numSpecialSquares);
-		maxPositionSquare(actualSquare);
+		this.numStairs += numStairs;
+		this.numSnakes += numSnakes;
+		this.numSpecialSquares += numSpecialSquares;
+		if (maxPosition < actualSquare) {
+			maxPosition = actualSquare;
+		}
 	}
 }

@@ -4,14 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 public class MachineLearner extends Machine{
-    private GameBoard board;
-
+    
     public MachineLearner(String name, GameBoard board) {
         super(name);
-        this.board = board;
-    }
-
-    public void setBoard(GameBoard board) {
         this.board = board;
     }
 
@@ -43,7 +38,7 @@ public class MachineLearner extends Machine{
         if(inicial!=change[0]){
             board.changePieceBoard(change[0], inicial, getPiece());
         }
-        System.out.println((change[0] + 1) + " <- simulacion de " + (value+inicial+1));
+        //System.out.println((change[0] + 1) + " <- simulacion de " + (value+inicial+1));
         if (maxSquare[0]<change[0]) {
             maxSquare=change;
             maxPlay=value+inicial;
