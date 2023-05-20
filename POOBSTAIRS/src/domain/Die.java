@@ -27,7 +27,6 @@ public class Die implements Serializable{
 		numPowers = (int) Math.round(numFaces*percentage);
 		assemble(numFaces);
 		currentFace = faces.get(0);
-		
 	}
 	/**
 	 * Metodo que ensambla las caras del dado
@@ -62,6 +61,11 @@ public class Die implements Serializable{
 		}
 			
 	}
+
+	public void setFace(int face){
+		currentFace = faces.get(face);
+	}
+
 	
 	/**
 	 * Función que simula el lanzamiento de un dado.

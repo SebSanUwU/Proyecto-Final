@@ -520,7 +520,106 @@ class PoobStairsTest {
 		} catch (POOBSTAIRSException e) {
 			fail("Lanzo excepción");
 		}
-		
+	}
+	@Test
+	void shouldMachinesDo(){
+		Player[] players = {new Player("Camilo"), new MachineBegginer("Pollis",null)};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
+		PoobStairs game;
+		try {
+			game = new PoobStairs(10,10, players);
+			game.setGame(0, 0, 0, 0);
+			Die dado = game.getDie();
+			dado.setFace(5);
+			game.movePiece(4);
+			game.playMachine();
+			assertTrue(game.getInLine()[6].contains(players[1].getPiece()));
+		} catch (Exception e) {
+			fail("Lanzo excepción");
+		}
+		players[1] = new MachineLearner("Pollis",null);
+		players[1].setPiece("RED", "Normal");
+		try {
+			game = new PoobStairs(10,10, players);
+			game.setGame(0, 0, 0, 0);
+			game.movePiece(2);
+			Die dado = game.getDie();
+			dado.setFace(5);
+			game.playMachine();
+			assertTrue(game.getInLine()[6].contains(players[1].getPiece()));
+		} catch (Exception e) {
+			fail("Lanzo excepción");
+		}
+	}
+	@Test
+	void shouldMachinesLearnerDo(){
+		Player[] players = {new Player("Camilo"), new MachineLearner("Pollis",null)};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
+		PoobStairs game;
+		try {
+			game = new PoobStairs(100,100, players);
+			game.setGame(0, 0, 0, 0);
+			game.addObstacle(10, 99, "stair");
+			game.addSpecialSquare(1, "Mortal");
+			game.addSpecialSquare(2, "Mortal");
+			game.addSpecialSquare(3, "Advance");
+			game.addSpecialSquare(4, "Mortal");
+			game.addSpecialSquare(5, "Mortal");
+			game.addObstacle(102, 55, "snake");
+			game.addObstacle(100, 115, "stair");
+			game.addObstacle(103, 200, "stair");
+			game.addSpecialSquare(101, "Advance");
+			game.addSpecialSquare(105, "Mortal");
+			Die dado = game.getDie();
+			dado.setFace(5);
+			game.movePiece(0);
+			game.playMachine();
+			assertTrue(game.getInLine()[99].contains(players[1].getPiece()));
+			game.movePiece(0);
+			game.playMachine();
+			assertTrue(game.getInLine()[200].contains(players[1].getPiece()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Lanzo excepción");
+		}
+	}
+
+	@Test
+	void shouldMachinesLearnerNotDo(){
+		Player[] players = {new Player("Camilo"), new MachineLearner("Pollis",null)};
+		players[0].setPiece("RED", "Normal");
+		players[1].setPiece("RED", "Normal");
+		PoobStairs game;
+		try {
+			game = new PoobStairs(100,100, players);
+			game.setGame(0, 0, 0, 0);
+			game.addObstacle(10, 99, "stair");
+			game.addSpecialSquare(1, "Mortal");
+			game.addSpecialSquare(2, "Mortal");
+			game.addSpecialSquare(3, "Advance");
+			game.addSpecialSquare(4, "Mortal");
+			game.addSpecialSquare(5, "Mortal");
+			game.addSpecialSquare(6, "Mortal");
+			game.addObstacle(102, 55, "snake");
+			game.addObstacle(100, 115, "stair");
+			game.addObstacle(103, 200, "stair");
+			game.addSpecialSquare(101, "Advance");
+			game.addSpecialSquare(105, "Regression");
+			Die dado = game.getDie();
+			dado.setFace(5);
+			game.movePiece(0);
+			game.playMachine();
+			assertFalse(game.getInLine()[6].contains(players[1].getPiece()));
+			game.movePiece(0);
+			game.playMachine();
+			assertFalse(game.getInLine()[115].contains(players[1].getPiece()));
+			assertFalse(game.getInLine()[55].contains(players[1].getPiece()));
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("Lanzo excepción");
+		}
 	}
 
 }

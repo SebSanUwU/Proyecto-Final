@@ -43,7 +43,7 @@ public class PoobStairs implements Serializable {
 	 *                             invalido de columnas o de filas.
 	 */
 	public PoobStairs(int rows, int columns, Player[] players) throws POOBSTAIRSException {
-		playerOnTurn = (new Random().nextInt(2));
+		playerOnTurn = 0;
 		this.players = players;
 		board = new GameBoard(rows, columns);
 	}
@@ -68,7 +68,7 @@ public class PoobStairs implements Serializable {
 	 *                             limite
 	 */
 	public void setGame(int numSnakes, int numStairs, float pModifier, float pSpecial) throws POOBSTAIRSException {
-		if (pModifier > 1.0 || pSpecial > 0.8)
+		if (pModifier > 1.0 || pSpecial > 1.0)
 			throw new POOBSTAIRSException(POOBSTAIRSException.INACCEPTED_PERCENTAGE);
 		board.setArea(numSnakes, numStairs, pSpecial, players);
 		die = new Die((byte) 6, pModifier);
@@ -208,6 +208,10 @@ public class PoobStairs implements Serializable {
 		else
 			playerOnTurn = 0;
 		return 0;
+	}
+
+	public Die getDie(){
+		return die;
 	}
 
 	/**
