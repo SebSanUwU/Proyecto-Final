@@ -99,7 +99,9 @@ public class POOBSTAIRSGUI extends JFrame {
 			 players[1].setPiece(colors2, piece2);
 		 }else{
 			if(dataPlayers.getMachineMode().equals("Principiante")){
+			
 				players[1] = new MachineBegginer("Machine", null);
+				System.out.println("prin");
 			}else{
 				players[1] = new MachineLearner("Machine", null);
 			}
@@ -274,18 +276,18 @@ public class POOBSTAIRSGUI extends JFrame {
 		/*startPlaying*/
 		startPlaying.roll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
+				if(machinePlay()){
+				}else{
 					Face current = poobStairs.rollDice();
 					startPlaying.assignValue(current.getValue());
 					int option = activePower(current);
 					if(option == 0) {
 						specialOptionsJD(poobStairs.usePower());
-					}else if(option == -1 || (option > 0 && option < 4)){
+					}else if(option == -1 || (option > 1 && option < 4)){
 						specialOptionsJD(current.getValue());
 					}
 					startPlaying.refresh(poobStairs);
-				
+				}
 			}
 		});
 		startPlaying.change.addActionListener(new ActionListener() {
@@ -428,6 +430,21 @@ public class POOBSTAIRSGUI extends JFrame {
 			startPlaying.refresh(poobStairs);
 		}
 		
+	}
+	/**
+	 * En caso de que el jugador en turno sea de tipo maquina, la maquina juega por si misma.
+	 */
+	private boolean machinePlay() {
+		if(poobStairs.getTurn() instanceof Machine) {
+			startPlaying.roll.setEnabled(false);
+			Face current = poobStairs.rollDice();
+			startPlaying.assignValue(current.getValue());
+			poobStairs.playMachine();
+			startPlaying.refresh(poobStairs);
+			startPlaying.roll.setEnabled(true);
+			return true;
+		}
+		return false;
 	}
 	/**
 	 * En caso de que dentro del rango de movimiento de la pieza en juego hallan casillas especiales,
