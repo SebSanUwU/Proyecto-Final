@@ -74,6 +74,13 @@ public class PoobStairs implements Serializable {
 		die = new Die((byte) 6, pModifier);
 	}
 
+	public void changeTurn(){
+		if (playerOnTurn == 0)
+				playerOnTurn = 1;
+			else
+				playerOnTurn = 0;
+	}
+
 	/**
 	 * Metodo que le entrega el trablero a PoobStairs
 	 * 
@@ -120,15 +127,9 @@ public class PoobStairs implements Serializable {
 		try {
 			Square finalDestination = board.changePiece(positions, piece);
 			piece.changePositionTo(finalDestination);
-			if (playerOnTurn == 0)
-				playerOnTurn = 1;
-			else
-				playerOnTurn = 0;
+			changeTurn();
 		} catch (POOBSTAIRSException e) {
-			if (playerOnTurn == 0)
-				playerOnTurn = 1;
-			else
-				playerOnTurn = 0;
+			changeTurn();
 		}
 		return false;
 	}
@@ -185,7 +186,7 @@ public class PoobStairs implements Serializable {
 	 * @return Aun por definir
 	 */
 	public int playMachine() {
-		Machine bot = (Machine) players[playerOnTurn];
+		Machine bot = (Machine) getTurn();
 		int extraMovement = usePower();
 		int[] movementSimulate1 = bot.play(die.getCurrentFace().getValue());
 		int[] movementSimulate2 = new int[] { -1, 0, 0, 0 };
@@ -199,14 +200,11 @@ public class PoobStairs implements Serializable {
 		} else {
 			betterMove = movementSimulate2;
 		}
-		getTurn().changeStats(betterMove[1], betterMove[2], betterMove[3], betterMove[0]);
-		if (getTurn().getPiecePosition() != betterMove[0]) {
-			board.changePieceBoard(getTurn().getPiecePosition(), betterMove[0], getTurn().getPiece());
+		bot.changeStats(betterMove[1], betterMove[2], betterMove[3], betterMove[0]);
+		if (bot.getPiecePosition() != betterMove[0]) {
+			board.changePieceBoard(bot.getPiecePosition(), betterMove[0], bot.getPiece());
 		}
-		if (playerOnTurn == 0)
-			playerOnTurn = 1;
-		else
-			playerOnTurn = 0;
+		changeTurn();
 		return 0;
 	}
 

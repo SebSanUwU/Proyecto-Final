@@ -28,7 +28,7 @@ public class GameBoard implements Serializable {
 			throw new POOBSTAIRSException(POOBSTAIRSException.RANGE);
 		squares = new Square[rows][columns];
 		totalSquares = rows * columns;
-		obstacleSquares = new ArrayList();
+		obstacleSquares = new ArrayList<>();
 		squaresInLine = new Square[totalSquares];
 		setSquares();
 	}
@@ -50,7 +50,7 @@ public class GameBoard implements Serializable {
 	 *                             de casillas especiales y obstaculos.
 	 */
 	public void setArea(int numSnakes, int numStairs, float pSpecial, Player[] player) throws POOBSTAIRSException {
-		int specialSquares= (int) Math.round((totalSquares - 2) * pSpecial);
+		int specialSquares = Math.round((totalSquares - 2) * pSpecial);
 		if (numSnakes * 2 + numStairs * 2 + specialSquares > (totalSquares - 2 - 4))
 			throw new POOBSTAIRSException(POOBSTAIRSException.NUM_OBSTACLE);
 		randomSquareObstacle(numSnakes, false, true);
@@ -219,31 +219,35 @@ public class GameBoard implements Serializable {
 	 */
 	private void connectObstacle(int[] obstacleSS, String obstacle) {
 		int rangeRow = squares[0].length;
-		int random_int;
 		for (int i = 0; i < obstacleSS.length; i++) {
 			for (int j = 0; j < squares.length; j++) {
 				if (obstacleSS[i] < rangeRow) {
-					while (true) {
-						random_int = ThreadLocalRandom.current().nextInt(rangeRow + 1, totalSquares - 1);
-						// System.out.println(obstacleSS[i]+","+random_int+" Range"+rangeRow);
-						if (!obstacleSquares.contains(random_int)) {
-							obstacleSquares.add(random_int);
-							addTheObstacle(obstacleSS[i], random_int, obstacle);
-							break;
-						}
-						if (rangeRow > squares[0].length) {
-							random_int = ThreadLocalRandom.current().nextInt(1, rangeRow - squares[0].length + 1);
-							// System.out.println(obstacleSS[i]+","+random_int+" Range"+rangeRow);
-							if (!obstacleSquares.contains(random_int)) {
-								obstacleSquares.add(random_int);
-								addTheObstacle(obstacleSS[i], random_int, obstacle);
-								break;
-							}
-						}
-					}
+					findRandomSquare(rangeRow, obstacleSS[i], obstacle);
 					break;
 				}
 				rangeRow += squares[0].length;
+			}
+		}
+	}
+
+	private void findRandomSquare(int rangeRow, int obstacleInit, String type) {
+		int random_int;
+		while (true) {
+			random_int = ThreadLocalRandom.current().nextInt(rangeRow + 1, totalSquares - 1);
+			// System.out.println(obstacleSS[i]+","+random_int+" Range"+rangeRow);
+			if (!obstacleSquares.contains(random_int)) {
+				obstacleSquares.add(random_int);
+				addTheObstacle(obstacleInit, random_int, type);
+				break;
+			}
+			if (rangeRow > squares[0].length) {
+				random_int = ThreadLocalRandom.current().nextInt(1, rangeRow - squares[0].length + 1);
+				// System.out.println(obstacleSS[i]+","+random_int+" Range"+rangeRow);
+				if (!obstacleSquares.contains(random_int)) {
+					obstacleSquares.add(random_int);
+					addTheObstacle(obstacleInit, random_int, type);
+					break;
+				}
 			}
 		}
 	}
@@ -277,19 +281,19 @@ public class GameBoard implements Serializable {
 		}
 	}
 
-	public void addTheSpecialSquare(int start,String type){
-		if(squaresInLine[start] instanceof Square){
-			if(type.equals("Regression")){
+	public void addTheSpecialSquare(int start, String type) {
+		if (squaresInLine[start] instanceof Square) {
+			if (type.equals("Regression")) {
 				squaresInLine[start] = new Regression(start, this);
-			}else if(type.equals("QA")){
+			} else if (type.equals("QA")) {
 				squaresInLine[start] = new QA(start);
-			}else if(type.equals("Jumper")){
+			} else if (type.equals("Jumper")) {
 				squaresInLine[start] = new Jumper(start);
-			}else if(type.equals("ReverseJumper")){
+			} else if (type.equals("ReverseJumper")) {
 				squaresInLine[start] = new ReverseJumper(start);
-			}else if(type.equals("Mortal")){
+			} else if (type.equals("Mortal")) {
 				squaresInLine[start] = new Mortal(start);
-			}else{
+			} else {
 				squaresInLine[start] = new Advance(start, this);
 			}
 		}
@@ -505,9 +509,8 @@ public class GameBoard implements Serializable {
 		int firstPos = piece.getIntPosition();
 		int secondPos = firstPos + positions;
 		int lastPos = secondPos;
-		if (secondPos >= totalSquares - 1 || secondPos < 0) {
+		if (secondPos >= totalSquares - 1 || secondPos < 0)
 			return new int[] { squaresInLine[firstPos].getNumSquare(), numStairs, numSnakes, numSpecialSquares };
-		}
 		if (squaresInLine[secondPos] instanceof SpecialSquare) {
 			lastPos = ((SpecialSquare) squaresInLine[secondPos]).useTrap();
 			if ((squaresInLine[secondPos] instanceof Jumper || squaresInLine[secondPos] instanceof ReverseJumper)

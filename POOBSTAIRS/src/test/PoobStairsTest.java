@@ -580,8 +580,12 @@ class PoobStairsTest {
 			game.movePiece(0);
 			game.playMachine();
 			assertTrue(game.getInLine()[200].contains(players[1].getPiece()));
+			assertEquals(players[1].getMax(),201);
+			assertEquals(players[1].getNumModifiers(),0);
+			assertEquals(players[1].getNumStairs(),2);
+			assertEquals(players[1].getNumSnakes(),0);
+			assertEquals(players[1].numSpecials(),2);
 		} catch (Exception e) {
-			e.printStackTrace();
 			fail("Lanzo excepción");
 		}
 	}
@@ -617,10 +621,8 @@ class PoobStairsTest {
 			assertFalse(game.getInLine()[115].contains(players[1].getPiece()));
 			assertFalse(game.getInLine()[55].contains(players[1].getPiece()));
 		} catch (Exception e) {
-			e.printStackTrace();
 			fail("Lanzo excepción");
 		}
 	}
-
 }
 

@@ -10,7 +10,6 @@ public abstract class Machine extends Player{
 
 	public Machine(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
 	}
 
 	public abstract int[] play(int value);

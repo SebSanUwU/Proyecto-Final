@@ -11,6 +11,7 @@ public  class Square implements Serializable{
     public Square(int numSquare){
         this.numSquare=numSquare;
         pieces = new ArrayList<Piece>();
+        obstacle=null;
     }
 
     public void addObstacle(Obstacle obstacle){
