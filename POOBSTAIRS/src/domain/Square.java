@@ -17,6 +17,10 @@ public  class Square implements Serializable{
     public void addObstacle(Obstacle obstacle){
         this.obstacle=obstacle;
     }
+    
+    protected void removeObstacle() {
+    	obstacle = null;
+    }
 
     public int getNumSquare(){
         return numSquare;

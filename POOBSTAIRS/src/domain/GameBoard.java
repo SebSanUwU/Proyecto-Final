@@ -271,13 +271,13 @@ public class GameBoard implements Serializable {
 			head = squaresInLine[start];
 			tail = squaresInLine[finish];
 		}
-		// System.out.println(start+","+finish);
+		
 		if (type.equals("stair")) {
-			squaresInLine[start].addObstacle(new NormalObstacle(head, tail, type));
-			squaresInLine[finish].addObstacle(new NormalObstacle(head, tail, type));
+			squaresInLine[start].addObstacle(new Obstacle(head, tail, type));
+			squaresInLine[finish].addObstacle(new Obstacle(head, tail, type));
 		} else {
-			squaresInLine[start].addObstacle(new NormalObstacle(tail, head, type));
-			squaresInLine[finish].addObstacle(new NormalObstacle(tail, head, type));
+			squaresInLine[start].addObstacle(new Obstacle(tail, head, type));
+			squaresInLine[finish].addObstacle(new Obstacle(tail, head, type));
 		}
 	}
 
@@ -394,6 +394,9 @@ public class GameBoard implements Serializable {
 					numStairs++;
 				else
 					numSnakes++;
+				
+				Obstacle newObstacle =Obstacle.change(destination.getObstacle(), this);
+				changeObstacle(newObstacle);
 			}
 		} catch (POOBSTAIRSException e) {
 			// En caso de ser una casilla especial se usa
@@ -541,5 +544,57 @@ public class GameBoard implements Serializable {
 				&& firstPos != lastPos)
 			return simulateChangePiece(0, piece, numStairs, numSnakes, numSpecialSquares);
 		return new int[] { squaresInLine[lastPos].getNumSquare(), numStairs, numSnakes, numSpecialSquares };
+	}
+	
+	/**
+	 * Identifica en que fila y columna de la matriz se encuentra cierta casilla del tablero
+	 * @param square, casilla a encontrar
+	 * @return arreglo de enteros que indica la fila y columna en la que se encuentra la casilla
+	 */
+	public int[] findRC(Square square) {
+		int row;
+		int column;
+		boolean found = false;
+		int[] info = new int[2];
+		for(row = 0; row < squares.length; row++) {
+			for(column = 0; column < squares[0].length; column++) {
+				if(squares[row][column] == square) {
+					found = true;
+					info[0] = row;
+					info[1] = column;
+					break;
+				}
+				if(found) break;
+			}
+		}
+		return info;
+	}
+	/**
+	 * Metodo que identifica el camino que debe recorrer la pieza de una casilla a otra
+	 * @param start, casilla en la que inicia la pieza
+	 * @param destination, casilla final de la pieza
+	 * @return arreglo de enteros que indica cuantas filas y columnas debe recorrer la pieza
+	 * @throws POOBSTAIRSException - SAME_LINE si ambas casillas se encuentran en la misma fila, NO_MOR_SQUARES si
+	 * alguno de los resultados se salen del tablero
+	 */
+	public int[] findPath(Square start, Square destination) {
+		int[] startLocation = findRC(start);
+		int[] destinationLocation = findRC(destination);
+		int[] path = {Math.abs(destinationLocation[0] - startLocation[0]), Math.abs(destinationLocation[1] - startLocation[1])};
+		return path;
+	}
+	
+	protected Square findSquare(int row, int column) {
+		return squares[row][column];
+	}
+	
+	protected void changeObstacleTail(Square previous, Square newTail, Obstacle obstacle) {
+		previous.removeObstacle();
+		newTail.addObstacle(obstacle);
+	}
+	
+	private void changeObstacle(Obstacle newObstacle) {
+		newObstacle.getHead().addObstacle(newObstacle);
+		newObstacle.getTail().addObstacle(newObstacle);
 	}
 }

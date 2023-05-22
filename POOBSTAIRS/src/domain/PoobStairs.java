@@ -42,9 +42,10 @@ public class PoobStairs implements Serializable {
 	 *                             tener un numero
 	 *                             invalido de columnas o de filas.
 	 */
-	public PoobStairs(int rows, int columns, Player[] players) throws POOBSTAIRSException {
+	public PoobStairs(int rows, int columns, Player[] players,boolean changeObstacles) throws POOBSTAIRSException {
 		playerOnTurn = 0;
 		this.players = players;
+		Obstacle.toChange = changeObstacles;
 		board = new GameBoard(rows, columns);
 	}
 

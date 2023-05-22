@@ -244,7 +244,8 @@ public class GamePane extends IndependentPane {
 						public void actionPerformed(ActionEvent e) {
 							JOptionPane.showMessageDialog(father,
 									"Head: " + (obstacle.getHead().getNumSquare() + 1) + "//" +
-											"Tail: " + (obstacle.getTail().getNumSquare() + 1));
+											"Tail: " + (obstacle.getTail().getNumSquare() + 1) + "//"
+											+ obstacle.getClass().getName());
 
 						}
 					});
