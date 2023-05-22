@@ -1,9 +1,11 @@
 package presentation;
 
+import java.awt.Color;
 import java.awt.Font;
 
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,6 +19,7 @@ public class InitGame extends IndependentPane{
 	/*initGame*/
 	protected JButton beggin;
 	protected JSpinner dataRows, dataColumns, dataSnakes, dataStairs, dataSpecials, dataPowers;
+	protected JComboBox changeObstacles;
 	
 	/**
 	 * Create the panel.
@@ -36,12 +39,17 @@ public class InitGame extends IndependentPane{
 		dataStairs= new JSpinner(new SpinnerNumberModel(0,0,50,1));
 		dataSpecials= new JSpinner(new SpinnerNumberModel(0.0,0.0,1.05,0.05));
 		dataPowers= new JSpinner(new SpinnerNumberModel(0.0,0.0,1.05,0.05));
+		String[] changeOrNot = {"Sí", "No"};
+		changeObstacles = new JComboBox(changeOrNot);
+		changeObstacles.setBackground(new Color(168, 202, 186));
+		
 	}
 	/**
 	 * Se encarga de inicializar los elementod del Panel
 	 */
 	
 	public void build() {
+		changeObstacles.setSelectedIndex(0);
 		JLabel title = new JLabel("Datos del Tablero");
 		title.setFont(new Font("Times New Roman", Font.PLAIN, 22));
 		title.setHorizontalAlignment(SwingConstants.CENTER);
@@ -51,6 +59,7 @@ public class InitGame extends IndependentPane{
 		JLabel stairs = new JLabel("Numero de Escaleras:");
 		JLabel specials = new JLabel("%Casilla Especial:");
 		JLabel powers = new JLabel("%Modificador:");
+		JLabel decision = new JLabel("¿Desea que los modificadores cambien?");
 		GroupLayout layout = new GroupLayout(this);
 		this.setLayout(layout);
 		layout.setHorizontalGroup(layout.createParallelGroup(Alignment.LEADING)
@@ -65,6 +74,7 @@ public class InitGame extends IndependentPane{
 										.addComponent(stairs)
 										.addComponent(specials)
 										.addComponent(powers)
+										.addComponent(decision)
 										.addComponent(beggin))
 								.addGap(5)
 								.addGroup(layout.createParallelGroup(Alignment.LEADING)
@@ -73,7 +83,8 @@ public class InitGame extends IndependentPane{
 										.addComponent(dataSnakes)
 										.addComponent(dataStairs)
 										.addComponent(dataSpecials)
-										.addComponent(dataPowers)))));
+										.addComponent(dataPowers)
+										.addComponent(changeObstacles)))));
 		layout.setVerticalGroup(
 				layout.createParallelGroup(Alignment.LEADING)
 						.addGroup(layout.createSequentialGroup()
@@ -103,8 +114,12 @@ public class InitGame extends IndependentPane{
 										.addComponent(powers)
 										.addComponent(dataPowers, 0, 25, 25))
 								.addGap(10)
+								.addGroup(layout.createParallelGroup(Alignment.LEADING)
+										.addComponent(decision)
+										.addComponent(changeObstacles, 0, 25, 25))
+								.addGap(10)
 								.addComponent(beggin)));
-		this.setBorder(new EmptyBorder(90, (int) (father.getSize().width * 0.3), 0, 0));
+		this.setBorder(new EmptyBorder(50, (int) (father.getSize().width * 0.25), 0, 0));
 		((POOBSTAIRSGUI)father).buildLabels(this, title.getText());
 		((POOBSTAIRSGUI)father).buildButton(this);
 		
@@ -133,6 +148,10 @@ public class InitGame extends IndependentPane{
 		return (Double)dataSpecials.getValue();
 	}
 	
-	
+	protected boolean getChange() {
+		String selectedOption = (String) changeObstacles.getSelectedItem();
+		if(selectedOption.equals("Sí")) return true;
+		else return false;
+	}
 
 }

@@ -90,7 +90,8 @@ public class POOBSTAIRSGUI extends JFrame {
 		 String colors2 = dataPlayers.getColors2(); 
 		 String piece = dataPlayers.getPiece(); 
 		 String piece2 = dataPlayers.getPiece2(); 
-		 String machineMode = dataPlayers.getMachineMode(); 
+		 String machineMode = dataPlayers.getMachineMode();
+		 
 		 
 		 players[0] = new Player(name1);
 		 players[0].setPiece(colors, piece);
@@ -106,7 +107,7 @@ public class POOBSTAIRSGUI extends JFrame {
 			players[1].setPiece(colors2, piece2);
 		 }
 		
-		poobStairs = new PoobStairs(rows, columns,players);
+		poobStairs = new PoobStairs(rows, columns,players,initGame.getChange());
 		poobStairs.setGame(snakes, stairs, (float) pSpecials, (float) pPowers);
 	}
 	/**

@@ -10,6 +10,7 @@ public class POOBSTAIRSException extends Exception{
 	public static final String NO_MORE_PIECES= "La casilla no puede aceptar más piezas";
 	public static final String NO_SPECIALS= "No existen casillas especiales en el rango";
 	public static final String NO_MOVEMENTS= "No se realiza ningun movimiento";
+	public static final String SAME_LINE = "Cabeza y cola en la misma fila";
 	public POOBSTAIRSException(String message) {
 		super(message);
 	}
