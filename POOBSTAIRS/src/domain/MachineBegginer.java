@@ -18,6 +18,7 @@ public class MachineBegginer extends Machine{
         }else{
             change=board.simulateChangePiece(analizeSpecialsSquares[randomChosse]-inicial, getPiece(),0,0,0);
         }
+        board.changePieceBoard(change[0], inicial, getPiece());
         return change;
     }
 }

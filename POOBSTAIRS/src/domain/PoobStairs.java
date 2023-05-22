@@ -205,7 +205,13 @@ public class PoobStairs implements Serializable {
 		if (bot.getPiecePosition() != betterMove[0]) {
 			board.changePieceBoard(bot.getPiecePosition(), betterMove[0], bot.getPiece());
 		}
-		changeTurn();
+
+		try {
+			board.changeObstacleToUse(bot.getPieceSquare().getObstacle());
+			changeTurn();
+		} catch (Exception e) {
+			changeTurn();
+		}
 		return 0;
 	}
 

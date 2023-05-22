@@ -234,15 +234,16 @@ public class GameBoard implements Serializable {
 		int random_int;
 		while (true) {
 			random_int = ThreadLocalRandom.current().nextInt(rangeRow + 1, totalSquares - 1);
-			// System.out.println(obstacleSS[i]+","+random_int+" Range"+rangeRow);
+			// System.out.println(1+obstacleInit+","+(random_int+1)+" Range+"+rangeRow);
 			if (!obstacleSquares.contains(random_int)) {
 				obstacleSquares.add(random_int);
 				addTheObstacle(obstacleInit, random_int, type);
 				break;
 			}
-			if (rangeRow > squares[0].length) {
-				random_int = ThreadLocalRandom.current().nextInt(1, rangeRow - squares[0].length + 1);
-				// System.out.println(obstacleSS[i]+","+random_int+" Range"+rangeRow);
+			if (rangeRow > squares[0].length && (rangeRow - squares[0].length) > squares[0].length) {
+				// System.out.println(1+obstacleInit+","+(random_int+1)+" Range-"+(rangeRow -
+				// squares[0].length));
+				random_int = ThreadLocalRandom.current().nextInt(1, rangeRow - squares[0].length);
 				if (!obstacleSquares.contains(random_int)) {
 					obstacleSquares.add(random_int);
 					addTheObstacle(obstacleInit, random_int, type);
@@ -271,7 +272,7 @@ public class GameBoard implements Serializable {
 			head = squaresInLine[start];
 			tail = squaresInLine[finish];
 		}
-		
+
 		if (type.equals("stair")) {
 			squaresInLine[start].addObstacle(new Obstacle(head, tail, type));
 			squaresInLine[finish].addObstacle(new Obstacle(head, tail, type));
@@ -394,9 +395,7 @@ public class GameBoard implements Serializable {
 					numStairs++;
 				else
 					numSnakes++;
-				
-				Obstacle newObstacle =Obstacle.change(destination.getObstacle(), this);
-				changeObstacle(newObstacle);
+				changeObstacleToUse(destination.getObstacle());
 			}
 		} catch (POOBSTAIRSException e) {
 			// En caso de ser una casilla especial se usa
@@ -411,6 +410,11 @@ public class GameBoard implements Serializable {
 		}
 		piece.changeStats(numStairs, numSnakes, numSpecialSquares, destination.getNumSquare());
 		return destination;
+	}
+
+	public void changeObstacleToUse(Obstacle obstacle) {
+		Obstacle newObstacle = Obstacle.change(obstacle, this);
+		changeObstacle(newObstacle);
 	}
 
 	/**
@@ -545,54 +549,64 @@ public class GameBoard implements Serializable {
 			return simulateChangePiece(0, piece, numStairs, numSnakes, numSpecialSquares);
 		return new int[] { squaresInLine[lastPos].getNumSquare(), numStairs, numSnakes, numSpecialSquares };
 	}
-	
+
 	/**
-	 * Identifica en que fila y columna de la matriz se encuentra cierta casilla del tablero
+	 * Identifica en que fila y columna de la matriz se encuentra cierta casilla del
+	 * tablero
+	 * 
 	 * @param square, casilla a encontrar
-	 * @return arreglo de enteros que indica la fila y columna en la que se encuentra la casilla
+	 * @return arreglo de enteros que indica la fila y columna en la que se
+	 *         encuentra la casilla
 	 */
 	public int[] findRC(Square square) {
 		int row;
 		int column;
 		boolean found = false;
 		int[] info = new int[2];
-		for(row = 0; row < squares.length; row++) {
-			for(column = 0; column < squares[0].length; column++) {
-				if(squares[row][column] == square) {
+		for (row = 0; row < squares.length; row++) {
+			for (column = 0; column < squares[0].length; column++) {
+				if (squares[row][column] == square) {
 					found = true;
 					info[0] = row;
 					info[1] = column;
 					break;
 				}
-				if(found) break;
+				if (found)
+					break;
 			}
 		}
 		return info;
 	}
+
 	/**
-	 * Metodo que identifica el camino que debe recorrer la pieza de una casilla a otra
-	 * @param start, casilla en la que inicia la pieza
+	 * Metodo que identifica el camino que debe recorrer la pieza de una casilla a
+	 * otra
+	 * 
+	 * @param start,       casilla en la que inicia la pieza
 	 * @param destination, casilla final de la pieza
-	 * @return arreglo de enteros que indica cuantas filas y columnas debe recorrer la pieza
-	 * @throws POOBSTAIRSException - SAME_LINE si ambas casillas se encuentran en la misma fila, NO_MOR_SQUARES si
-	 * alguno de los resultados se salen del tablero
+	 * @return arreglo de enteros que indica cuantas filas y columnas debe recorrer
+	 *         la pieza
+	 * @throws POOBSTAIRSException - SAME_LINE si ambas casillas se encuentran en la
+	 *                             misma fila, NO_MOR_SQUARES si
+	 *                             alguno de los resultados se salen del tablero
 	 */
 	public int[] findPath(Square start, Square destination) {
 		int[] startLocation = findRC(start);
 		int[] destinationLocation = findRC(destination);
-		int[] path = {Math.abs(destinationLocation[0] - startLocation[0]), Math.abs(destinationLocation[1] - startLocation[1])};
+		int[] path = { Math.abs(destinationLocation[0] - startLocation[0]),
+				Math.abs(destinationLocation[1] - startLocation[1]) };
 		return path;
 	}
-	
+
 	protected Square findSquare(int row, int column) {
 		return squares[row][column];
 	}
-	
+
 	protected void changeObstacleTail(Square previous, Square newTail, Obstacle obstacle) {
 		previous.removeObstacle();
 		newTail.addObstacle(obstacle);
 	}
-	
+
 	private void changeObstacle(Obstacle newObstacle) {
 		newObstacle.getHead().addObstacle(newObstacle);
 		newObstacle.getTail().addObstacle(newObstacle);
