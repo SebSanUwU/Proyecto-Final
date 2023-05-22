@@ -35,6 +35,10 @@ public   class Obstacle implements Serializable{
     	tail = newTail;
     }
     
+    protected void setHead(Square newHead) {
+    	head = newHead;
+    }
+    
     protected void setType(String newType) {
     	type = newType;
     }

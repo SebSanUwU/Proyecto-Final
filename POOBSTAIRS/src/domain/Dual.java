@@ -6,6 +6,8 @@ public class Dual extends Obstacle {
 		super(head, tail, type);
 		if(this.getType().equals("snake")) this.setType("stair");
 		else this.setType("snake");
+		this.setTail(head);
+		this.setHead(tail);
 	}
 
 }
