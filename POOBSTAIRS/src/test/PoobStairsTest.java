@@ -846,7 +846,6 @@ class PoobStairsTest {
 		}catch(POOBSTAIRSException e){
 			fail("Lanzo excepción");
 		}
-		
 	}
 }
 

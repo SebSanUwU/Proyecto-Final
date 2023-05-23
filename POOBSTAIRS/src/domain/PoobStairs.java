@@ -207,7 +207,9 @@ public class PoobStairs implements Serializable {
 		}
 
 		try {
-			board.changeObstacleToUse(bot.getPieceSquare().getObstacle());
+			if(!bot.getPieceSquare().containsObstacleToUse()){
+				board.changeObstacleToUse(bot.getPieceSquare().getObstacle());
+			}
 			changeTurn();
 		} catch (Exception e) {
 			changeTurn();

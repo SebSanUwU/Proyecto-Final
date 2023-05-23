@@ -104,7 +104,6 @@ public class POOBSTAIRSGUI extends JFrame {
 			}else{
 				players[1] = new MachineLearner("Maquina aprendiz", null);
 			}
-			players[1].setPiece(colors2, piece2);
 		 }
 		
 		poobStairs = new PoobStairs(rows, columns,players,initGame.getChange());

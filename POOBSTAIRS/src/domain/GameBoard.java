@@ -60,6 +60,7 @@ public class GameBoard implements Serializable {
 		if (player[1] instanceof Machine) {
 			Machine bot = (Machine) player[1];
 			bot.setBoard(this);
+			bot.setColorPiece(player[0]);
 		}
 		player[0].changePositionPiece(squaresInLine[0]);
 		player[1].changePositionPiece(squaresInLine[0]);
@@ -516,7 +517,7 @@ public class GameBoard implements Serializable {
 		int firstPos = piece.getIntPosition();
 		int secondPos = firstPos + positions;
 		int lastPos = secondPos;
-		if (secondPos >= totalSquares - 1 || secondPos < 0)
+		if (secondPos >= totalSquares  || secondPos < 0)
 			return new int[] { squaresInLine[firstPos].getNumSquare(), numStairs, numSnakes, numSpecialSquares };
 		if (squaresInLine[secondPos] instanceof SpecialSquare) {
 			lastPos = ((SpecialSquare) squaresInLine[secondPos]).useTrap();
