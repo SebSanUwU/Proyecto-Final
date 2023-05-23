@@ -31,6 +31,7 @@ import javax.swing.border.TitledBorder;
 
 import domain.Advance;
 import domain.Jumper;
+import domain.Mortal;
 import domain.Obstacle;
 import domain.POOBSTAIRSException;
 import domain.Piece;
@@ -252,7 +253,19 @@ public class GamePane extends IndependentPane {
 					square.add(infoButton);
 				} catch (POOBSTAIRSException e) {
 					if (poobStairs.board()[i][j] instanceof SpecialSquare) {
-						square = new DiferentSquare("/img/Special.jpg");
+						if(poobStairs.board()[i][j] instanceof Mortal){
+							square = new DiferentSquare("/img/mortal.png");
+						}else if(poobStairs.board()[i][j] instanceof Jumper){
+							square = new DiferentSquare("/img/Jumper.png");
+						}else if(poobStairs.board()[i][j] instanceof ReverseJumper){
+							square = new DiferentSquare("/img/ReverseJumper.png");
+						}else if(poobStairs.board()[i][j] instanceof Advance){
+							square = new DiferentSquare("/img/Advance.png");
+						}else if(poobStairs.board()[i][j] instanceof Regression){
+							square = new DiferentSquare("/img/Regression.png");
+						}else{
+							square = new DiferentSquare("/img/Special.jpg");
+						}
 						square.add(new JLabel(String.valueOf(poobStairs.board()[i][j].getNumSquare() + 1)));
 						JButton infoButton = new JButton("i");
 						String inf = (poobStairs.board()[i][j]).getClass().getName().replace("domain.", "");

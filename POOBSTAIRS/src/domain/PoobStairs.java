@@ -8,14 +8,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Random;
-
-import javax.swing.JOptionPane;
-
 
 import domain.Die.Face;
-import presentation.POOBSTAIRSGUI;
+
 
 /**
  * Clase principal del modelo para lograr que el juego POOBSTAIRS funcione
@@ -69,7 +64,7 @@ public class PoobStairs implements Serializable {
 	 *                             limite
 	 */
 	public void setGame(int numSnakes, int numStairs, float pModifier, float pSpecial) throws POOBSTAIRSException {
-		if (pModifier > 1.0 || pSpecial > 1.0)
+		if (pModifier > 1.0 || pSpecial > 6.0)
 			throw new POOBSTAIRSException(POOBSTAIRSException.INACCEPTED_PERCENTAGE);
 		board.setArea(numSnakes, numStairs, pSpecial, players);
 		die = new Die((byte) 6, pModifier);
@@ -199,6 +194,7 @@ public class PoobStairs implements Serializable {
 		if (movementSimulate1[0] > movementSimulate2[0]) {
 			betterMove = movementSimulate1;
 		} else {
+			bot.sumModifiers();
 			betterMove = movementSimulate2;
 		}
 		bot.changeStats(betterMove[1], betterMove[2], betterMove[3], betterMove[0]);
@@ -207,7 +203,7 @@ public class PoobStairs implements Serializable {
 		}
 
 		try {
-			if(!bot.getPieceSquare().containsObstacleToUse()){
+			if(!bot.getPieceSquare().containsObstacleToUse() && bot.getPieceSquare().getObstacle().getTail().getNumSquare()==bot.getPieceSquare().getNumSquare()){
 				board.changeObstacleToUse(bot.getPieceSquare().getObstacle());
 			}
 			changeTurn();
@@ -268,10 +264,21 @@ public class PoobStairs implements Serializable {
 		out.close();
 	}
 
+	/**
+	 * Metodo para añadir un obstaculo al tablero.
+	 * @param start , casilla de inicio del obstaculo 
+	 * @param finish , casilla final del obstaculo.
+	 * @param type , el tipo de obstaculo que desea agregar (stair o snake)
+	 */
 	public void addObstacle(int start,int finish,String type){
 		board.addTheObstacle(start, finish, type);
 	}
 
+	/**
+	 * Metodo para añadir una casilla especial al tablero.
+	 * @param start , casilla donde ira la casilla especial
+	 * @param type , tipo de casilla especial.
+	 */
 	public void addSpecialSquare(int start,String type){
 		board.addTheSpecialSquare(start,type);
 	}
