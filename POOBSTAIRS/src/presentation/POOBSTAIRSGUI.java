@@ -281,7 +281,7 @@ public class POOBSTAIRSGUI extends JFrame {
 					int option = activePower(current);
 					if(option == 0) {
 						specialOptionsJD(poobStairs.usePower());
-					}else if(option == -1 || (option > 1 && option < 4)){
+					}else if(option == -1 || (option >= 1 && option < 4)){
 						specialOptionsJD(current.getValue());
 					}
 					startPlaying.refresh(poobStairs);
