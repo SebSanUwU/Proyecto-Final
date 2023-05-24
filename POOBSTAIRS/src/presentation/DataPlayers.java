@@ -148,7 +148,9 @@ public class DataPlayers extends IndependentPane{
 											.addComponent(name1, 0, 100, 100)
 											.addComponent(machineMode, 0, 100, 100))
 									.addGap(5)
-									.addComponent(colors, 0, 100, 100))
+									.addComponent(colors, 0, 100, 100)
+									.addGap(5)
+									.addComponent(pieces, 0, 100, 100))
 							.addGroup(layout.createSequentialGroup()
 									.addComponent(next)
 									.addGap(5)
@@ -161,7 +163,8 @@ public class DataPlayers extends IndependentPane{
 									.addGroup(layout.createParallelGroup(Alignment.LEADING)
 											.addComponent(name)
 											.addComponent(name1, 0, 25, 25)
-											.addComponent(colors, 0, 25, 25))
+											.addComponent(colors, 0, 25, 25)
+											.addComponent(pieces,0,25,25))
 									.addGap(20)
 									.addGroup(layout.createParallelGroup(Alignment.LEADING)
 											.addComponent(modeOfMachine, 0, 25, 25)
@@ -171,7 +174,7 @@ public class DataPlayers extends IndependentPane{
 											.addComponent(next)
 											.addComponent(principalMenu))));
 			((POOBSTAIRSGUI) father).buildButton(this);
-			this.setBorder(new EmptyBorder(100, (int) (father.getSize().width * 0.3), 0, 0));
+			this.setBorder(new EmptyBorder(100, (int) (father.getSize().width * 0.2), 0, 0));
 	}
 	
 	protected String getName1() {
